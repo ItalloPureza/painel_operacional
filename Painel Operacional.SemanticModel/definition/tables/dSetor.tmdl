@@ -1,0 +1,19 @@
+table dSetor
+	lineageTag: a3f0cc3d-6c58-5943-84c1-29cc1f6b44dc
+
+	column Setor
+		lineageTag: f2bbb752-3d28-58ed-87d5-18e8e2207af1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Setor]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dSetor = calculated
+		mode: import
+		source =
+				
+				-- Setores do cadastro do RH: filtro de setor das telas de cancelamento do Global (14/10/2026). Filtra os
+				-- cancelamentos (setor do treinador) e a base do % (setor do CS no retrato do CRM). gerar_global.py.
+				DISTINCT( FILTER( SELECTCOLUMNS( dColaborador, "Setor", dColaborador[Setor] ), NOT ISBLANK( [Setor] ) && [Setor] <> "" ) )
+

@@ -1,0 +1,545 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "ger_chart_4",
+  "position": {
+    "x": 1106,
+    "y": 692,
+    "z": 56039,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 56039
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fInativacoes"
+                    }
+                  },
+                  "Property": "Produto"
+                }
+              },
+              "queryRef": "fInativacoes.Produto",
+              "nativeQueryRef": "Produto",
+              "displayName": "Produto"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fInativacoes"
+                    }
+                  },
+                  "Property": "ID"
+                }
+              },
+              "queryRef": "fInativacoes.ID",
+              "nativeQueryRef": "ID",
+              "displayName": "ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fInativacoes"
+                    }
+                  },
+                  "Property": "Cliente"
+                }
+              },
+              "queryRef": "fInativacoes.Cliente",
+              "nativeQueryRef": "Cliente",
+              "displayName": "Cliente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fInativacoes"
+                    }
+                  },
+                  "Property": "CS (último dia ativo)"
+                }
+              },
+              "queryRef": "fInativacoes.CS (último dia ativo)",
+              "nativeQueryRef": "CS (último dia ativo)",
+              "displayName": "CS"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fInativacoes"
+                    }
+                  },
+                  "Property": "Data da Inativação"
+                }
+              },
+              "queryRef": "fInativacoes.Data da Inativação",
+              "nativeQueryRef": "Data da Inativação",
+              "displayName": "Inativação"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fInativacoes"
+                    }
+                  },
+                  "Property": "Início do Período"
+                }
+              },
+              "queryRef": "fInativacoes.Início do Período",
+              "nativeQueryRef": "Início do Período",
+              "displayName": "Início do período"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fInativacoes"
+                    }
+                  },
+                  "Property": "Ticket do Período"
+                }
+              },
+              "queryRef": "fInativacoes.Ticket do Período",
+              "nativeQueryRef": "Ticket do Período",
+              "displayName": "Ticket do período"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fInativacoes"
+                    }
+                  },
+                  "Property": "Ticket"
+                }
+              },
+              "queryRef": "fInativacoes.Ticket",
+              "nativeQueryRef": "Ticket",
+              "displayName": "Ticket"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fInativacoes"
+                    }
+                  },
+                  "Property": "Dias do Ticket até a Inativação"
+                }
+              },
+              "queryRef": "fInativacoes.Dias do Ticket até a Inativação",
+              "nativeQueryRef": "Dias do Ticket até a Inativação",
+              "displayName": "Dias"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fInativacoes"
+                    }
+                  },
+                  "Property": "Voltou em"
+                }
+              },
+              "queryRef": "fInativacoes.Voltou em",
+              "nativeQueryRef": "Voltou em",
+              "displayName": "Voltou em"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fInativacoes"
+                    }
+                  },
+                  "Property": "Conferência"
+                }
+              },
+              "queryRef": "fInativacoes.Conferência",
+              "nativeQueryRef": "Conferência",
+              "displayName": "Conferência"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fInativacoes"
+                  }
+                },
+                "Property": "Data da Inativação"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "58.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fInativacoes.Produto"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "52.2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fInativacoes.ID"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "117.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fInativacoes.Cliente"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.13857624123267D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fInativacoes.CS (último dia ativo)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "77.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fInativacoes.Data da Inativação"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fInativacoes.Início do Período"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "81.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fInativacoes.Ticket do Período"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "55.8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fInativacoes.Ticket"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "41.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fInativacoes.Dias do Ticket até a Inativação"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fInativacoes.Voltou em"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "88.2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fInativacoes.Conferência"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Inativações para conferir'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dias = do fechamento do ticket até a inativação · quem saiu duas vezes aparece duas vezes'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

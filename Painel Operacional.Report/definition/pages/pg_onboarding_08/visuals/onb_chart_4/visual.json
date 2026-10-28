@@ -1,0 +1,719 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "onb_chart_4",
+  "position": {
+    "x": 1106,
+    "y": 692,
+    "z": 33000,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 33000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Cliente"
+                }
+              },
+              "queryRef": "dCarteira.Cliente",
+              "nativeQueryRef": "Cliente",
+              "displayName": "Cliente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "ID Legado"
+                }
+              },
+              "queryRef": "dCarteira.ID Legado",
+              "nativeQueryRef": "ID Legado",
+              "displayName": "ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "CS"
+                }
+              },
+              "queryRef": "dCarteira.CS",
+              "nativeQueryRef": "CS",
+              "displayName": "Responsável"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Status"
+                }
+              },
+              "queryRef": "dCarteira.Status",
+              "nativeQueryRef": "Status",
+              "displayName": "Status"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Data de Registro"
+                }
+              },
+              "queryRef": "dCarteira.Data de Registro",
+              "nativeQueryRef": "Data de Registro",
+              "displayName": "Registro"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Dias desde o Registro"
+                }
+              },
+              "queryRef": "dCarteira.Dias desde o Registro",
+              "nativeQueryRef": "Dias desde o Registro",
+              "displayName": "Idade (dias)"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Empresas Usadas"
+                }
+              },
+              "queryRef": "dCarteira.Empresas Usadas",
+              "nativeQueryRef": "Empresas Usadas",
+              "displayName": "Empresas"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Empresas do Contrato"
+                }
+              },
+              "queryRef": "dCarteira.Empresas do Contrato",
+              "nativeQueryRef": "Empresas do Contrato",
+              "displayName": "Contratadas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Mensalidade (Contratos)"
+                }
+              },
+              "queryRef": "dCarteira.Mensalidade (Contratos)",
+              "nativeQueryRef": "Mensalidade (Contratos)",
+              "displayName": "Mensalidade"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Data do Último Ticket de Treinamento"
+                }
+              },
+              "queryRef": "dCarteira.Data do Último Ticket de Treinamento",
+              "nativeQueryRef": "Data do Último Ticket de Treinamento",
+              "displayName": "Último contato"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Categoria do Último Ticket"
+                }
+              },
+              "queryRef": "dCarteira.Categoria do Último Ticket",
+              "nativeQueryRef": "Categoria do Último Ticket",
+              "displayName": "Categoria"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Dias sem Contato"
+                }
+              },
+              "queryRef": "dCarteira.Dias sem Contato",
+              "nativeQueryRef": "Dias sem Contato",
+              "displayName": "Dias s/ contato"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Data do Penúltimo Ticket de Treinamento"
+                }
+              },
+              "queryRef": "dCarteira.Data do Penúltimo Ticket de Treinamento",
+              "nativeQueryRef": "Data do Penúltimo Ticket de Treinamento",
+              "displayName": "Penúltimo"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Dias entre os Contatos"
+                }
+              },
+              "queryRef": "dCarteira.Dias entre os Contatos",
+              "nativeQueryRef": "Dias entre os Contatos",
+              "displayName": "Dias entre"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Checkouts"
+                }
+              },
+              "queryRef": "dCarteira.Checkouts",
+              "nativeQueryRef": "Checkouts",
+              "displayName": "Checkouts"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Contatos"
+                }
+              },
+              "queryRef": "dCarteira.Contatos",
+              "nativeQueryRef": "Contatos",
+              "displayName": "Contatos"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Faltas"
+                }
+              },
+              "queryRef": "dCarteira.Faltas",
+              "nativeQueryRef": "Faltas",
+              "displayName": "Faltas"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dCarteira"
+                  }
+                },
+                "Property": "Dias sem Contato"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "96.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Cliente"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "52.2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.ID Legado"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "48.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.CS"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "81.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Status"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Data de Registro"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Dias desde o Registro"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Empresas Usadas"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "83.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Empresas do Contrato"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Data do Último Ticket de Treinamento"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "72.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Categoria do Último Ticket"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "58.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Dias sem Contato"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "70.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Data do Penúltimo Ticket de Treinamento"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Dias entre os Contatos"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "70.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Checkouts"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Contatos"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Faltas"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "78.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Mensalidade (Contratos)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Lista de clientes'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Retrato mais recente do CRM (não muda com o período) · inclui inativos (como no OKR 2026)'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

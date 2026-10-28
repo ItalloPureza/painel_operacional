@@ -1,0 +1,569 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
+  "name": "ong_chart_4",
+  "position": {
+    "x": 1106,
+    "y": 692,
+    "z": 52014,
+    "width": 782,
+    "height": 360,
+    "tabOrder": 52014
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaboradorMes"
+                    }
+                  },
+                  "Property": "Colaborador"
+                }
+              },
+              "queryRef": "dColaboradorMes.Colaborador",
+              "nativeQueryRef": "Colaborador",
+              "displayName": "Analista"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaboradorMes"
+                    }
+                  },
+                  "Property": "Equipe"
+                }
+              },
+              "queryRef": "dColaboradorMes.Equipe",
+              "nativeQueryRef": "Equipe",
+              "displayName": "Equipe"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Clientes KP no Início do Mês (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Clientes KP no Início do Mês (por pessoa)",
+              "nativeQueryRef": "Clientes KP no Início do Mês (por pessoa)",
+              "displayName": "Clientes KP"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Cancelamentos Efetivados no Mês (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Cancelamentos Efetivados no Mês (por pessoa)",
+              "nativeQueryRef": "Cancelamentos Efetivados no Mês (por pessoa)",
+              "displayName": "Efetivados"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "% Cancelamento KP no Mês (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.% Cancelamento KP no Mês (por pessoa)",
+              "nativeQueryRef": "% Cancelamento KP no Mês (por pessoa)",
+              "displayName": "% cancelamento"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "R$ Cancelado no Mês (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.R$ Cancelado no Mês (por pessoa)",
+              "nativeQueryRef": "R$ Cancelado no Mês (por pessoa)",
+              "displayName": "R$ cancelado"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Cancelamentos Revertidos no Mês (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Cancelamentos Revertidos no Mês (por pessoa)",
+              "nativeQueryRef": "Cancelamentos Revertidos no Mês (por pessoa)",
+              "displayName": "Revertidos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "% Revertidos no Mês (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.% Revertidos no Mês (por pessoa)",
+              "nativeQueryRef": "% Revertidos no Mês (por pessoa)",
+              "displayName": "% revertidos"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dColaborador"
+                  }
+                },
+                "Property": "Clientes KP no Início do Mês (por pessoa)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "105.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaboradorMes.Colaborador"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "105.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaboradorMes.Equipe"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "71.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Clientes KP no Início do Mês (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "86.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Cancelamentos Efetivados no Mês (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "100.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.% Cancelamento KP no Mês (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "120.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.R$ Cancelado no Mês (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "86.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Cancelamentos Revertidos no Mês (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "86.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.% Revertidos no Mês (por pessoa)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Por analista'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Mês mais recente do período · carteira KP no 1º retrato do mês (CS da carteira) · cancelamentos pelo treinador, data de fechamento'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "soValor",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dColaboradorMes"
+              }
+            },
+            "Property": "Setor"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "dColaboradorMes",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "d"
+                          }
+                        },
+                        "Property": "Setor"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Ongoing'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "competenciaCartao",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Competência"
+              }
+            },
+            "Property": "Competência"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "c",
+              "Entity": "Competência",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "c"
+                          }
+                        },
+                        "Property": "Competência"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Mês mais recente'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "isHiddenInViewMode": true
+      }
+    ]
+  }
+}

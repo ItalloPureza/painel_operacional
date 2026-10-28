@@ -1,0 +1,102 @@
+table Gestao_Contratos_AF_Prod
+	lineageTag: 546ba0e6-236a-41fd-acdc-0cb973723b37
+
+	column 'Chave Estrangeira Contrato Template'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9ffe2b11-67ba-49ab-b1ee-9a1e6deea968
+		summarizeBy: sum
+		sourceColumn: Chave Estrangeira Contrato Template
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data do Contrato'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 2960f20f-a2f6-4a1b-bbda-702e3dbc03ed
+		summarizeBy: none
+		sourceColumn: Data do Contrato
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Razão Social'
+		dataType: string
+		lineageTag: c0863832-5604-4d13-bcd9-e1bedc801452
+		summarizeBy: none
+		sourceColumn: Razão Social
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome Fantasia'
+		dataType: string
+		lineageTag: 68b9ef9b-bc65-4d0c-bfcb-68b70b044e57
+		summarizeBy: none
+		sourceColumn: Nome Fantasia
+
+		annotation SummarizationSetBy = Automatic
+
+	column CNPJ/CPF
+		dataType: string
+		lineageTag: 0e51d2a8-4a60-4614-b2e4-b60331998716
+		summarizeBy: none
+		sourceColumn: CNPJ/CPF
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Valor de Implantação'
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 86a4e8c6-5bb7-4f26-8e8a-cad78fe46beb
+		summarizeBy: sum
+		sourceColumn: Valor de Implantação
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Valor Mensalidade'
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 54fbcd4b-17b7-48ec-9983-cc0048ec7002
+		summarizeBy: sum
+		sourceColumn: Valor Mensalidade
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Data Aprovacao'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 37ab535f-9fce-4da1-8fa4-97478b4e94d9
+		summarizeBy: none
+		sourceColumn: Data Aprovacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Contrato Ativo?'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 5b7ad48a-0f17-4e58-9521-09d58fb3d17c
+		summarizeBy: none
+		sourceColumn: Contrato Ativo?
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Gestao_Contratos_AF_Prod = m
+		mode: import
+		queryGroup: 'Gestão de Contratos'
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Gestao_Contratos_AF_Prod",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"Chave Estrangeira Contrato Template", Int64.Type}, {"Data do Contrato", type datetime}, {"Razão Social", type text}, {"Nome Fantasia", type text}, {"CNPJ/CPF", type text}, {"Valor de Implantação", type number}, {"Valor Mensalidade", type number}, {"Data Aprovacao", type datetime}, {"Contrato Ativo?", type logical}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,458 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "glb_chart_4",
+  "position": {
+    "x": 1106,
+    "y": 692,
+    "z": 54037,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 54037
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "id"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.id",
+              "nativeQueryRef": "id",
+              "displayName": "Ticket"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "ID Legado do Cliente"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.ID Legado do Cliente",
+              "nativeQueryRef": "ID Legado do Cliente",
+              "displayName": "ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "organization"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.organization",
+              "nativeQueryRef": "organization",
+              "displayName": "Cliente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "Data_Fechamento_Ticket"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.Data_Fechamento_Ticket",
+              "nativeQueryRef": "Data_Fechamento_Ticket",
+              "displayName": "Fechado em"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "Sistema"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.Sistema",
+              "nativeQueryRef": "Sistema",
+              "displayName": "Sistema"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "area_responsavel"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.area_responsavel",
+              "nativeQueryRef": "area_responsavel",
+              "displayName": "Área"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "Alterações do Ticket"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.Alterações do Ticket",
+              "nativeQueryRef": "Alterações do Ticket",
+              "displayName": "Alterações"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "Valor Alterado (ticket)"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.Valor Alterado (ticket)",
+              "nativeQueryRef": "Valor Alterado (ticket)",
+              "displayName": "Total"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Helpdesk_Tickets"
+                  }
+                },
+                "Property": "Data_Fechamento_Ticket"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "62.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.id"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "58.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.ID Legado do Cliente"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "159.1D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.organization"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "72.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.Data_Fechamento_Ticket"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "90.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.Sistema"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "79.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.area_responsavel"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "119.3D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.Alterações do Ticket"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "120.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.Valor Alterado (ticket)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Tickets com alteração de receita'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Lista de tickets: mostra só os setores do seu acesso · Total = soma dos valores das alterações do ticket'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

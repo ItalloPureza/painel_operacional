@@ -1,0 +1,70 @@
+table Time_EquipeSetor
+	isHidden
+	lineageTag: b1f8e0e0-39d9-502b-a324-3a57e05ae0f6
+
+	column equipe_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 3ae051e7-56b9-5a83-99f1-7b2863fb6fee
+		summarizeBy: none
+		sourceColumn: equipe_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Equipe
+		dataType: string
+		lineageTag: 77ea7d22-4b38-5bae-aa67-182782f45d15
+		summarizeBy: none
+		sourceColumn: Equipe
+
+		annotation SummarizationSetBy = Automatic
+
+	column ativo
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: a29a7842-7a59-512f-b30c-b274875c15ca
+		summarizeBy: none
+		sourceColumn: ativo
+
+		annotation SummarizationSetBy = Automatic
+
+	column setor_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 9c27bdd9-75a1-5cb6-a013-931b645b3c51
+		summarizeBy: none
+		sourceColumn: setor_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Setor RH'
+		dataType: string
+		lineageTag: 02d2be7c-b5a4-5f5c-953a-bb07e155b35d
+		summarizeBy: none
+		sourceColumn: Setor RH
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Área RH'
+		dataType: string
+		lineageTag: 1f7847d4-1902-56c4-a645-0c6f2b277558
+		summarizeBy: none
+		sourceColumn: Área RH
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Time_EquipeSetor = m
+		mode: import
+		queryGroup: Estrutura
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Time_EquipeSetor",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"equipe_id", Int64.Type}, {"Equipe", type text}, {"ativo", type logical}, {"setor_id", Int64.Type}, {"Setor RH", type text}, {"Área RH", type text}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

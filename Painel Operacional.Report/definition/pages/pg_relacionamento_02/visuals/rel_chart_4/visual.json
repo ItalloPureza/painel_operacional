@@ -1,0 +1,539 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "rel_chart_4",
+  "position": {
+    "x": 1106,
+    "y": 692,
+    "z": 33000,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 33000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Cancelamentos"
+                    }
+                  },
+                  "Property": "id"
+                }
+              },
+              "queryRef": "Helpdesk_Cancelamentos.id",
+              "nativeQueryRef": "id",
+              "displayName": "Ticket"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Cancelamentos"
+                    }
+                  },
+                  "Property": "organization"
+                }
+              },
+              "queryRef": "Helpdesk_Cancelamentos.organization",
+              "nativeQueryRef": "organization",
+              "displayName": "Cliente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Cancelamentos"
+                    }
+                  },
+                  "Property": "Data de Criação"
+                }
+              },
+              "queryRef": "Helpdesk_Cancelamentos.Data de Criação",
+              "nativeQueryRef": "Data de Criação",
+              "displayName": "Criado em"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Cancelamentos"
+                    }
+                  },
+                  "Property": "owner"
+                }
+              },
+              "queryRef": "Helpdesk_Cancelamentos.owner",
+              "nativeQueryRef": "owner",
+              "displayName": "Atendente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Cancelamentos"
+                    }
+                  },
+                  "Property": "category"
+                }
+              },
+              "queryRef": "Helpdesk_Cancelamentos.category",
+              "nativeQueryRef": "category",
+              "displayName": "Categoria"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Cancelamentos"
+                    }
+                  },
+                  "Property": "sistema"
+                }
+              },
+              "queryRef": "Helpdesk_Cancelamentos.sistema",
+              "nativeQueryRef": "sistema",
+              "displayName": "Produto"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Cancelamentos"
+                    }
+                  },
+                  "Property": "status"
+                }
+              },
+              "queryRef": "Helpdesk_Cancelamentos.status",
+              "nativeQueryRef": "status",
+              "displayName": "Status"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Cancelamentos"
+                    }
+                  },
+                  "Property": "Tempo do Pedido em Aberto"
+                }
+              },
+              "queryRef": "Helpdesk_Cancelamentos.Tempo do Pedido em Aberto",
+              "nativeQueryRef": "Tempo do Pedido em Aberto",
+              "displayName": "Tempo"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Helpdesk_Cancelamentos"
+                  }
+                },
+                "Property": "Data de Criação"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "62.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Cancelamentos.id"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "171.5D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Cancelamentos.organization"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "72.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Cancelamentos.Data de Criação"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "85.7D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Cancelamentos.owner"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "128.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Cancelamentos.category"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Cancelamentos.sistema"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "90.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Cancelamentos.status"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "85.7D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Cancelamentos.Tempo do Pedido em Aberto"
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Pedidos em aberto'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Pedidos em aberto agora (não muda com o período) · segue atendente e equipe'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "semVazio_Pedido_em_Aberto",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Helpdesk_Cancelamentos"
+              }
+            },
+            "Property": "Pedido em Aberto"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "t",
+              "Entity": "Helpdesk_Cancelamentos",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Not": {
+                  "Expression": {
+                    "In": {
+                      "Expressions": [
+                        {
+                          "Column": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Source": "t"
+                              }
+                            },
+                            "Property": "Pedido em Aberto"
+                          }
+                        }
+                      ],
+                      "Values": [
+                        [
+                          {
+                            "Literal": {
+                              "Value": "null"
+                            }
+                          }
+                        ],
+                        [
+                          {
+                            "Literal": {
+                              "Value": "''"
+                            }
+                          }
+                        ]
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

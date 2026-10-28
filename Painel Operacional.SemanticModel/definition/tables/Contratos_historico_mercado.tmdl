@@ -1,0 +1,91 @@
+table Contratos_historico_mercado
+	lineageTag: c3898aaa-eb7c-4ccc-90ac-c24b763f11ed
+
+	column periodo
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 98121cb0-ec2a-4393-8eea-428109ffdafb
+		summarizeBy: none
+		sourceColumn: periodo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 39991513-86bb-4014-a8c6-4ffbdb06f987
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column empresa_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 644c821c-3967-472b-b2e8-8d41eb457e69
+		summarizeBy: sum
+		sourceColumn: empresa_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome
+		dataType: string
+		lineageTag: 39ff7a38-04b9-4f78-b8d9-80e7184739d1
+		summarizeBy: none
+		sourceColumn: nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column tamanho
+		dataType: int64
+		formatString: 0
+		lineageTag: fd7e1b13-d49c-497b-9acb-f5bc06d07216
+		summarizeBy: sum
+		sourceColumn: tamanho
+
+		annotation SummarizationSetBy = Automatic
+
+	column ativo
+		dataType: int64
+		formatString: 0
+		lineageTag: 5fbe0cf6-45bc-47d5-8929-efa7025c5e3b
+		summarizeBy: sum
+		sourceColumn: ativo
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 2570748a-aae7-4f40-8649-e24b13994c94
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: bec16cf6-faea-43c2-98a0-93b0832e57be
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Contratos_historico_mercado = m
+		mode: import
+		queryGroup: Contratos
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Contratos_historico_mercado",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"periodo", type datetime}, {"id", Int64.Type}, {"empresa_id", Int64.Type}, {"nome", type text}, {"tamanho", Int64.Type}, {"ativo", Int64.Type}, {"created_at", type datetime}, {"updated_at", type datetime}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

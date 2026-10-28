@@ -1,0 +1,146 @@
+table WhatsApp_Contatos
+	lineageTag: 2c69e326-6409-5585-8984-1e400246ba72
+
+	measure 'Contatos na Carteira' = COUNTROWS( WhatsApp_Contatos )
+		formatString: #,0
+		displayFolder: WhatsApp
+		lineageTag: c31a9f0e-d70b-57d4-afe3-1d6483d65671
+
+	measure 'Carteira sem Mensagem 30d' = VAR ref = CALCULATE( MAX( WhatsApp_Contatos[Extracao] ), REMOVEFILTERS( WhatsApp_Contatos ) ) RETURN CALCULATE( COUNTROWS( WhatsApp_Contatos ), WhatsApp_Contatos[Última mensagem] < ref - 30 )
+		formatString: #,0
+		displayFolder: WhatsApp
+		lineageTag: fc3307f9-89a9-55b7-ab2c-b8dd8c28d360
+
+	column identity
+		dataType: string
+		isHidden
+		lineageTag: f833e3a5-d2ae-5456-af7f-45470fd3717f
+		summarizeBy: none
+		sourceColumn: identity
+
+		annotation SummarizationSetBy = Automatic
+
+	column Contato
+		dataType: string
+		lineageTag: 7bbbd87f-f4ef-5fe0-bba4-2bbdb2acff6e
+		summarizeBy: none
+		sourceColumn: Contato
+
+		annotation SummarizationSetBy = Automatic
+
+	column Grupo
+		dataType: string
+		lineageTag: 1d94832c-71c9-529d-827c-c92e331b4819
+		summarizeBy: none
+		sourceColumn: Grupo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cidade
+		dataType: string
+		lineageTag: ff7366a6-82fa-514a-9bd7-e0eeba881eab
+		summarizeBy: none
+		sourceColumn: Cidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fila
+		dataType: string
+		lineageTag: a3066317-ee38-5c95-a183-be286f14ed7c
+		summarizeBy: none
+		sourceColumn: Fila
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fonte
+		dataType: string
+		lineageTag: 96d12a56-3ad3-5e71-9a99-d2dc3127d76a
+		summarizeBy: none
+		sourceColumn: Fonte
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ativo
+		dataType: string
+		lineageTag: 0019a588-a81f-5aa5-a6de-25c569091f4c
+		summarizeBy: none
+		sourceColumn: Ativo
+
+		annotation SummarizationSetBy = Automatic
+
+	column email_atendente
+		dataType: string
+		isHidden
+		lineageTag: 82181c90-887d-55ff-a9a3-d35f88c97825
+		summarizeBy: none
+		sourceColumn: email_atendente
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Atendente (WhatsApp)'
+		dataType: string
+		lineageTag: 7f9b8596-c9d0-5d67-9358-37e073330bdf
+		summarizeBy: none
+		sourceColumn: Atendente (WhatsApp)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Última mensagem'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 6988b5f6-c5f4-5d80-a7e1-8957024f7927
+		summarizeBy: none
+		sourceColumn: Última mensagem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor = RELATED( dColaboradorMes[Setor] )
+		dataType: string
+		lineageTag: a50f7e34-a92b-571f-b619-8cf9c0ea9490
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Extracao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 571e7731-2d51-5846-b8e0-45901c30363c
+		summarizeBy: none
+		sourceColumn: Extracao
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês da Composição' = ( VAR _d = BLANK() VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Pessoa
+		lineageTag: 0a2a41ad-a624-5328-ad99-cc61894de510
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Chave Pessoa Mês' = IF( TRIM( WhatsApp_Contatos[email_atendente] ) <> "", LOWER( TRIM( WhatsApp_Contatos[email_atendente] ) ) & "|" & WhatsApp_Contatos[Mês da Composição] )
+		dataType: string
+		isHidden
+		displayFolder: Pessoa
+		lineageTag: a3d6cf5a-f488-55ed-94d9-2b4a0761d9d9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition WhatsApp_Contatos = m
+		mode: import
+		queryGroup: WhatsApp
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="WhatsApp_Contatos",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"identity", type text}, {"Contato", type text}, {"Grupo", type text}, {"Cidade", type text}, {"Fila", type text}, {"Fonte", type text}, {"Ativo", type text}, {"email_atendente", type text}, {"Atendente (WhatsApp)", type text}, {"Última mensagem", type datetime}, {"Extracao", type datetime}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

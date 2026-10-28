@@ -1,0 +1,388 @@
+table fPeriodos
+	lineageTag: 46222d1e-f88d-5b1d-ac15-27fa49a5f794
+
+	column Produto
+		lineageTag: 4a142607-e1ab-5ede-9382-89321c654ab0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Produto]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID CRM'
+		formatString: 0
+		lineageTag: 2aaf3885-ddcb-51b3-b3ae-a7af5b24352a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ID CRM]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nº do Período'
+		formatString: 0
+		lineageTag: 669fa2e3-6ffa-593d-83fa-e8681682d265
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nº do Período]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Entrada'
+		lineageTag: e4c95621-e94b-5d4a-ac69-56d0026af2e5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tipo de Entrada]
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID
+		lineageTag: dca57f5d-9d85-5434-af4b-79cee3c4302d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cliente
+		lineageTag: 37d44ade-c802-545f-a206-885cd056b385
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cliente]
+
+		annotation SummarizationSetBy = Automatic
+
+	column CNPJ
+		lineageTag: d719439c-16fa-5e71-9402-d3c5c78b26c7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CNPJ]
+
+		annotation SummarizationSetBy = Automatic
+
+	column CS
+		lineageTag: 4fccd00c-0a12-5549-9c30-81f660aba4e3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe do CS'
+		lineageTag: 23567f21-d24a-5cbe-9e95-75df72d9ac29
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Equipe do CS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Entrada
+		formatString: dd/mm/yy
+		lineageTag: aecd17f2-054e-536d-bf46-d1725910934c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Entrada]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Início no Retrato'
+		formatString: dd/mm/yy
+		lineageTag: da30930b-cbb1-533a-ae72-8b7a0efbcc72
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Início no Retrato]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Último Dia Ativo'
+		formatString: dd/mm/yy
+		lineageTag: ab4d464b-c7d7-52bb-a639-cb5aaacf000c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Último Dia Ativo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Saída
+		formatString: dd/mm/yy
+		lineageTag: 162c3fab-abb4-5be9-acbf-aa91b671f749
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Saída]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Confirmação da Saída'
+		lineageTag: 2c0de771-eead-50b1-a8ab-41a215c5d34a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Confirmação da Saída]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Voltou em'
+		formatString: dd/mm/yy
+		lineageTag: 6c2b9452-00c5-5b17-a30d-73dde67d5746
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Voltou em]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Situação
+		lineageTag: eae43708-bf5f-5397-8a10-113430ef9707
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Situação]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ticket do Período'
+		lineageTag: fa04646f-8f78-5dda-825b-3576b1487e25
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ticket do Período]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ticket
+		formatString: 0
+		lineageTag: f3407c6d-e31d-5623-b4b8-9c89589d8c96
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ticket]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Categoria do Ticket'
+		lineageTag: 2b360ef6-b434-5ad8-89ba-4d3e9928cb7c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Categoria do Ticket]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Status do Ticket'
+		lineageTag: fe801efd-36e4-5b22-8af8-7768f4eca60f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Status do Ticket]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fechamento do Ticket'
+		formatString: dd/mm/yy
+		lineageTag: 8a57e13f-26ab-5d33-beab-075883203fd2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Fechamento do Ticket]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias do Ticket até a Saída'
+		formatString: 0
+		lineageTag: 450e28b4-9700-525d-ba3b-eb292eb71f8d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Dias do Ticket até a Saída]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Alegação
+		lineageTag: f7386ccd-ecd0-5b99-a107-28bdb02b2fe4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Alegação]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ticket de Período Anterior'
+		formatString: dd/mm/yy
+		lineageTag: 4195e5b6-0acc-51ff-bdd1-6c164567204c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ticket de Período Anterior]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Conferência
+		lineageTag: 2d015fda-806d-53ff-823e-a7177ccfa926
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Conferência]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data Base'
+		formatString: dd/mm/yy
+		lineageTag: 261e8cc3-da31-5410-a38d-6fc7e3008fd3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Data Base]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fPeriodos = calculated
+		mode: import
+		source =
+				
+				-- Uma linha por PERÍODO de vida de cada cliente e produto (AF = status do cliente; KP = Status KP), pelo retrato
+				-- diário do CRM desde 14/07/2026: cada entrada (novo ou retorno) abre um período e cada saída fecha.
+				-- Inativo por até 7 dias e voltou = não é saída. O ticket de cancelamento do período é só evidência.
+				-- Base do Cohort (fCohort) e das Inativações (fInativacoes). Calculada no refresh, fora do RLS. gerar_gerencia.py.
+				VAR ult = MAX( CRM_Backup_Diario[Periodo] )
+				-- ===== AF: dias ativo/inativo por cliente; "+ 0" tira a linhagem (o NATURALINNERJOIN junta pelo nome)
+				VAR baseAC = FILTER( CRM_Backup_Diario, CRM_Backup_Diario[Status_Office] <> "Teste" && CRM_Backup_Diario[Só Kappa] = "Não" )
+				VAR porCliAC = GROUPBY( baseAC, CRM_Backup_Diario[Id_CRM],
+				    "@min", MINX( CURRENTGROUP(), IF( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado", "Suspenso" }, 1, 0 ) ), "@max", MAXX( CURRENTGROUP(), IF( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado", "Suspenso" }, 1, 0 ) ),
+				    "@prim", MINX( CURRENTGROUP(), CRM_Backup_Diario[Periodo] ) )
+				VAR mudouAC = SELECTCOLUMNS( FILTER( porCliAC, [@min] = 0 && [@max] = 1 ), "@sid", CRM_Backup_Diario[Id_CRM] )
+				VAR diaAC = GROUPBY( CALCULATETABLE( baseAC, TREATAS( mudouAC, CRM_Backup_Diario[Id_CRM] ) ), CRM_Backup_Diario[Id_CRM], CRM_Backup_Diario[Periodo],
+				    "@at", MAXX( CURRENTGROUP(), IF( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado", "Suspenso" }, 1, 0 ) ) )
+				VAR linAC = SELECTCOLUMNS( diaAC, "@id", CRM_Backup_Diario[Id_CRM] + 0, "@d", CRM_Backup_Diario[Periodo] + 0, "@at", [@at] )
+				VAR diasAC = SELECTCOLUMNS( DISTINCT( SELECTCOLUMNS( baseAC, "@p", CRM_Backup_Diario[Periodo] ) ), "@d", [@p] + 0 )
+				VAR diasAntAC = ADDCOLUMNS( diasAC, "@dAnt", VAR d = [@d] RETURN MAXX( FILTER( diasAC, [@d] < d ), [@d] ) )
+				VAR paresAC = NATURALINNERJOIN( NATURALINNERJOIN( linAC, diasAntAC ),
+				    SELECTCOLUMNS( linAC, "@id", [@id], "@dAnt", [@d], "@atAnt", [@at] ) )
+				VAR inatAC = SELECTCOLUMNS( FILTER( paresAC, [@at] = 0 && [@atAnt] = 1 ), "@iid", [@id], "@id2", [@d], "@idAnt", [@dAnt] )
+				VAR reatAC = SELECTCOLUMNS( FILTER( paresAC, [@at] = 1 && [@atAnt] = 0 ), "@rid", [@id], "@rd", [@d] )
+				-- saída = inativação que não voltou em até 7 dias; volta de verdade = voltou depois de mais de 7 dias inativo
+				VAR saidasAC = SELECTCOLUMNS( FILTER( ADDCOLUMNS( inatAC, "@v",
+				        VAR i = [@iid] VAR d = [@id2] RETURN MINX( FILTER( reatAC, [@rid] = i && [@rd] > d ), [@rd] ) ),
+				        ISBLANK( [@v] ) || [@v] - [@id2] > 7 ),
+				    "@sid", [@iid], "@sd", [@id2], "@sdAnt", [@idAnt] )
+				VAR voltasAC = FILTER( ADDCOLUMNS( reatAC, "@desde",
+				        VAR i = [@rid] VAR rd = [@rd] RETURN MAXX( FILTER( inatAC, [@iid] = i && [@id2] < rd ), [@id2] ) ),
+				    ISBLANK( [@desde] ) || [@rd] - [@desde] > 7 )
+				-- começos: 1º retrato ativo (sempre ativos ou a 1ª mudança foi uma inativação) = Novo; volta de verdade = Retorno
+				-- (volta sem saída vista antes = Retorno: o cliente já estava inativo no 1º retrato)
+				VAR primAC = SELECTCOLUMNS( FILTER( ADDCOLUMNS( FILTER( porCliAC, [@max] = 1 ),
+				        "@pi", VAR i = CRM_Backup_Diario[Id_CRM] RETURN MINX( FILTER( inatAC, [@iid] = i ), [@id2] ),
+				        "@pr", VAR i = CRM_Backup_Diario[Id_CRM] RETURN MINX( FILTER( reatAC, [@rid] = i ), [@rd] ) ),
+				        [@min] = 1 || ISBLANK( [@pr] ) || ( NOT ISBLANK( [@pi] ) && [@pi] < [@pr] ) ),
+				    "@id", CRM_Backup_Diario[Id_CRM] + 0, "@ini", [@prim] + 0, "@tipo", "Novo" )
+				VAR comecosAC = UNION( primAC,
+				    SELECTCOLUMNS( voltasAC, "@id", [@rid], "@ini", [@rd], "@tipo", IF( ISBLANK( [@desde] ), "Retorno", "Retorno" ) ) )
+				VAR perAC = ADDCOLUMNS( comecosAC,
+				    "@saida", VAR i = [@id] VAR c = [@ini] RETURN MINX( FILTER( saidasAC, [@sid] = i && [@sd] > c ), [@sd] ),
+				    "@dAnt", VAR i = [@id] VAR c = [@ini]
+				        VAR sd = MINX( FILTER( saidasAC, [@sid] = i && [@sd] > c ), [@sd] )
+				        RETURN MAXX( FILTER( saidasAC, [@sid] = i && [@sd] = sd ), [@sdAnt] ),
+				    "@volta", VAR i = [@id] VAR c = [@ini] RETURN MINX( FILTER( comecosAC, [@id] = i && [@ini] > c ), [@ini] ),
+				    "@nper", VAR i = [@id] VAR c = [@ini] RETURN COUNTROWS( FILTER( comecosAC, [@id] = i && [@ini] <= c ) ) )
+				
+				-- ===== KP: dias ativo/inativo por cliente; "+ 0" tira a linhagem (o NATURALINNERJOIN junta pelo nome)
+				VAR baseKC = FILTER( CRM_Backup_Diario, CRM_Backup_Diario[Status_Office] <> "Teste" && CRM_Backup_Diario[Periodo] >= DATE( 2026, 7, 22 ) )
+				VAR porCliKC = GROUPBY( baseKC, CRM_Backup_Diario[Id_CRM],
+				    "@min", MINX( CURRENTGROUP(), IF( CRM_Backup_Diario[Status KP] = "Ativo", 1, 0 ) ), "@max", MAXX( CURRENTGROUP(), IF( CRM_Backup_Diario[Status KP] = "Ativo", 1, 0 ) ),
+				    "@prim", MINX( CURRENTGROUP(), CRM_Backup_Diario[Periodo] ) )
+				VAR mudouKC = SELECTCOLUMNS( FILTER( porCliKC, [@min] = 0 && [@max] = 1 ), "@sid", CRM_Backup_Diario[Id_CRM] )
+				VAR diaKC = GROUPBY( CALCULATETABLE( baseKC, TREATAS( mudouKC, CRM_Backup_Diario[Id_CRM] ) ), CRM_Backup_Diario[Id_CRM], CRM_Backup_Diario[Periodo],
+				    "@at", MAXX( CURRENTGROUP(), IF( CRM_Backup_Diario[Status KP] = "Ativo", 1, 0 ) ) )
+				VAR linKC = SELECTCOLUMNS( diaKC, "@id", CRM_Backup_Diario[Id_CRM] + 0, "@d", CRM_Backup_Diario[Periodo] + 0, "@at", [@at] )
+				VAR diasKC = SELECTCOLUMNS( DISTINCT( SELECTCOLUMNS( baseKC, "@p", CRM_Backup_Diario[Periodo] ) ), "@d", [@p] + 0 )
+				VAR diasAntKC = ADDCOLUMNS( diasKC, "@dAnt", VAR d = [@d] RETURN MAXX( FILTER( diasKC, [@d] < d ), [@d] ) )
+				VAR paresKC = NATURALINNERJOIN( NATURALINNERJOIN( linKC, diasAntKC ),
+				    SELECTCOLUMNS( linKC, "@id", [@id], "@dAnt", [@d], "@atAnt", [@at] ) )
+				VAR inatKC = SELECTCOLUMNS( FILTER( paresKC, [@at] = 0 && [@atAnt] = 1 ), "@iid", [@id], "@id2", [@d], "@idAnt", [@dAnt] )
+				VAR reatKC = SELECTCOLUMNS( FILTER( paresKC, [@at] = 1 && [@atAnt] = 0 ), "@rid", [@id], "@rd", [@d] )
+				-- saída = inativação que não voltou em até 7 dias; volta de verdade = voltou depois de mais de 7 dias inativo
+				VAR saidasKC = SELECTCOLUMNS( FILTER( ADDCOLUMNS( inatKC, "@v",
+				        VAR i = [@iid] VAR d = [@id2] RETURN MINX( FILTER( reatKC, [@rid] = i && [@rd] > d ), [@rd] ) ),
+				        ISBLANK( [@v] ) || [@v] - [@id2] > 7 ),
+				    "@sid", [@iid], "@sd", [@id2], "@sdAnt", [@idAnt] )
+				VAR voltasKC = FILTER( ADDCOLUMNS( reatKC, "@desde",
+				        VAR i = [@rid] VAR rd = [@rd] RETURN MAXX( FILTER( inatKC, [@iid] = i && [@id2] < rd ), [@id2] ) ),
+				    ISBLANK( [@desde] ) || [@rd] - [@desde] > 7 )
+				-- começos: 1º retrato ativo (sempre ativos ou a 1ª mudança foi uma inativação) = Novo; volta de verdade = Retorno
+				-- (volta sem saída vista antes = Novo: o cliente já estava inativo no 1º retrato)
+				VAR primKC = SELECTCOLUMNS( FILTER( ADDCOLUMNS( FILTER( porCliKC, [@max] = 1 ),
+				        "@pi", VAR i = CRM_Backup_Diario[Id_CRM] RETURN MINX( FILTER( inatKC, [@iid] = i ), [@id2] ),
+				        "@pr", VAR i = CRM_Backup_Diario[Id_CRM] RETURN MINX( FILTER( reatKC, [@rid] = i ), [@rd] ) ),
+				        [@min] = 1 || ISBLANK( [@pr] ) || ( NOT ISBLANK( [@pi] ) && [@pi] < [@pr] ) ),
+				    "@id", CRM_Backup_Diario[Id_CRM] + 0, "@ini", [@prim] + 0, "@tipo", "Novo" )
+				VAR comecosKC = UNION( primKC,
+				    SELECTCOLUMNS( voltasKC, "@id", [@rid], "@ini", [@rd], "@tipo", IF( ISBLANK( [@desde] ), "Novo", "Retorno" ) ) )
+				VAR perKC = ADDCOLUMNS( comecosKC,
+				    "@saida", VAR i = [@id] VAR c = [@ini] RETURN MINX( FILTER( saidasKC, [@sid] = i && [@sd] > c ), [@sd] ),
+				    "@dAnt", VAR i = [@id] VAR c = [@ini]
+				        VAR sd = MINX( FILTER( saidasKC, [@sid] = i && [@sd] > c ), [@sd] )
+				        RETURN MAXX( FILTER( saidasKC, [@sid] = i && [@sd] = sd ), [@sdAnt] ),
+				    "@volta", VAR i = [@id] VAR c = [@ini] RETURN MINX( FILTER( comecosKC, [@id] = i && [@ini] > c ), [@ini] ),
+				    "@nper", VAR i = [@id] VAR c = [@ini] RETURN COUNTROWS( FILTER( comecosKC, [@id] = i && [@ini] <= c ) ) )
+				
+				-- ===== períodos dos dois produtos
+				VAR per = UNION(
+				    SELECTCOLUMNS( perAC, "@prod", "AF", "@id", [@id], "@ini", [@ini], "@tipo", [@tipo], "@saida", [@saida], "@dAnt", [@dAnt],
+				        "@volta", [@volta], "@nper", [@nper] ),
+				    SELECTCOLUMNS( perKC, "@prod", "KP", "@id", [@id], "@ini", [@ini], "@tipo", [@tipo], "@saida", [@saida], "@dAnt", [@dAnt],
+				        "@volta", [@volta], "@nper", [@nper] ) )
+				VAR per2 = ADDCOLUMNS( per,
+				    "@ref", IF( ISBLANK( [@saida] ), ult, [@dAnt] ),
+				    "@reg", VAR i = [@id] VAR c = [@ini] RETURN CALCULATE( MAX( CRM_Backup_Diario[Dt_Cadastro] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Periodo] = c ) )
+				-- entrada: cliente novo do Alfa = data de registro no CRM; demais = 1º retrato ativo do período
+				VAR per3 = ADDCOLUMNS( per2,
+				    "@entrada", IF( [@prod] = "AF" && [@tipo] = "Novo" && NOT ISBLANK( [@reg] ), [@reg], [@ini] ),
+				    "@idf", VAR i = [@id] VAR r = [@ref] RETURN CALCULATE( MAX( CRM_Backup_Diario[ID_Legado] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Periodo] = r ),
+				    "@cn", VAR i = [@id] VAR r = [@ref] RETURN CALCULATE( MAX( CRM_Backup_Diario[CNPJ (dígitos)] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Periodo] = r ),
+				    "@nome", VAR i = [@id] VAR r = [@ref] RETURN CALCULATE( MAX( CRM_Backup_Diario[Nome_Fantasia] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Periodo] = r ),
+				    "@cs", VAR i = [@id] VAR r = [@ref] RETURN CALCULATE( MAX( CRM_Backup_Diario[Responsavel] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Periodo] = r ),
+				    "@email", VAR i = [@id] VAR r = [@ref] RETURN CALCULATE( MAX( CRM_Backup_Diario[Responsavel_Email] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Periodo] = r ) )
+				-- ===== evidência: ticket de cancelamento do MESMO período (fechado entre a entrada e 15 dias depois da saída)
+				-- prioridade: efetivado tipo 2 (4) > com estorno total (3) > efetivado só tipo 1 (2) > outro (1); chave = prioridade | dia | nº
+				VAR tk = SELECTCOLUMNS( FILTER( Helpdesk_Cancelamentos, NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ) && Helpdesk_Cancelamentos[sistema] IN { "Alfa", "Kappa" } ),
+				    "@tid", Helpdesk_Cancelamentos[id], "@tf", Helpdesk_Cancelamentos[idLegado], "@tcn", SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( TRIM( Helpdesk_Cancelamentos[cnpj] ), ".", "" ), "/", "" ), "-", "" ), " ", "" ), "@tsis", Helpdesk_Cancelamentos[sistema], "@tfech", Helpdesk_Cancelamentos[Data de Fechamento],
+				    "@tprio", IF( Helpdesk_Cancelamentos[category] = "Cancelamento Efetivado", IF( Helpdesk_Cancelamentos[type] = 2, IF( Helpdesk_Cancelamentos[estornoTotal] = "Sim", 3, 4 ), 2 ), 1 ),
+				    "@tef", IF( Helpdesk_Cancelamentos[category] = "Cancelamento Efetivado", 1, 0 ) )
+				VAR per4 = ADDCOLUMNS( per3,
+				    "@key", VAR p = [@prod] VAR f = IFERROR( VALUE( [@idf] ), BLANK() ) VAR cn = [@cn] VAR e = [@entrada] VAR sd = [@saida]
+				        RETURN IF( NOT ISBLANK( sd ), MAXX( FILTER( tk, [@tsis] = IF( p = "AF", "Alfa", "Kappa" ) && IF( ISBLANK( f ), [@tcn] = cn && cn <> "", [@tf] = f ) && [@tfech] >= e && [@tfech] < sd + 16 ),
+				            [@tprio] * 1000000000000 + INT( [@tfech] ) * 10000000 + [@tid] ) ),
+				    "@anterior", VAR p = [@prod] VAR f = IFERROR( VALUE( [@idf] ), BLANK() ) VAR cn = [@cn] VAR e = [@entrada] VAR sd = [@saida]
+				        RETURN IF( NOT ISBLANK( sd ), MAXX( FILTER( tk, [@tsis] = IF( p = "AF", "Alfa", "Kappa" ) && IF( ISBLANK( f ), [@tcn] = cn && cn <> "", [@tf] = f ) && [@tef] = 1 && [@tfech] < e ), [@tfech] ) ) )
+				VAR per5 = ADDCOLUMNS( per4,
+				    "@prio", IF( NOT ISBLANK( [@key] ), INT( [@key] / 1000000000000 ) ),
+				    "@tid2", IF( NOT ISBLANK( [@key] ), MOD( [@key], 10000000 ) ) )
+				VAR per6 = ADDCOLUMNS( per5,
+				    "@cat", VAR t = [@tid2] RETURN IF( NOT ISBLANK( t ), CALCULATE( MAX( Helpdesk_Cancelamentos[category] ), REMOVEFILTERS( Helpdesk_Cancelamentos ), Helpdesk_Cancelamentos[id] = t ) ),
+				    "@tstatus", VAR t = [@tid2] RETURN IF( NOT ISBLANK( t ), CALCULATE( MAX( Helpdesk_Cancelamentos[status] ), REMOVEFILTERS( Helpdesk_Cancelamentos ), Helpdesk_Cancelamentos[id] = t ) ),
+				    "@tfech", VAR t = [@tid2] RETURN IF( NOT ISBLANK( t ),
+				        CALCULATE( MAX( Helpdesk_Cancelamentos[Data de Fechamento] ), REMOVEFILTERS( Helpdesk_Cancelamentos ), Helpdesk_Cancelamentos[id] = t ) ),
+				    "@ale", VAR t = [@tid2] RETURN IF( NOT ISBLANK( t ), CALCULATE( MAX( Helpdesk_Cancelamentos[alegacao] ), REMOVEFILTERS( Helpdesk_Cancelamentos ), Helpdesk_Cancelamentos[id] = t ) ) )
+				VAR per7 = ADDCOLUMNS( per6,
+				    "@classe", IF( NOT ISBLANK( [@saida] ), SWITCH( [@prio], 4, "Efetivado", 3, "Efetivado com estorno total", 2, "Efetivado só tipo 1",
+				        1, "Outro: " & [@cat], IF( NOT ISBLANK( [@anterior] ), "Só ticket de período anterior", "Sem ticket" ) ) ),
+				    "@dias", IF( NOT ISBLANK( [@tfech] ), INT( [@saida] ) - INT( [@tfech] ) ) )
+				RETURN
+				    SELECTCOLUMNS( per7,
+				        "Produto", [@prod],
+				        "ID CRM", [@id],
+				        "Nº do Período", [@nper],
+				        "Tipo de Entrada", [@tipo],
+				        "ID", [@idf],
+				        "Cliente", [@nome],
+				        "CNPJ", [@cn],
+				        "CS", [@cs],
+				        "Equipe do CS", IF( ISBLANK( [@email] ), BLANK(), LOOKUPVALUE( dColaboradorMes[Equipe], dColaboradorMes[email], [@email], dColaboradorMes[AnoMes], ( VAR _d = [@ref] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) ), BLANK() ) ),
+				        "Entrada", [@entrada],
+				        "Início no Retrato", [@ini],
+				        "Último Dia Ativo", [@dAnt],
+				        "Saída", [@saida],
+				        "Confirmação da Saída", IF( NOT ISBLANK( [@saida] ),
+				            IF( ISBLANK( [@volta] ) && ult - [@saida] < 7, "Recente (menos de 7 dias)", "Confirmada" ) ),
+				        "Voltou em", [@volta],
+				        "Situação", IF( ISBLANK( [@saida] ), "Ativo", "Saiu" ),
+				        "Ticket do Período", [@classe],
+				        "Ticket", [@tid2],
+				        "Categoria do Ticket", [@cat],
+				        "Status do Ticket", [@tstatus],
+				        "Fechamento do Ticket", [@tfech],
+				        "Dias do Ticket até a Saída", [@dias],
+				        "Alegação", [@ale],
+				        "Ticket de Período Anterior", [@anterior],
+				        "Conferência", IF( NOT ISBLANK( [@saida] ), SWITCH( TRUE(),
+				            [@classe] = "Só ticket de período anterior", "Só ticket de antes da volta",
+				            [@classe] = "Sem ticket", "Sem ticket",
+				            [@dias] > 60, "CRM inativou com atraso",
+				            "OK" ) ),
+				        "Data Base", ult )
+

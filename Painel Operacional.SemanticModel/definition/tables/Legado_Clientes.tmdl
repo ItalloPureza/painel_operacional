@@ -1,0 +1,460 @@
+table Legado_Clientes
+	lineageTag: 08f3fe44-5af7-5029-933e-aecb2ae87c83
+
+	column ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 798064bd-a114-5834-8ebd-86d8a1f3f668
+		summarizeBy: none
+		sourceColumn: ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CNPJ
+		dataType: string
+		lineageTag: 0d419e25-3918-56c2-897b-1e6430138d88
+		summarizeBy: none
+		sourceColumn: CNPJ
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Razão Social'
+		dataType: string
+		lineageTag: bed5bca1-3f13-5988-944e-0f3145a57dd6
+		summarizeBy: none
+		sourceColumn: Razão Social
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome Fantasia'
+		dataType: string
+		lineageTag: 2642806d-ae64-50aa-ae1f-6d0e8f7ff18f
+		summarizeBy: none
+		sourceColumn: Nome Fantasia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 4f92dbdf-372b-5c52-8a65-e5649dd6ee4a
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Status de Saúde'
+		dataType: string
+		lineageTag: 3e932525-f7ed-5e8a-844c-f2b8b948423e
+		summarizeBy: none
+		sourceColumn: Status de Saúde
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Status Secundário'
+		dataType: string
+		lineageTag: 6c549069-5198-5031-957c-be50e620c3c9
+		summarizeBy: none
+		sourceColumn: Status Secundário
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Status KP'
+		dataType: string
+		lineageTag: a178c268-5b01-5472-916f-0a62d919e9d4
+		summarizeBy: none
+		sourceColumn: Status KP
+
+		annotation SummarizationSetBy = Automatic
+
+	column Treinamento
+		dataType: int64
+		formatString: 0
+		lineageTag: 348056bb-6b14-5f42-8105-c09234d6ee90
+		summarizeBy: none
+		sourceColumn: Treinamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column Utilização
+		dataType: double
+		formatString: 0.00
+		lineageTag: 6133aca5-7dad-5198-ae19-7c900b5bbc74
+		summarizeBy: none
+		sourceColumn: Utilização
+
+		annotation SummarizationSetBy = Automatic
+
+	column Responsável
+		dataType: string
+		lineageTag: d309fd75-e562-5351-9f10-846865e8abba
+		summarizeBy: none
+		sourceColumn: Responsável
+
+		annotation SummarizationSetBy = Automatic
+
+	column Categoria
+		dataType: string
+		lineageTag: 759135c9-5884-5ed4-a3b0-a1039b364c00
+		summarizeBy: none
+		sourceColumn: Categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cidade/UF
+		dataType: string
+		lineageTag: bed4b043-968b-5ec8-aafe-31c23ac0d524
+		summarizeBy: none
+		sourceColumn: Cidade/UF
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Telefone 1'
+		dataType: string
+		lineageTag: 25c6c7f9-250b-53b6-a12c-f7ad980317a9
+		summarizeBy: none
+		sourceColumn: Telefone 1
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Telefone 2'
+		dataType: string
+		lineageTag: 60f2356b-edfc-537d-9c5e-9d5163e40a83
+		summarizeBy: none
+		sourceColumn: Telefone 2
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Cadastro'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 50be30c3-e1c1-5df1-98b3-db3e21e88d65
+		summarizeBy: none
+		sourceColumn: Data de Cadastro
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data da Estrutura'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: f4b22e90-aea6-57da-b1b2-4f36f51714df
+		summarizeBy: none
+		sourceColumn: Data da Estrutura
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Reativação'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 56a99be3-4187-55dc-a3ec-4559bcee09bb
+		summarizeBy: none
+		sourceColumn: Data de Reativação
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Bloqueio'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 7f7b2891-7158-5fa8-b26d-c579b447a682
+		summarizeBy: none
+		sourceColumn: Data de Bloqueio
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Suspensão'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 3bb8fd47-72bd-5cca-8d53-b805e7d42a62
+		summarizeBy: none
+		sourceColumn: Data de Suspensão
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Cancelamento'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: c4e4628a-9626-5464-98c8-df1c75445407
+		summarizeBy: none
+		sourceColumn: Data de Cancelamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data do Aviso Prévio'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 8e600161-f3c3-594d-b586-8c3c413324a2
+		summarizeBy: none
+		sourceColumn: Data do Aviso Prévio
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Empresas no Contrato'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 09e1997c-7c76-54b2-aaf0-044d1030b599
+		summarizeBy: none
+		sourceColumn: Empresas no Contrato
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Empresas Cadastradas'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 32ff0258-2f19-5f09-a00d-3b607ff426d6
+		summarizeBy: none
+		sourceColumn: Empresas Cadastradas
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Empresas com D'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 836429e3-47a7-5092-8f47-0ecec0187ebd
+		summarizeBy: none
+		sourceColumn: Empresas com D
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Empresas sem D'
+		dataType: int64
+		formatString: #,0
+		lineageTag: cbdf3261-e01a-5f03-9c3d-2564427d514a
+		summarizeBy: none
+		sourceColumn: Empresas sem D
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Usuários Ativos'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 1497b3ae-e35f-5360-85f7-b15e2cd26983
+		summarizeBy: none
+		sourceColumn: Usuários Ativos
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Usuários Inativos'
+		dataType: int64
+		formatString: #,0
+		lineageTag: c35f2700-720f-5bd9-af24-1159ade59e78
+		summarizeBy: none
+		sourceColumn: Usuários Inativos
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total de Entregas'
+		dataType: int64
+		formatString: #,0
+		lineageTag: fa09cfa4-3505-5169-bfb0-ba96fe616b40
+		summarizeBy: none
+		sourceColumn: Total de Entregas
+
+		annotation SummarizationSetBy = Automatic
+
+	column Licença
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: 28618de0-4f11-5536-8f18-9401d6908ef0
+		summarizeBy: none
+		sourceColumn: Licença
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mensalidade
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: 75f13373-9cb0-56c7-9970-3591e64ad7df
+		summarizeBy: none
+		sourceColumn: Mensalidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Receita AF'
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: 5970131f-0deb-520d-ace9-cd0edb9fc80f
+		summarizeBy: none
+		sourceColumn: Receita AF
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Receita KP'
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: 940226dd-921e-5e0b-91af-d6ee0341278f
+		summarizeBy: none
+		sourceColumn: Receita KP
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Receita GB'
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: 34e44392-2228-57fb-a36e-1eb6352ef818
+		summarizeBy: none
+		sourceColumn: Receita GB
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Receita AF Docs'
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: 1237580b-3627-550e-bf9d-9abe7b6f1ca0
+		summarizeBy: none
+		sourceColumn: Receita AF Docs
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NPS Detratores'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 43ae9c1c-6acc-5d00-9717-2c017d4e68ac
+		summarizeBy: none
+		sourceColumn: NPS Detratores
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NPS Neutros'
+		dataType: int64
+		formatString: #,0
+		lineageTag: a39551a2-579e-5f7e-9545-f29a19f1d241
+		summarizeBy: none
+		sourceColumn: NPS Neutros
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NPS Promotores'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 8cb3b683-a136-52ad-9f34-85ad833e0786
+		summarizeBy: none
+		sourceColumn: NPS Promotores
+
+		annotation SummarizationSetBy = Automatic
+
+	column NPS
+		dataType: int64
+		formatString: 0
+		lineageTag: 544efb41-d737-55a4-8bb3-3bc768e681b1
+		summarizeBy: none
+		sourceColumn: NPS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Acesso em Dia'
+		dataType: double
+		formatString: 0.00
+		lineageTag: e704837d-8b1c-5e94-9a3e-f37523dc8e6d
+		summarizeBy: none
+		sourceColumn: Acesso em Dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Entregas
+		dataType: double
+		formatString: 0.00
+		lineageTag: 94817127-7626-559f-bca4-1b494328616a
+		summarizeBy: none
+		sourceColumn: Entregas
+
+		annotation SummarizationSetBy = Automatic
+
+	column e-Contínuo
+		dataType: double
+		formatString: 0.00
+		lineageTag: 7ec04146-0692-5ccd-95c5-2ce66ce4be5f
+		summarizeBy: none
+		sourceColumn: e-Contínuo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Avaliação
+		dataType: double
+		formatString: 0.00
+		lineageTag: 23573708-9cd8-5fd7-b677-859052c432c1
+		summarizeBy: none
+		sourceColumn: Avaliação
+
+		annotation SummarizationSetBy = Automatic
+
+	column Processos
+		dataType: int64
+		formatString: 0
+		lineageTag: 3993e8ea-3b5d-51c3-9ee6-cd047d946cc3
+		summarizeBy: none
+		sourceColumn: Processos
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Holding Hands'
+		dataType: string
+		lineageTag: 9937f842-831c-543d-9b87-2330b01da859
+		summarizeBy: none
+		sourceColumn: Holding Hands
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Área VIP'
+		dataType: double
+		formatString: 0.00
+		lineageTag: d429731a-1228-55af-b07b-7955e9bcdc75
+		summarizeBy: none
+		sourceColumn: Área VIP
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Pagamento em Dia'
+		dataType: string
+		lineageTag: 92a37e55-f27d-5c26-85a5-db410f8996cd
+		summarizeBy: none
+		sourceColumn: Pagamento em Dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Histórico Cruzeiro'
+		dataType: string
+		lineageTag: ea864092-e354-5ff6-97f8-ea31e3a6eb80
+		summarizeBy: none
+		sourceColumn: Histórico Cruzeiro
+
+		annotation SummarizationSetBy = Automatic
+
+	column Extracao
+		dataType: dateTime
+		isHidden
+		formatString: dd/mm/yy hh:nn
+		lineageTag: 4e22ea1c-5cd4-5718-bb9d-e6e9daae83be
+		summarizeBy: none
+		sourceColumn: Extracao
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID do Cliente (busca)' = VAR i = TRIM( "" & Legado_Clientes[ID] ) RETURN IF( i = "" || i = "0", BLANK(), i )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 491e1320-61d3-594b-8e55-fe2c9bbfc04f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ do Cliente (busca)' = VAR c = Legado_Clientes[CNPJ] RETURN IF( c = "", BLANK(), c )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 86b17dca-ba0e-5c3c-9388-5ef9359e9f4c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Legado_Clientes = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Legado_Clientes",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"ID", Int64.Type}, {"CNPJ", type text}, {"Razão Social", type text}, {"Nome Fantasia", type text}, {"Status", type text}, {"Status de Saúde", type text}, {"Status Secundário", type text}, {"Status KP", type text}, {"Treinamento", Int64.Type}, {"Utilização", type number}, {"Responsável", type text}, {"Categoria", type text}, {"Cidade/UF", type text}, {"Telefone 1", type text}, {"Telefone 2", type text}, {"Data de Cadastro", type datetime}, {"Data da Estrutura", type datetime}, {"Data de Reativação", type datetime}, {"Data de Bloqueio", type datetime}, {"Data de Suspensão", type datetime}, {"Data de Cancelamento", type datetime}, {"Data do Aviso Prévio", type datetime}, {"Empresas no Contrato", Int64.Type}, {"Empresas Cadastradas", Int64.Type}, {"Empresas com D", Int64.Type}, {"Empresas sem D", Int64.Type}, {"Usuários Ativos", Int64.Type}, {"Usuários Inativos", Int64.Type}, {"Total de Entregas", Int64.Type}, {"Licença", Currency.Type}, {"Mensalidade", Currency.Type}, {"Receita AF", Currency.Type}, {"Receita KP", Currency.Type}, {"Receita GB", Currency.Type}, {"Receita AF Docs", Currency.Type}, {"NPS Detratores", Int64.Type}, {"NPS Neutros", Int64.Type}, {"NPS Promotores", Int64.Type}, {"NPS", Int64.Type}, {"Acesso em Dia", type number}, {"Entregas", type number}, {"e-Contínuo", type number}, {"Avaliação", type number}, {"Processos", Int64.Type}, {"Holding Hands", type text}, {"Área VIP", type number}, {"Pagamento em Dia", type text}, {"Histórico Cruzeiro", type text}, {"Extracao", type datetime}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,843 @@
+table Helpdesk_Cancelamentos
+	lineageTag: cfd80fcd-f661-4f49-a695-1de34c84df97
+
+	/// Tickets de cancelamento por data de CRIAÇÃO. Usar só em telas de pendência (fila aberta).
+	measure 'Cancelamentos Abertos no Período' = CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), USERELATIONSHIP( Helpdesk_Cancelamentos[Data de Criação], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: Base de datas
+		lineageTag: 47b1b242-24b4-510a-9de7-7f6df3c0e67a
+
+	/// Tickets de cancelamento por data de FECHAMENTO (padrão).
+	measure 'Cancelamentos Fechados' = CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ) )
+		formatString: #,0
+		displayFolder: Base de datas
+		lineageTag: 79ad498a-b80f-5153-bfb6-3777cfa875db
+
+	/// Cancelamentos efetivados de contas de porte 'Grande' (faixas na coluna Porte da Conta).
+	measure 'Cancelamentos Contas Grandes' = CALCULATE( [Cancelamentos Efetivados], Helpdesk_Cancelamentos[Porte da Conta] = "Grande" )
+		formatString: #,0
+		displayFolder: Cancelamento
+		lineageTag: 03ff11ab-4d4d-5b6e-b50e-65f7344dc07e
+
+	/// Cancelamentos efetivados de contas de porte 'Média' (faixas na coluna Porte da Conta).
+	measure 'Cancelamentos Contas Médias' = CALCULATE( [Cancelamentos Efetivados], Helpdesk_Cancelamentos[Porte da Conta] = "Média" )
+		formatString: #,0
+		displayFolder: Cancelamento
+		lineageTag: 66895a72-1d34-558d-a1b6-773f1169cd62
+
+	/// Cancelamentos efetivados de contas de porte 'Pequena' (faixas na coluna Porte da Conta).
+	measure 'Cancelamentos Contas Pequenas' = CALCULATE( [Cancelamentos Efetivados], Helpdesk_Cancelamentos[Porte da Conta] = "Pequena" )
+		formatString: #,0
+		displayFolder: Cancelamento
+		lineageTag: 1797199a-5868-5ce0-b178-270219a404d8
+
+	/// SEM DEFINIÇÃO na intranet (ver docs/metas-intranet.md): fica vazia. Meta da equipe ÷ pessoas ativas na equipe.
+	measure 'Meta de Cancelamentos (Individual)' = BLANK()
+		formatString: #,0.00
+		displayFolder: Metas (a ligar)
+		lineageTag: 3844b0f1-0840-5c4c-9818-09349cf44f59
+
+	/// Meta de R$ cancelado do Ongoing AF = meta % 'Mensalidade cancelamentos' x mensalidade AF no 1º dia do mês do setor ou da equipe (derivada, base CRM). Onboarding e Kappa ficam vazios (sem meta de R$ na intranet).
+	measure 'Meta de R$ Cancelado' = VAR area = SELECTEDVALUE( Helpdesk_Cancelamentos[areaDeAtuacao] ) VAR sis = SELECTEDVALUE( Helpdesk_Cancelamentos[sistema] ) VAR eq = SELECTEDVALUE( Helpdesk_Cancelamentos[Equipe do Treinador] ) VAR setor = SWITCH( area, "Sucesso do Cliente", "Ongoing", "Consultoria", "Onboarding" ) VAR v = FILTER( Meta_Vinculo, Meta_Vinculo[Medida] = "Meta de R$ Cancelado (" & setor & ")" ) VAR d = MAXX( v, Meta_Vinculo[def_id] ) VAR s = MAXX( v, Meta_Vinculo[setor_id] ) RETURN IF( d > 0 && sis = "Alfa", SUMX( VALUES( Calendario[AnoMes] ), CALCULATE( DIVIDE( CALCULATE( [Meta Alvo (período)], Meta_Def[id] = d, Meta_Valor[setor_id] = s ), 100 ) * IF( ISBLANK( eq ), CALCULATE( [Mensalidade AF (início do mês)], CRM_Backup_Diario[Setor do CS] = setor ), CALCULATE( [Mensalidade AF (início do mês)], CRM_Backup_Diario[Setor do CS] = setor, CRM_Backup_Diario[Equipe do CS] = eq ) ) ) ) )
+		formatString: #,0.00
+		displayFolder: Metas (a ligar)
+		lineageTag: 83e26684-0967-5ad2-8391-3f80623b2077
+
+	/// Meta de cancelamentos (quantidade) do setor da tela = meta % da intranet x clientes ativos no 1º dia do mês do setor ou da equipe do gráfico (derivada, base CRM). Ongoing: 'Clientes cancelados'; Onboarding: 'Churn rate - Alfa'. Só Alfa; Kappa fica vazio.
+	measure 'Meta de Cancelamentos' = VAR area = SELECTEDVALUE( Helpdesk_Cancelamentos[areaDeAtuacao] ) VAR sis = SELECTEDVALUE( Helpdesk_Cancelamentos[sistema] ) VAR eq = SELECTEDVALUE( Helpdesk_Cancelamentos[Equipe do Treinador] ) VAR setor = SWITCH( area, "Sucesso do Cliente", "Ongoing", "Consultoria", "Onboarding" ) VAR v = FILTER( Meta_Vinculo, Meta_Vinculo[Medida] = "Meta de Cancelamentos (" & setor & ")" ) VAR d = MAXX( v, Meta_Vinculo[def_id] ) VAR s = MAXX( v, Meta_Vinculo[setor_id] ) RETURN IF( d > 0 && sis = "Alfa", SUMX( VALUES( Calendario[AnoMes] ), CALCULATE( DIVIDE( CALCULATE( [Meta Alvo (período)], Meta_Def[id] = d, Meta_Valor[setor_id] = s ), 100 ) * IF( ISBLANK( eq ), CALCULATE( [Clientes Ativos AF (início do mês)], CRM_Backup_Diario[Setor do CS] = setor ), CALCULATE( [Clientes Ativos AF (início do mês)], CRM_Backup_Diario[Setor do CS] = setor, CRM_Backup_Diario[Equipe do CS] = eq ) ) ) ) )
+		formatString: #,0.00
+		displayFolder: Metas (a ligar)
+		lineageTag: 6243cb38-888e-5b15-8ac9-a426f0700fce
+
+	/// Revertidos ÷ pedidos (efetivados + revertidos).
+	measure '% Revertidos' = DIVIDE( [Cancelamentos Revertidos], [Pedidos de Cancelamento] )
+		formatString: 0.00%
+		displayFolder: Cancelamento
+		lineageTag: ccf4a0df-c0f2-58d3-8967-32c2b242212e
+
+	/// Efetivados + revertidos.
+	measure 'Pedidos de Cancelamento' = [Cancelamentos Efetivados] + [Cancelamentos Revertidos]
+		formatString: #,0
+		displayFolder: Cancelamento
+		lineageTag: 10ae4865-6162-5a88-b7f6-d3b14474d8b6
+
+	/// Pedidos de cancelamento revertidos (mesmos filtros), por data de FECHAMENTO.
+	measure 'Cancelamentos Revertidos' = CALCULATE( [Cancelamentos Fechados], Helpdesk_Cancelamentos[Resultado do Pedido] = "Revertido" )
+		formatString: #,0
+		displayFolder: Cancelamento
+		lineageTag: fdd99c08-ccb4-5b9a-930b-23e3a95f8242
+
+	/// Mensalidade dos cancelamentos efetivados, por data de FECHAMENTO.
+	measure 'R$ Cancelado' = CALCULATE( SUM( Helpdesk_Cancelamentos[mensalidade] ), Helpdesk_Cancelamentos[Resultado do Pedido] = "Efetivado", NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ) )
+		formatString: \R$ #,0.00
+		displayFolder: Cancelamento
+		lineageTag: 65f90ed0-a34c-5c7b-a708-53be39a080b8
+
+	/// Cancelamentos efetivados (fechados, tipo 2, sem estorno total e sem ajuste de carteira), por data de FECHAMENTO.
+	measure 'Cancelamentos Efetivados' = CALCULATE( [Cancelamentos Fechados], Helpdesk_Cancelamentos[Resultado do Pedido] = "Efetivado" )
+		formatString: #,0
+		displayFolder: Cancelamento
+		lineageTag: 13b68a69-fdce-53e8-b1d2-cfcddc65ceda
+
+	/// Pedidos 'Cancelamento - Outros' do Alfa, por data de FECHAMENTO.
+	measure 'Pedidos Outros Atendidos' = CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), Helpdesk_Cancelamentos[type] = 2, Helpdesk_Cancelamentos[Serviço] = "Cancelamento", Helpdesk_Cancelamentos[ajusteCarteira] <> "Sim", NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ), Helpdesk_Cancelamentos[category] = "Cancelamento - Outros", Helpdesk_Cancelamentos[sistema] = "Alfa" )
+		formatString: #,0
+		displayFolder: Relacionamento
+		lineageTag: ebecbee7-4b6f-5c81-99b5-ff4cdc0a5bf1
+
+	/// Meta de % de reversão (intranet: Reversão - Alfa 17 / Kappa 10, setor Relacionamento). Só aparece com UM produto escolhido no filtro Sistema (a taxa sem filtro soma todos os produtos e não é comparável com a meta de um produto).
+	measure 'Meta % Reversão' = VAR sis = SELECTEDVALUE( Helpdesk_Cancelamentos[sistema] ) VAR v = FILTER( Meta_Vinculo, Meta_Vinculo[Medida] = "Meta % Reversão" && ( Meta_Vinculo[Sistema] = sis || Meta_Vinculo[Sistema] = "" ) ) VAR d = MAXX( v, Meta_Vinculo[def_id] ) VAR s = MAXX( v, Meta_Vinculo[setor_id] ) RETURN IF( d > 0, DIVIDE( CALCULATE( [Meta Alvo (período)], Meta_Def[id] = d, Meta_Valor[setor_id] = s ), 100 ) )
+		formatString: 0.00%
+		displayFolder: Relacionamento
+		lineageTag: 91d71bd6-f3e4-5f31-8397-bf93ca3e0f1b
+
+	/// Pedidos tipo 2 fechados de clientes que têm mais de um pedido (ClienteReativado? do OKR 2026).
+	measure 'Pedidos de Clientes com Mais de um Pedido' = CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), Helpdesk_Cancelamentos[type] = 2, NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ), Helpdesk_Cancelamentos[Cliente com Mais de um Pedido] = "Sim" )
+		formatString: #,0
+		displayFolder: Relacionamento
+		lineageTag: bb2aefb6-bc70-5fa9-8a01-b718d708a31c
+
+	/// Pedidos revertidos, por data de FECHAMENTO (tela Clientes Revertidos).
+	measure 'Clientes Revertidos' = CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), KEEPFILTERS( Helpdesk_Cancelamentos[category] = "Cancelamento Revertido" ), NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ) )
+		formatString: #,0
+		displayFolder: Relacionamento
+		lineageTag: 0709d991-2182-5c74-a3f9-7fbd1ef1e465
+
+	/// Pedidos tipo 2 fechados no período (lista Status Cancelados).
+	measure 'Pedidos Fechados (Tipo 2)' = CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), Helpdesk_Cancelamentos[type] = 2, NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ) )
+		formatString: #,0
+		displayFolder: Relacionamento
+		lineageTag: aae1e342-e8b3-51e3-9033-43091cf4fcea
+
+	/// Pedidos em aberto criados há 5 dias ou mais (FOTO).
+	measure 'Pedidos em Aberto há 5+ Dias' = CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), REMOVEFILTERS( Calendario ), Helpdesk_Cancelamentos[Pedido em Aberto] = "Há 5 dias ou mais" )
+		formatString: #,0
+		displayFolder: Relacionamento
+		lineageTag: c1222b54-95ac-5359-8281-b8e422d6bfcb
+
+	/// Pedidos tipo 2 não Fechados/Resolvidos (FOTO: não muda com o período).
+	measure 'Pedidos em Aberto' = CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), REMOVEFILTERS( Calendario ), NOT ISBLANK( Helpdesk_Cancelamentos[Pedido em Aberto] ) )
+		formatString: #,0
+		displayFolder: Relacionamento
+		lineageTag: 9343314b-dfe3-5c94-ac84-4aa883cf4294
+
+	/// Reversões ÷ pedidos atendidos (fechamento nos dois) — tela Reversão do OKR 2026.
+	measure '% Reversão Atendida' = DIVIDE( [Reversões Atendidas], [Pedidos Atendidos] )
+		formatString: 0.00%
+		displayFolder: Relacionamento
+		lineageTag: 193cd2e2-60ce-543c-a3e2-b37a0210c19f
+
+	/// Pedidos revertidos (sem outro pedido do cliente fechado no mesmo mês), por data de FECHAMENTO.
+	measure 'Reversões Atendidas' = CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), Helpdesk_Cancelamentos[type] = 2, Helpdesk_Cancelamentos[Serviço] = "Cancelamento", Helpdesk_Cancelamentos[ajusteCarteira] <> "Sim", NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ), Helpdesk_Cancelamentos[category] = "Cancelamento Revertido", Helpdesk_Cancelamentos[Cancelou no Mesmo Mês] = "Não" )
+		formatString: #,0
+		displayFolder: Relacionamento
+		lineageTag: 91355c3b-ccc1-53a7-8610-ea48d741debc
+
+	/// Pedidos tipo 2 do serviço Cancelamento (sem 'Outros', sem ajuste), por data de FECHAMENTO — tela Reversão.
+	measure 'Pedidos Atendidos' = CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), Helpdesk_Cancelamentos[type] = 2, Helpdesk_Cancelamentos[Serviço] = "Cancelamento", Helpdesk_Cancelamentos[ajusteCarteira] <> "Sim", NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ), Helpdesk_Cancelamentos[category] <> "Cancelamento - Outros" )
+		formatString: #,0
+		displayFolder: Relacionamento
+		lineageTag: cd55e4e0-638b-58c2-8a93-2a707c005b94
+
+	/// Mensalidade dos efetivados tipo 2, por data de FECHAMENTO.
+	measure 'R$ Cancelado por Alegação' = CALCULATE( SUM( Helpdesk_Cancelamentos[mensalidade] ), Helpdesk_Cancelamentos[type] = 2, Helpdesk_Cancelamentos[category] = "Cancelamento Efetivado", NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ) )
+		formatString: \R$ #,0.00
+		displayFolder: Relacionamento
+		lineageTag: 0faedbd9-b510-5a8c-b489-005fa3a486e9
+
+	/// Efetivados tipo 2 (sem outros filtros), por data de FECHAMENTO — tela Alegação/Fase do OKR 2026.
+	measure 'Cancelamentos por Alegação' = CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), Helpdesk_Cancelamentos[type] = 2, Helpdesk_Cancelamentos[category] = "Cancelamento Efetivado", NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ) )
+		formatString: #,0
+		displayFolder: Relacionamento
+		lineageTag: 0748f9f8-b86f-5007-841d-ccb858fbcd07
+
+	/// Revertidos (fechamento) ÷ pedidos (criação) — mesma conta do OKR 2026.
+	measure '% Reversão (Empresa)' = DIVIDE( [Revertidos (Empresa)], [Pedidos de Cancelamento (Empresa)] )
+		formatString: 0.00%
+		displayFolder: Relacionamento
+		lineageTag: e15fbe28-d972-5e7f-8794-62451fe34ca9
+
+	/// Revertidos (fechados, tipo 2, sem estorno, sem outro pedido do cliente fechado no mesmo mês), por data de FECHAMENTO.
+	measure 'Revertidos (Empresa)' = CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), KEEPFILTERS( Helpdesk_Cancelamentos[category] = "Cancelamento Revertido" ), Helpdesk_Cancelamentos[estornoTotal] <> "Sim", Helpdesk_Cancelamentos[status] = "Fechado", Helpdesk_Cancelamentos[type] = 2, Helpdesk_Cancelamentos[Cancelou no Mesmo Mês] = "Não", NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ) )
+		formatString: #,0
+		displayFolder: Relacionamento
+		lineageTag: 42e84809-618a-50d2-bd4b-4c6ac138d8a5
+
+	/// Cancelamentos efetivados (fechados, tipo 2, sem estorno total), por data de FECHAMENTO.
+	measure 'Efetivados (Empresa)' = CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), KEEPFILTERS( Helpdesk_Cancelamentos[category] = "Cancelamento Efetivado" ), Helpdesk_Cancelamentos[estornoTotal] <> "Sim", Helpdesk_Cancelamentos[status] = "Fechado", Helpdesk_Cancelamentos[type] = 2, NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ) )
+		formatString: #,0
+		displayFolder: Relacionamento
+		lineageTag: b49d8814-381f-5074-9967-4f5cb8803099
+
+	/// Pedidos de cancelamento (tipo 2, serviço Cancelamento, sem 'Outros' e sem ajuste de carteira; no AF sem os da treinadora Rodrigo Vieira), por data de CRIAÇÃO — tela Cancelamentos do OKR 2026.
+	measure 'Pedidos de Cancelamento (Empresa)' = CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), USERELATIONSHIP( Helpdesk_Cancelamentos[Data de Criação], Calendario[Date] ), Helpdesk_Cancelamentos[type] = 2, Helpdesk_Cancelamentos[Serviço] = "Cancelamento", Helpdesk_Cancelamentos[category] <> "Cancelamento - Outros", Helpdesk_Cancelamentos[ajusteCarteira] <> "Sim", KEEPFILTERS( FILTER( ALL( Helpdesk_Cancelamentos[sistema], Helpdesk_Cancelamentos[treinador] ), NOT ( Helpdesk_Cancelamentos[sistema] = "Alfa" && Helpdesk_Cancelamentos[treinador] = "Rodrigo Vieira" ) ) ) )
+		formatString: #,0
+		displayFolder: Relacionamento
+		lineageTag: 4caba62a-fdec-553f-a4c1-b1f2c0be87af
+
+	/// Coluna 'Tempo' da lista 'Pedidos em aberto': o 'Pedido em Aberto' do pedido (há 5 dias ou mais / menos de 5), vazio para pedido fora da seleção de Atendente/Equipe — assim a lista segue esses filtros.
+	measure 'Tempo do Pedido em Aberto' = IF( [Na Seleção de Atendente] >= 1, CALCULATE( SELECTEDVALUE( Helpdesk_Cancelamentos[Pedido em Aberto] ), REMOVEFILTERS( Calendario ) ) )
+		displayFolder: Relacionamento
+		lineageTag: 8feb8aa1-06a7-5b2b-9361-c2e8c3fcb284
+
+	/// Pedidos da seleção de Atendente/Equipe (Cancelamentos Atendidos): com eles escolhidos, só os pedidos de quem estava na seleção no mês (composição do mês, como os cartões '(por pessoa)'); sem eles, todos. Ignora o período (a lista é foto).
+	measure 'Na Seleção de Atendente' = IF( ISFILTERED( dColaboradorMes[Colaborador] ) || ISFILTERED( dColaboradorMes[Equipe] ), CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), REMOVEFILTERS( Calendario ), KEEPFILTERS( TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) ) ), CALCULATE( COUNTROWS( Helpdesk_Cancelamentos ), REMOVEFILTERS( Calendario ) ) )
+		formatString: #,0
+		displayFolder: Relacionamento
+		lineageTag: f77a7462-0698-5a61-ba38-ce1000d7457c
+
+	/// Cancelamentos efetivados da tela (área e sistema da tela, pelo treinador, data de fechamento) ÷ clientes KP da carteira do setor no 1º retrato do mês. Nos cartões vale o mês mais recente do período.
+	measure '% Cancelamento KP (área)' = DIVIDE( [Cancelamentos Efetivados], [Clientes KP no Início do Mês (área)] )
+		formatString: 0.00%
+		displayFolder: Kappa por Área
+		lineageTag: fdcf46b0-4ae8-51ef-a4ee-c4c64b7bd21d
+
+	/// Clientes com Kappa ativo no 1º retrato do mês (CNPJ distinto, regra da Global 02) da carteira do setor da tela (área Consultoria = Onboarding, Sucesso do Cliente = Ongoing), pelo setor/equipe do CS no cadastro do RH do mês. Segue os filtros Equipe e Treinador da tela (equipe do CS e e-mail do treinador = responsável da carteira).
+	measure 'Clientes KP no Início do Mês (área)' = VAR setor = SWITCH( CALCULATE( SELECTEDVALUE( Helpdesk_Cancelamentos[areaDeAtuacao] ), ALLEXCEPT( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[areaDeAtuacao] ) ), "Sucesso do Cliente", "Ongoing", "Consultoria", "Onboarding" ) VAR d1 = CALCULATE( MIN( CRM_Backup_Diario[Periodo] ), REMOVEFILTERS( CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Equipe do CS], CRM_Backup_Diario[Setor do CS] ) ) VAR fe = ISFILTERED( Helpdesk_Cancelamentos[Equipe do Treinador] ) VAR eqs = FILTERS( Helpdesk_Cancelamentos[Equipe do Treinador] ) VAR ft = ISFILTERED( Helpdesk_Cancelamentos[treinador] ) VAR ems = CALCULATETABLE( VALUES( Helpdesk_Cancelamentos[Email do Treinador] ), REMOVEFILTERS( Calendario ) ) RETURN IF( NOT ISBLANK( setor ) && NOT ISBLANK( d1 ), CALCULATE( [Clientes Ativos KP (início do mês)], CRM_Backup_Diario[Periodo] = d1, CRM_Backup_Diario[Setor do CS] = setor, KEEPFILTERS( FILTER( ALL( CRM_Backup_Diario[Equipe do CS] ), NOT fe || CRM_Backup_Diario[Equipe do CS] IN eqs ) ), KEEPFILTERS( FILTER( ALL( CRM_Backup_Diario[Responsavel_Email] ), NOT ft || CRM_Backup_Diario[Responsavel_Email] IN ems ) ) ) )
+		formatString: #,0
+		displayFolder: Kappa por Área
+		lineageTag: 1031abb9-96b3-5ae2-a8ea-111d88fc3919
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 43e30077-d573-4756-9641-a5edb1d0a22f
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column type
+		dataType: int64
+		formatString: 0
+		lineageTag: 62429175-9af0-4613-80c9-c037b92a5d93
+		summarizeBy: sum
+		sourceColumn: type
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		lineageTag: 4b60baa0-0d8b-4d85-b896-c74cec8c9f1d
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Criação'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 2d528118-faf9-4676-98b6-ec45f211803f
+		summarizeBy: none
+		sourceColumn: Data de Criação
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Data Resolvido'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 02f89f57-d45b-4cb0-ae0f-3569a9bd81f0
+		summarizeBy: none
+		sourceColumn: Data Resolvido
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Data de Fechamento'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: f656437e-8ba0-4e12-8fd7-96193a759ac2
+		summarizeBy: none
+		sourceColumn: Data de Fechamento
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ownerTeam
+		dataType: string
+		lineageTag: 640453ae-907c-4925-9a18-c519fe6a89ae
+		summarizeBy: none
+		sourceColumn: ownerTeam
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: eb254637-34c3-4a3c-87a4-5c78bb2791c6
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column tags
+		dataType: string
+		lineageTag: cefd49e4-c06b-4b53-844b-e0275dc45efd
+		summarizeBy: none
+		sourceColumn: tags
+
+		annotation SummarizationSetBy = Automatic
+
+	column origin
+		dataType: int64
+		formatString: 0
+		lineageTag: ecadf10b-325c-427d-a463-a9fe3acf88b3
+		summarizeBy: sum
+		sourceColumn: origin
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data da Ultima Ação'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: b4b33c0f-608e-4422-b597-666d24e50708
+		summarizeBy: none
+		sourceColumn: Data da Ultima Ação
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Data da Ultima Atualização'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: b6fb2a9c-dc57-4616-8fcc-ea7614a0ba3e
+		summarizeBy: none
+		sourceColumn: Data da Ultima Atualização
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Serviço
+		dataType: string
+		lineageTag: cb959a5d-f21f-4507-b33e-55ec2386aa11
+		summarizeBy: none
+		sourceColumn: Serviço
+
+		annotation SummarizationSetBy = Automatic
+
+	column owner
+		dataType: string
+		lineageTag: 52c58844-913d-483c-8dfc-2da837b75f96
+		summarizeBy: none
+		sourceColumn: owner
+
+		annotation SummarizationSetBy = Automatic
+
+	column organization
+		dataType: string
+		lineageTag: 66fb1d87-fb23-45d6-8ebe-b93c81ad86f3
+		summarizeBy: none
+		sourceColumn: organization
+
+		annotation SummarizationSetBy = Automatic
+
+	column treinador
+		dataType: string
+		lineageTag: 55858a3a-af38-4edd-a458-085d9207f35e
+		summarizeBy: none
+		sourceColumn: treinador
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendedor
+		dataType: string
+		lineageTag: 837eac57-3a1f-4bb5-9b9a-b62e50f20928
+		summarizeBy: none
+		sourceColumn: vendedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column idLegado
+		dataType: int64
+		formatString: 0
+		lineageTag: 8d038550-e28c-4f91-a25a-fdda136e6be8
+		summarizeBy: sum
+		sourceColumn: idLegado
+
+		annotation SummarizationSetBy = Automatic
+
+	column cnpj
+		dataType: string
+		lineageTag: f971b212-bb4c-4927-8ee4-dfd6f4b79ed8
+		summarizeBy: none
+		sourceColumn: cnpj
+
+		annotation SummarizationSetBy = Automatic
+
+	column licenca
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: 3f59d78a-5a9d-466a-9708-94806f03425f
+		summarizeBy: sum
+		sourceColumn: licenca
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column licencaPaga
+		dataType: string
+		lineageTag: 60fba144-3c77-400e-8e50-5bc7bddb9ac0
+		summarizeBy: none
+		sourceColumn: licencaPaga
+
+		annotation SummarizationSetBy = Automatic
+
+	column mensalidade
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 6e792699-9e71-429a-b2b7-3f11e302a996
+		summarizeBy: sum
+		sourceColumn: mensalidade
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column mensalidadeAVencer
+		dataType: string
+		lineageTag: 699c60f2-5e0e-400d-9471-a685a78e3cb5
+		summarizeBy: none
+		sourceColumn: mensalidadeAVencer
+
+		annotation SummarizationSetBy = Automatic
+
+	column qntdCnpj
+		dataType: string
+		lineageTag: a0b2e4e1-95d7-47de-a1fe-90877bcf9ea5
+		summarizeBy: none
+		sourceColumn: qntdCnpj
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Contrato'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 538fa7b8-d87b-43d2-a50f-6d9950c6bb54
+		summarizeBy: none
+		sourceColumn: Data de Contrato
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column contato
+		dataType: string
+		lineageTag: c0cd3ff4-b982-4ab5-8f8a-c364db15de77
+		summarizeBy: none
+		sourceColumn: contato
+
+		annotation SummarizationSetBy = Automatic
+
+	column mensalidadePendente
+		dataType: string
+		lineageTag: cf1134b9-fec3-48ca-9ae0-5fb4f21682be
+		summarizeBy: none
+		sourceColumn: mensalidadePendente
+
+		annotation SummarizationSetBy = Automatic
+
+	column sistema
+		dataType: string
+		lineageTag: 91a38bbe-d198-41d4-ace8-a40e1e5630f8
+		summarizeBy: none
+		sourceColumn: sistema
+
+		annotation SummarizationSetBy = Automatic
+
+	column idContrato
+		dataType: int64
+		formatString: 0
+		lineageTag: 251d5676-d319-4947-bf8f-be5f02b93ae8
+		summarizeBy: sum
+		sourceColumn: idContrato
+
+		annotation SummarizationSetBy = Automatic
+
+	column contratouOutroSoftware
+		dataType: string
+		lineageTag: 251352d9-c5c0-45a5-a822-36427caed172
+		summarizeBy: none
+		sourceColumn: contratouOutroSoftware
+
+		annotation SummarizationSetBy = Automatic
+
+	column reclamacaoVenda
+		dataType: string
+		lineageTag: 641f85de-3661-4baa-baf7-e4c28858047c
+		summarizeBy: none
+		sourceColumn: reclamacaoVenda
+
+		annotation SummarizationSetBy = Automatic
+
+	column areaDeAtuacao
+		dataType: string
+		lineageTag: ab430534-6426-4d25-8ac7-f15ac0b445a9
+		summarizeBy: none
+		sourceColumn: areaDeAtuacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column faseDoCliente
+		dataType: string
+		lineageTag: c880364f-d274-4bd9-a72a-8d570eb796e3
+		summarizeBy: none
+		sourceColumn: faseDoCliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column estornoTotal
+		dataType: string
+		lineageTag: 7493c8d1-a760-4430-ba77-b16258312335
+		summarizeBy: none
+		sourceColumn: estornoTotal
+
+		annotation SummarizationSetBy = Automatic
+
+	column valorEstorno
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: b4b5af7a-d5fb-4e1d-9856-7bd3c6b75e97
+		summarizeBy: sum
+		sourceColumn: valorEstorno
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column alegacao
+		dataType: string
+		lineageTag: 540f9dd6-c1d4-4f97-b5cd-547159988bfa
+		summarizeBy: none
+		sourceColumn: alegacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column nomeConcorrente
+		dataType: string
+		lineageTag: c5f39f6c-db4c-46ca-ab9b-d945f8eb28ea
+		summarizeBy: none
+		sourceColumn: nomeConcorrente
+
+		annotation SummarizationSetBy = Automatic
+
+	column excecaoGerencia
+		dataType: string
+		lineageTag: 656d8067-4df8-40e7-89db-bbd4107cfe00
+		summarizeBy: none
+		sourceColumn: excecaoGerencia
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipoInativacao
+		dataType: string
+		lineageTag: afc10074-94c1-45c6-b970-4e56f0aac189
+		summarizeBy: none
+		sourceColumn: tipoInativacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataInativacaoTexto
+		dataType: string
+		lineageTag: fb78cfa0-c2d8-4f14-ab8e-6bfaa134404e
+		summarizeBy: none
+		sourceColumn: dataInativacaoTexto
+
+		annotation SummarizationSetBy = Automatic
+
+	column descontoIsencaoReajuste
+		dataType: string
+		lineageTag: 98aebbf7-e386-4bd3-9114-4ee0f202bd9f
+		summarizeBy: none
+		sourceColumn: descontoIsencaoReajuste
+
+		annotation SummarizationSetBy = Automatic
+
+	column descontoMensalidade
+		dataType: string
+		lineageTag: eed8626f-edd4-4f99-953f-a9fd0d7b36c8
+		summarizeBy: none
+		sourceColumn: descontoMensalidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column descontoMensalidadeValor
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: 25ed31bd-993e-4a28-a11d-b3255cd0ee1a
+		summarizeBy: sum
+		sourceColumn: descontoMensalidadeValor
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column isencaoMensalidade
+		dataType: string
+		lineageTag: 508992ad-9cd9-4051-bd30-41f23dae4be8
+		summarizeBy: none
+		sourceColumn: isencaoMensalidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column isencaoMensalidadeValor
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: 73e2b400-3149-46b9-a80c-005193ae2fe8
+		summarizeBy: sum
+		sourceColumn: isencaoMensalidadeValor
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column reajusteMensalidade
+		dataType: string
+		lineageTag: 64a787fe-b0bc-4f1f-8b94-61885816cfd0
+		summarizeBy: none
+		sourceColumn: reajusteMensalidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column reajusteMensalidadeValor
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: 61898620-151a-4211-81ac-65d03c88516b
+		summarizeBy: sum
+		sourceColumn: reajusteMensalidadeValor
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column ajusteCarteira
+		dataType: string
+		lineageTag: d08225d5-3241-459e-b720-e38114b5ba70
+		summarizeBy: none
+		sourceColumn: ajusteCarteira
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor = VAR s = LOOKUPVALUE( dDeParaOwnerTeam[Setor], dDeParaOwnerTeam[owner_team], Helpdesk_Cancelamentos[ownerTeam] ) RETURN IF( ISBLANK( s ) && Helpdesk_Cancelamentos[ownerTeam] = "Liderança", "Relacionamento", s )
+		dataType: string
+		lineageTag: 173e3529-60f8-4d0b-a083-82a1d6746cc8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_extracao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 2f88740b-a209-4461-92e0-629ff82aa6e9
+		summarizeBy: none
+		sourceColumn: data_extracao
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email do Treinador' = VAR n = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( LOWER( TRIM( Helpdesk_Cancelamentos[treinador] ) ), "á", "a" ), "à", "a" ), "â", "a" ), "ã", "a" ), "ä", "a" ), "é", "e" ), "è", "e" ), "ê", "e" ), "ë", "e" ), "í", "i" ), "ì", "i" ), "î", "i" ), "ï", "i" ), "ó", "o" ), "ò", "o" ), "ô", "o" ), "õ", "o" ), "ö", "o" ), "ú", "u" ), "ù", "u" ), "û", "u" ), "ü", "u" ), "ç", "c" ), "ñ", "n" ), "  ", " " ) VAR p = SUBSTITUTE( n, " ", "|" ) VAR curto = IF( PATHLENGTH( p ) > 1, PATHITEM( p, 1 ) & " " & PATHITEMREVERSE( p, 1 ), n ) VAR e1 = IF( n = "", BLANK(), LOOKUPVALUE( dColaborador[email], dColaborador[Nome Normalizado], n, BLANK() ) ) RETURN IF( ISBLANK( e1 ) && n <> "", LOOKUPVALUE( dColaborador[email], dColaborador[Nome Curto Normalizado], curto, BLANK() ), e1 )
+		dataType: string
+		isHidden
+		displayFolder: Pessoa
+		lineageTag: 5fce4add-e235-50f4-8f05-6bdadb3ad0c6
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe do Treinador' = IF( ISBLANK( Helpdesk_Cancelamentos[Email do Treinador] ), IF( TRIM( Helpdesk_Cancelamentos[treinador] ) <> "", "(sem cadastro)" ), COALESCE( LOOKUPVALUE( dColaboradorMes[Equipe], dColaboradorMes[email], Helpdesk_Cancelamentos[Email do Treinador], dColaboradorMes[AnoMes], Helpdesk_Cancelamentos[Mês da Composição], BLANK() ), "(sem equipe)" ) )
+		dataType: string
+		displayFolder: Pessoa
+		lineageTag: 2bd5392b-34b8-5a36-aea2-8644f537a401
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Setor do Treinador' = LOOKUPVALUE( dColaboradorMes[Setor], dColaboradorMes[email], Helpdesk_Cancelamentos[Email do Treinador], dColaboradorMes[AnoMes], Helpdesk_Cancelamentos[Mês da Composição], BLANK() )
+		dataType: string
+		displayFolder: Pessoa
+		lineageTag: b1f333e3-8c5d-584a-8a6d-15fd6c0eaf51
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Resultado do Pedido' = IF( Helpdesk_Cancelamentos[status] = "Fechado" && Helpdesk_Cancelamentos[type] = 2 && Helpdesk_Cancelamentos[estornoTotal] <> "Sim" && Helpdesk_Cancelamentos[ajusteCarteira] <> "Sim", SWITCH( Helpdesk_Cancelamentos[category], "Cancelamento Efetivado", "Efetivado", "Cancelamento Revertido", "Revertido" ) )
+		dataType: string
+		displayFolder: Cancelamento
+		lineageTag: 16afbbf8-7fcb-56bb-8760-cc32d6e2ce24
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Porte da Conta' =
+			-- Porte da conta pela mensalidade (decisão do gestor, 05/10/2026). Para mudar as faixas, altere só estes valores:
+			VAR LimitePequena = 300    -- abaixo de 300: Pequena
+			VAR LimiteMedia = 900      -- de 300 até 900: Média; acima de 900: Grande
+			VAR Valor = Helpdesk_Cancelamentos[mensalidade]
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        ISBLANK( Valor ), BLANK(),
+			        Valor < LimitePequena, "Pequena",
+			        Valor <= LimiteMedia, "Média",
+			        "Grande"
+			    )
+		dataType: string
+		displayFolder: Cancelamento
+		lineageTag: 4ae4efb8-07b0-5890-b965-81036e6569d7
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cancelou no Mesmo Mês' = VAR f = Helpdesk_Cancelamentos[idLegado] VAR s = Helpdesk_Cancelamentos[sistema] VAR d = Helpdesk_Cancelamentos[Data de Fechamento] VAR n = COUNTROWS( FILTER( CALCULATETABLE( Helpdesk_Cancelamentos, REMOVEFILTERS(), Helpdesk_Cancelamentos[idLegado] = f, Helpdesk_Cancelamentos[type] = 2 ), Helpdesk_Cancelamentos[sistema] = s && YEAR( Helpdesk_Cancelamentos[Data de Fechamento] ) = YEAR( d ) && MONTH( Helpdesk_Cancelamentos[Data de Fechamento] ) = MONTH( d ) ) ) RETURN IF( n > 1, "Sim", "Não" )
+		dataType: string
+		displayFolder: Relacionamento
+		lineageTag: 1966849d-0747-5a6b-8486-181a1f0f1295
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cliente com Mais de um Pedido' = VAR f = Helpdesk_Cancelamentos[idLegado] VAR s = Helpdesk_Cancelamentos[sistema] VAR n = COUNTROWS( CALCULATETABLE( Helpdesk_Cancelamentos, REMOVEFILTERS(), Helpdesk_Cancelamentos[idLegado] = f, Helpdesk_Cancelamentos[sistema] = s, Helpdesk_Cancelamentos[type] = 2 ) ) RETURN IF( n > 1, "Sim", "Não" )
+		dataType: string
+		displayFolder: Relacionamento
+		lineageTag: 49011e4a-66e3-5aa5-9515-a4f931387cc9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias Ativos' = VAR c = Helpdesk_Cancelamentos[Data de Contrato] VAR f = Helpdesk_Cancelamentos[Data de Fechamento] RETURN IF( NOT ISBLANK( c ) && NOT ISBLANK( f ), DATEDIFF( c, f, DAY ) )
+		dataType: int64
+		formatString: 0
+		displayFolder: Relacionamento
+		lineageTag: 10f5e709-6660-5326-b421-4b83c0d4b5a0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Pedido em Aberto' = VAR ref = CALCULATE( MAX( Helpdesk_Cancelamentos[data_extracao] ), REMOVEFILTERS( Helpdesk_Cancelamentos ) ) RETURN IF( Helpdesk_Cancelamentos[type] = 2 && NOT Helpdesk_Cancelamentos[status] IN { "Fechado", "Resolvido" }, IF( INT( ref - Helpdesk_Cancelamentos[Data de Criação] ) >= 5, "Há 5 dias ou mais", "Menos de 5 dias" ) )
+		dataType: string
+		displayFolder: Relacionamento
+		lineageTag: a0a772a0-ea1a-5494-a454-eac49d00f912
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email do Atendente' = VAR n = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( LOWER( TRIM( Helpdesk_Cancelamentos[owner] ) ), "á", "a" ), "à", "a" ), "â", "a" ), "ã", "a" ), "ä", "a" ), "é", "e" ), "è", "e" ), "ê", "e" ), "ë", "e" ), "í", "i" ), "ì", "i" ), "î", "i" ), "ï", "i" ), "ó", "o" ), "ò", "o" ), "ô", "o" ), "õ", "o" ), "ö", "o" ), "ú", "u" ), "ù", "u" ), "û", "u" ), "ü", "u" ), "ç", "c" ), "ñ", "n" ), "  ", " " ) VAR p = SUBSTITUTE( n, " ", "|" ) VAR curto = IF( PATHLENGTH( p ) > 1, PATHITEM( p, 1 ) & " " & PATHITEMREVERSE( p, 1 ), n ) VAR e1 = IF( n = "", BLANK(), LOOKUPVALUE( dColaborador[email], dColaborador[Nome Normalizado], n, BLANK() ) ) RETURN IF( ISBLANK( e1 ) && n <> "", LOOKUPVALUE( dColaborador[email], dColaborador[Nome Curto Normalizado], curto, BLANK() ), e1 )
+		dataType: string
+		isHidden
+		displayFolder: Pessoa
+		lineageTag: 08d56d6d-d73d-5cb7-aff8-39d6da02cc49
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe do Atendente' = IF( ISBLANK( Helpdesk_Cancelamentos[Email do Atendente] ), IF( TRIM( Helpdesk_Cancelamentos[owner] ) <> "", "(sem cadastro)" ), COALESCE( LOOKUPVALUE( dColaboradorMes[Equipe], dColaboradorMes[email], Helpdesk_Cancelamentos[Email do Atendente], dColaboradorMes[AnoMes], Helpdesk_Cancelamentos[Mês da Composição], BLANK() ), "(sem equipe)" ) )
+		dataType: string
+		displayFolder: Pessoa
+		lineageTag: c29122c2-234c-5314-8abe-a2c68dd099e7
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Status do Cliente' = VAR i = Helpdesk_Cancelamentos[idLegado] RETURN IF( NOT ISBLANK( i ), LOOKUPVALUE( dCarteira[Status], dCarteira[ID Legado], FORMAT( i, "0" ), BLANK() ) )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 5504ab30-676d-591e-b943-db75c83f3f32
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CS do Cliente' = VAR i = Helpdesk_Cancelamentos[idLegado] RETURN IF( NOT ISBLANK( i ), LOOKUPVALUE( dCarteira[CS], dCarteira[ID Legado], FORMAT( i, "0" ), BLANK() ) )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 823722b3-83ff-597b-bfa0-8824b32388f9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID do Cliente (busca)' = VAR i = TRIM( "" & Helpdesk_Cancelamentos[idLegado] ) RETURN IF( i = "" || i = "0", BLANK(), i )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 167ad6df-aef8-5261-aa03-508280bfd666
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ do Cliente (busca)' = VAR c = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( TRIM( Helpdesk_Cancelamentos[cnpj] ), ".", "" ), "/", "" ), "-", "" ), " ", "" ) RETURN IF( c = "", BLANK(), c )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 48de7870-fc6a-5774-b675-b21311a07848
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Data de Cancelamento do Cliente do cliente no último retrato do CRM (campo do CRM; pode divergir do sistema legado).
+	column 'Data de Cancelamento do Cliente' = VAR i = Helpdesk_Cancelamentos[idLegado] RETURN IF( NOT ISBLANK( i ), LOOKUPVALUE( CRM_Clientes_Atual[Data_Cancelamento], CRM_Clientes_Atual[ID_Legado], FORMAT( i, "0" ), BLANK() ) )
+		dataType: dateTime
+		formatString: dd/mm/yy
+		displayFolder: Cliente
+		lineageTag: 6b150f95-cf22-4f8c-bf65-e94c50304cce
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// Data de Reativação do cliente no último retrato do CRM (campo do CRM; pode divergir do sistema legado).
+	column 'Data de Reativação' = VAR i = Helpdesk_Cancelamentos[idLegado] RETURN IF( NOT ISBLANK( i ), LOOKUPVALUE( CRM_Clientes_Atual[Data_Reativacao], CRM_Clientes_Atual[ID_Legado], FORMAT( i, "0" ), BLANK() ) )
+		dataType: dateTime
+		formatString: dd/mm/yy
+		displayFolder: Cliente
+		lineageTag: f468acab-7df2-4d4f-a9a1-c200d51ffa05
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// Só pedidos efetivados do Alfa. Sim = cliente Ativo/Bloqueado hoje + reativação do CRM igual ou posterior ao fechamento do pedido + sem inativação agendada (data de cancelamento do cliente a partir do último retrato). "Inativação agendada" = ainda vai inativar. Não = os demais.
+	column 'Reativado após o Cancelamento' = VAR efet = Helpdesk_Cancelamentos[category] = "Cancelamento Efetivado" && Helpdesk_Cancelamentos[sistema] = "Alfa" VAR f = Helpdesk_Cancelamentos[Data de Fechamento] VAR rv = Helpdesk_Cancelamentos[Data de Reativação] VAR dc = Helpdesk_Cancelamentos[Data de Cancelamento do Cliente] VAR ativo = Helpdesk_Cancelamentos[Status do Cliente] IN { "Ativo", "Bloqueado" } VAR agendada = ativo && NOT ISBLANK( dc ) && dc >= MAX( dCarteira[Data do Retrato] ) RETURN IF( NOT efet, BLANK(), IF( agendada, "Inativação agendada", IF( ativo && NOT ISBLANK( rv ) && rv >= f, "Sim", "Não" ) ) )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: ceb04b95-6f55-43cd-b8a0-e399bf5438e3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Só para pedido efetivado do Alfa com o cliente Ativo/Bloqueado hoje e sem inativação agendada: sinais de que ele voltou — reativação do CRM (data igual ou posterior ao fechamento), contrato de reativação aprovado no portal depois do fechamento, ticket do Comercial "Reativação de Contratos" criado depois do fechamento. Sem nenhum = "Sem registro".
+	column 'Como voltou' = VAR efet = Helpdesk_Cancelamentos[category] = "Cancelamento Efetivado" && Helpdesk_Cancelamentos[sistema] = "Alfa" VAR f = Helpdesk_Cancelamentos[Data de Fechamento] VAR rv = Helpdesk_Cancelamentos[Data de Reativação] VAR dc = Helpdesk_Cancelamentos[Data de Cancelamento do Cliente] VAR ativo = Helpdesk_Cancelamentos[Status do Cliente] IN { "Ativo", "Bloqueado" } VAR agendada = ativo && NOT ISBLANK( dc ) && dc >= MAX( dCarteira[Data do Retrato] ) VAR cn = Helpdesk_Cancelamentos[CNPJ do Cliente (busca)] VAR idf = FORMAT( Helpdesk_Cancelamentos[idLegado], "0" ) VAR tpl = SELECTCOLUMNS( FILTER( Gestao_Contratos_Tipos_Contrato, SEARCH( "REATIV", Gestao_Contratos_Tipos_Contrato[Tipo Contrato], 1, 0 ) > 0 ), "k", Gestao_Contratos_Tipos_Contrato[Chave Primária Template] ) VAR ctAC = CALCULATE( MAX( Gestao_Contratos_AF_Prod[Data Aprovacao] ), REMOVEFILTERS( Gestao_Contratos_AF_Prod ), TREATAS( tpl, Gestao_Contratos_AF_Prod[Chave Estrangeira Contrato Template] ), Gestao_Contratos_AF_Prod[CNPJ/CPF] = cn, Gestao_Contratos_AF_Prod[Data Aprovacao] >= f ) VAR ctVi = CALCULATE( MAX( Gestao_Contratos_Gama_Prod[Data Aprovacao] ), REMOVEFILTERS( Gestao_Contratos_Gama_Prod ), TREATAS( tpl, Gestao_Contratos_Gama_Prod[Chave Estrangeira Contrato Template] ), Gestao_Contratos_Gama_Prod[CNPJ/CPF] = cn, Gestao_Contratos_Gama_Prod[Data Aprovacao] >= f ) VAR ct = MAX( ctAC, ctVi ) VAR tk = CALCULATE( MAX( Helpdesk_Tickets[Data_Criacao_Ticket] ), REMOVEFILTERS( Helpdesk_Tickets ), Helpdesk_Tickets[service] = "Comercial", Helpdesk_Tickets[category] = "Reativação de Contratos", Helpdesk_Tickets[ID Legado do Cliente] = idf, Helpdesk_Tickets[Data_Criacao_Ticket] >= f ) VAR sinais = FILTER( UNION( ROW( "t", IF( NOT ISBLANK( rv ) && rv >= f, "CRM (" & FORMAT( rv, "dd/mm/yy" ) & ")", "" ) ), ROW( "t", IF( NOT ISBLANK( ct ), "Contrato de reativação (" & FORMAT( ct, "dd/mm/yy" ) & ")", "" ) ), ROW( "t", IF( NOT ISBLANK( tk ), "Ticket do Comercial (" & FORMAT( tk, "dd/mm/yy" ) & ")", "" ) ) ), [t] <> "" ) RETURN IF( NOT( efet && ativo && NOT agendada ), BLANK(), IF( COUNTROWS( sinais ) = 0, "Sem registro", CONCATENATEX( sinais, [t], " + " ) ) )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 8b13970b-a6a1-4855-8e97-37d778a8411b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês da Composição' = ( VAR _d = Helpdesk_Cancelamentos[Data de Fechamento] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Pessoa
+		lineageTag: 2824c8b7-6896-54b4-8ed5-abaac7db4035
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Helpdesk_Cancelamentos = m
+		mode: import
+		queryGroup: Helpdesk
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Helpdesk_Cancelamentos",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"id", Int64.Type}, {"type", Int64.Type}, {"status", type text}, {"Data de Criação", type datetime}, {"Data Resolvido", type datetime}, {"Data de Fechamento", type datetime}, {"ownerTeam", type text}, {"category", type text}, {"tags", type text}, {"origin", Int64.Type}, {"Data da Ultima Ação", type datetime}, {"Data da Ultima Atualização", type datetime}, {"Serviço", type text}, {"owner", type text}, {"organization", type text}, {"treinador", type text}, {"vendedor", type text}, {"idLegado", Int64.Type}, {"cnpj", type text}, {"licenca", Currency.Type}, {"licencaPaga", type text}, {"mensalidade", type number}, {"mensalidadeAVencer", type text}, {"qntdCnpj", type text}, {"Data de Contrato", type datetime}, {"contato", type text}, {"mensalidadePendente", type text}, {"sistema", type text}, {"idContrato", Int64.Type}, {"contratouOutroSoftware", type text}, {"reclamacaoVenda", type text}, {"areaDeAtuacao", type text}, {"faseDoCliente", type text}, {"estornoTotal", type text}, {"valorEstorno", Currency.Type}, {"alegacao", type text}, {"nomeConcorrente", type text}, {"excecaoGerencia", type text}, {"tipoInativacao", type text}, {"dataInativacaoTexto", type text}, {"descontoIsencaoReajuste", type text}, {"descontoMensalidade", type text}, {"descontoMensalidadeValor", Currency.Type}, {"isencaoMensalidade", type text}, {"isencaoMensalidadeValor", Currency.Type}, {"reajusteMensalidade", type text}, {"reajusteMensalidadeValor", Currency.Type}, {"ajusteCarteira", type text}, {"data_extracao", type datetime}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

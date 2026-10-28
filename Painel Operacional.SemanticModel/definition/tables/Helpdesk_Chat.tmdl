@@ -1,0 +1,112 @@
+table Helpdesk_Chat
+	lineageTag: 5b620661-6621-4db1-8fa4-ad9b191c4311
+
+	/// Tempo médio de espera até o cliente desistir (planilha mensal). Vazio com Analista, Canal, Categoria ou Sistema escolhidos: a planilha do chat não tem esses campos.
+	measure 'Tempo até Desistência (min)' = IF( NOT ( ISFILTERED( Helpdesk_Tickets[owner] ) || ISFILTERED( Helpdesk_Tickets[Canal] ) || ISFILTERED( Helpdesk_Tickets[category] ) || ISFILTERED( Helpdesk_Tickets[Sistema] ) ), DIVIDE( AVERAGE( Helpdesk_Chat[Tempo até Desistência (s)] ), 60 ) )
+		displayFolder: Chat
+		lineageTag: 874b63aa-1ab9-532b-8f9f-7a08542c7cf6
+
+		formatStringDefinition = VAR _s = ROUND( SELECTEDMEASURE() * 60, 0 ) RETURN """" & FORMAT( INT( _s / 3600 ), "00" ) & ":" & FORMAT( INT( MOD( _s, 3600 ) / 60 ), "00" ) & ":" & FORMAT( MOD( _s, 60 ), "00" ) & """"
+
+	/// Desistidos ÷ (atendidos no Helpdesk + desistidos) — mesma conta do OKR 2026. Vazio com Analista, Canal, Categoria ou Sistema escolhidos: a planilha do chat não tem esses campos.
+	measure '% Abandono do Chat' = IF( NOT ( ISFILTERED( Helpdesk_Tickets[owner] ) || ISFILTERED( Helpdesk_Tickets[Canal] ) || ISFILTERED( Helpdesk_Tickets[category] ) || ISFILTERED( Helpdesk_Tickets[Sistema] ) ), DIVIDE( SUM( Helpdesk_Chat[Chats Desistidos - Helpdesk] ), SUM( Helpdesk_Chat[Chats atendidos - Helpdesk] ) + SUM( Helpdesk_Chat[Chats Desistidos - Helpdesk] ) ) )
+		formatString: 0.00%
+		displayFolder: Chat
+		lineageTag: bc4318ce-51f6-543a-9f3e-9c8cec44eb7c
+
+	/// Chats em que o cliente desistiu antes do atendimento (planilha mensal). Vazio com Analista, Canal, Categoria ou Sistema escolhidos: a planilha do chat não tem esses campos.
+	measure 'Chats Desistidos' = IF( NOT ( ISFILTERED( Helpdesk_Tickets[owner] ) || ISFILTERED( Helpdesk_Tickets[Canal] ) || ISFILTERED( Helpdesk_Tickets[category] ) || ISFILTERED( Helpdesk_Tickets[Sistema] ) ), SUM( Helpdesk_Chat[Chats Desistidos - Helpdesk] ) )
+		formatString: #,0
+		displayFolder: Chat
+		lineageTag: 52458853-fd90-5c96-8733-cd7537092e5f
+
+	/// Chats atendidos (Helpdesk + WhatsApp), da planilha mensal. Vazio com Analista, Canal, Categoria ou Sistema escolhidos: a planilha do chat não tem esses campos.
+	measure 'Chats Atendidos' = IF( NOT ( ISFILTERED( Helpdesk_Tickets[owner] ) || ISFILTERED( Helpdesk_Tickets[Canal] ) || ISFILTERED( Helpdesk_Tickets[category] ) || ISFILTERED( Helpdesk_Tickets[Sistema] ) ), SUM( Helpdesk_Chat[Chats atendidos - Helpdesk] ) + SUM( Helpdesk_Chat[Chats atendidos - Whatsapp] ) )
+		formatString: #,0
+		displayFolder: Chat
+		lineageTag: d62b7240-20e6-5005-b467-66c9b7e53f5b
+
+	column Data
+		dataType: string
+		lineageTag: 0aec3e7a-3372-4d4a-9cdd-b0fb83026543
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Chats atendidos - Helpdesk'
+		dataType: int64
+		formatString: 0
+		lineageTag: eff584c2-f27c-446a-af1e-dfe46fdeab63
+		summarizeBy: sum
+		sourceColumn: Chats atendidos - Helpdesk
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Chats Desistidos - Helpdesk'
+		dataType: int64
+		formatString: 0
+		lineageTag: a9cba32c-f1f7-4c12-8d2b-4069ac71d43d
+		summarizeBy: sum
+		sourceColumn: Chats Desistidos - Helpdesk
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tempo médio de espera até ocorrer a desistência'
+		dataType: string
+		lineageTag: fe4a16fa-66c5-45b2-9e80-ce51e4ac02ab
+		summarizeBy: none
+		sourceColumn: Tempo médio de espera até ocorrer a desistência
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Chats atendidos - Whatsapp'
+		dataType: int64
+		formatString: 0
+		lineageTag: 259c05c6-b3d0-4734-a919-54c5b81726e1
+		summarizeBy: sum
+		sourceColumn: Chats atendidos - Whatsapp
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor = "Suporte"
+		dataType: string
+		lineageTag: f05748c0-01e0-4ebe-b45d-8c33dceae77b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data Mês' = IFERROR( DATE( VALUE( RIGHT( Helpdesk_Chat[Data], 4 ) ), VALUE( MID( Helpdesk_Chat[Data], 4, 2 ) ), 1 ), BLANK() )
+		dataType: dateTime
+		formatString: dd/mm/yy
+		displayFolder: Chat
+		lineageTag: 28157f4a-fea3-5d3e-81de-c1e99820637a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tempo até Desistência (s)' = IFERROR( TIMEVALUE( Helpdesk_Chat[Tempo médio de espera até ocorrer a desistência] ) * 86400, BLANK() )
+		dataType: double
+		isHidden
+		formatString: 0
+		displayFolder: Chat
+		lineageTag: 772e7058-6c62-50dc-9ed6-403aaea6018a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Helpdesk_Chat = m
+		mode: import
+		queryGroup: Helpdesk
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Helpdesk_Chat",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"Data", type text}, {"Chats atendidos - Helpdesk", Int64.Type}, {"Chats Desistidos - Helpdesk", Int64.Type}, {"Tempo médio de espera até ocorrer a desistência", type text}, {"Chats atendidos - Whatsapp", Int64.Type}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

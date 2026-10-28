@@ -1,0 +1,1462 @@
+table Helpdesk_Tickets
+	lineageTag: b5a6e783-9a57-4315-be5b-257f1016e013
+
+	/// Tickets por data de RESOLUÇÃO. Usar só no SLA.
+	measure 'Tickets Resolvidos' = CALCULATE( COUNTROWS( Helpdesk_Tickets ), NOT ISBLANK( Helpdesk_Tickets[Data_Resolucao_Ticket] ), USERELATIONSHIP( Helpdesk_Tickets[Data_Resolucao_Ticket], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: Base de datas
+		lineageTag: acbd0d78-b2e9-54b7-b7fa-7c36afc73388
+
+	/// Tickets por data de CRIAÇÃO. Usar só no No Show.
+	measure 'Tickets Criados' = CALCULATE( COUNTROWS( Helpdesk_Tickets ), USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: Base de datas
+		lineageTag: 2714d08c-ab3b-54b8-a826-c815541d6199
+
+	/// Tickets por data de FECHAMENTO (padrão do ticket).
+	measure 'Tickets Fechados' = CALCULATE( COUNTROWS( Helpdesk_Tickets ), NOT ISBLANK( Helpdesk_Tickets[Data_Fechamento_Ticket] ) )
+		formatString: #,0
+		displayFolder: Base de datas
+		lineageTag: a13e4fe5-4a82-5fea-9c79-4f545c466efd
+
+	/// Data da última live no período.
+	measure 'Última Live no Período' = CALCULATE( MAX( Helpdesk_Tickets[Data_Criacao_Ticket] ), Helpdesk_Tickets[service] = "Live", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) )
+		formatString: dd/mm/yy
+		displayFolder: Lives
+		lineageTag: 11330002-45b1-587a-a6c0-61706cfad446
+
+	/// Data da primeira live do cliente em todo o histórico (não muda com o período).
+	measure 'Primeira Live' = CALCULATE( MIN( Helpdesk_Tickets[Data_Criacao_Ticket] ), Helpdesk_Tickets[service] = "Live", REMOVEFILTERS( Calendario ) )
+		formatString: dd/mm/yy
+		displayFolder: Lives
+		lineageTag: cee73c06-7717-5184-9b18-3c079a8eba2f
+
+	/// Em quantas lives cada escritório esteve, em média.
+	measure 'Lives por Cliente' = AVERAGEX( FILTER( CALCULATETABLE( VALUES( Helpdesk_Tickets[id_client] ), Helpdesk_Tickets[service] = "Live", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) ), NOT ISBLANK( Helpdesk_Tickets[id_client] ) ), [Lives Realizadas] )
+		formatString: 0.00
+		displayFolder: Lives
+		lineageTag: 3b4d6e38-0b06-5227-b0d1-a6e2d405ac21
+
+	/// Participantes ÷ escritórios.
+	measure 'Participações por Cliente' = DIVIDE( [Participantes (Lives)], [Clientes nas Lives] )
+		formatString: 0.00
+		displayFolder: Lives
+		lineageTag: 100326e0-2506-5f23-bb19-bb8e33a42e31
+
+	/// Escritórios do período que já tinham participado de uma live antes.
+	measure 'Clientes que Voltaram' = [Clientes nas Lives] - [Clientes Novos nas Lives]
+		formatString: #,0
+		displayFolder: Lives
+		lineageTag: 361341fc-24d9-5891-80f3-fdf28e155eba
+
+	/// Escritórios cuja PRIMEIRA live (em todo o histórico) caiu no período.
+	measure 'Clientes Novos nas Lives' = CALCULATE( DISTINCTCOUNTNOBLANK( Helpdesk_Tickets[id_client] ), Helpdesk_Tickets[service] = "Live", Helpdesk_Tickets[Cliente Novo na Live] = TRUE(), USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: Lives
+		lineageTag: 059336e0-d6b2-5893-bcdc-07c5d69b92ae
+
+	/// Escritórios diferentes por live, em média.
+	measure 'Média de Clientes por Live' = AVERAGEX( CALCULATETABLE( VALUES( Helpdesk_Tickets[Live (data e tema)] ), Helpdesk_Tickets[service] = "Live", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) ), [Clientes nas Lives] )
+		formatString: 0.00
+		displayFolder: Lives
+		lineageTag: 25f0a4ad-9b3f-599a-a64f-69ab85350058
+
+	/// Participantes da live mais cheia do período.
+	measure 'Maior Público em uma Live' = MAXX( CALCULATETABLE( VALUES( Helpdesk_Tickets[Live (data e tema)] ), Helpdesk_Tickets[service] = "Live", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) ), [Participantes (Lives)] )
+		formatString: #,0
+		displayFolder: Lives
+		lineageTag: 97e9b27f-6336-5b57-9e64-d7ad90f9dec0
+
+	/// Participantes ÷ lives realizadas.
+	measure 'Média de Participantes por Live' = DIVIDE( [Participantes (Lives)], [Lives Realizadas] )
+		formatString: 0.00
+		displayFolder: Lives
+		lineageTag: 2a42b2f1-b7fa-5883-a1f5-fdd9c8f8ca7b
+
+	/// Categorias (temas) diferentes das lives no período.
+	measure 'Temas Abordados' = CALCULATE( DISTINCTCOUNTNOBLANK( Helpdesk_Tickets[category] ), Helpdesk_Tickets[service] = "Live", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: Lives
+		lineageTag: a4c7895f-3936-55e2-8308-78ee9241e165
+
+	/// Lives = combinações data + tema (categoria) com pelo menos 1 participante.
+	measure 'Lives Realizadas' = CALCULATE( DISTINCTCOUNTNOBLANK( Helpdesk_Tickets[Live (data e tema)] ), Helpdesk_Tickets[service] = "Live", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: Lives
+		lineageTag: ce37428f-63f6-549f-90e4-c3efdaf23285
+
+	/// Escritórios (clientes do Helpdesk) diferentes que participaram. Por data da live.
+	measure 'Clientes nas Lives' = CALCULATE( DISTINCTCOUNTNOBLANK( Helpdesk_Tickets[id_client] ), Helpdesk_Tickets[service] = "Live", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: Lives
+		lineageTag: 4c81fcfe-edfc-55ec-8222-65db548eb471
+
+	/// Solicitantes diferentes (a mesma pessoa em duas lives conta 1). Por data da live.
+	measure 'Pessoas Distintas (Lives)' = CALCULATE( DISTINCTCOUNTNOBLANK( Helpdesk_Tickets[solicitantes] ), Helpdesk_Tickets[service] = "Live", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: Lives
+		lineageTag: 6d17e05e-b957-55a2-b00b-d90929cf0947
+
+	/// Cada ticket do serviço Live = 1 participante. Por DATA DA LIVE (criação do ticket).
+	measure 'Participantes (Lives)' = CALCULATE( COUNTROWS( Helpdesk_Tickets ), Helpdesk_Tickets[service] = "Live", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: Lives
+		lineageTag: bf4304ca-217a-566e-8b63-5fba125fa75b
+
+	/// Tickets fechados que têm SLA previsto. Status SLA calculado até a resolução; contado pela data de FECHAMENTO.
+	measure 'Tickets com SLA' = CALCULATE( COUNTROWS( Helpdesk_Tickets ), NOT ISBLANK( Helpdesk_Tickets[Status SLA] ), NOT ISBLANK( Helpdesk_Tickets[Data_Fechamento_Ticket] ) )
+		formatString: #,0
+		displayFolder: SLA
+		lineageTag: 1814b00e-b40c-585c-a9d9-b4bc755ac2fd
+
+	/// Dos tickets fechados no período, quantos foram resolvidos dentro do SLA.
+	measure '% no Prazo do SLA' = DIVIDE( [Tickets no Prazo do SLA], [Tickets com SLA] )
+		formatString: 0.00%
+		displayFolder: SLA
+		lineageTag: 84d14191-d2fc-5ac7-befd-c03322545289
+
+	/// Tickets fechados que foram resolvidos até o SLA previsto. Contado pela data de FECHAMENTO.
+	measure 'Tickets no Prazo do SLA' = CALCULATE( COUNTROWS( Helpdesk_Tickets ), Helpdesk_Tickets[Status SLA] = "No prazo", NOT ISBLANK( Helpdesk_Tickets[Data_Fechamento_Ticket] ) )
+		formatString: #,0
+		displayFolder: SLA
+		lineageTag: f29b68ae-7623-5a58-9220-5ca9be4e04fa
+
+	/// Quanto dos tickets (com empresa) vem das 10 empresas que mais abriram.
+	measure '% Tickets das 10 Maiores Empresas' = VAR emp = CALCULATETABLE( VALUES( Helpdesk_Tickets[Empresa] ), NOT ISBLANK( Helpdesk_Tickets[Empresa] ) ) RETURN DIVIDE( SUMX( TOPN( 10, emp, [Tickets Fechados] ), [Tickets Fechados] ), [Tickets com Empresa] )
+		formatString: 0.00%
+		displayFolder: Atendimento
+		lineageTag: 1db698fc-30df-5ab8-bf3f-e257a26d1c69
+
+	/// Empresas com 10 ou mais tickets fechados no período.
+	measure 'Empresas com 10+ Tickets' = COUNTROWS( FILTER( CALCULATETABLE( VALUES( Helpdesk_Tickets[Empresa] ), NOT ISBLANK( Helpdesk_Tickets[Empresa] ) ), [Tickets Fechados] >= 10 ) )
+		formatString: #,0
+		displayFolder: Atendimento
+		lineageTag: eeecbae5-9495-5904-ac59-85765e98e919
+
+	/// Tickets fechados ÷ empresas atendidas.
+	measure 'Tickets por Empresa' = DIVIDE( [Tickets com Empresa], [Empresas Atendidas] )
+		formatString: 0.00
+		displayFolder: Atendimento
+		lineageTag: 4cf07b82-cd4d-5bc8-be64-353349356bbe
+
+	/// Tickets fechados que têm empresa identificada.
+	measure 'Tickets com Empresa' = CALCULATE( [Tickets Fechados], NOT ISBLANK( Helpdesk_Tickets[Empresa] ) )
+		formatString: #,0
+		displayFolder: Atendimento
+		lineageTag: 67cd279d-e1c3-5ace-9f31-c56de742aa31
+
+	/// Empresas (organization) com ticket fechado no período.
+	measure 'Empresas Atendidas' = CALCULATE( DISTINCTCOUNTNOBLANK( Helpdesk_Tickets[Empresa] ), NOT ISBLANK( Helpdesk_Tickets[Data_Fechamento_Ticket] ) )
+		formatString: #,0
+		displayFolder: Atendimento
+		lineageTag: f9b513a7-fca4-5d33-aa77-5a0652a8c1ed
+
+	/// TMA Chat (min) em hh:mm:ss (para cartão).
+	measure 'TMA Chat' = VAR _m = [TMA Chat (min)] RETURN IF( ISBLANK( _m ), "", VAR _s = ROUND( _m * 60, 0 ) RETURN FORMAT( INT( _s / 3600 ), "00" ) & ":" & FORMAT( INT( MOD( _s, 3600 ) / 60 ), "00" ) & ":" & FORMAT( MOD( _s, 60 ), "00" ) )
+		displayFolder: Atendimento
+		lineageTag: d9685d69-52b1-5718-979c-a3974bea3b83
+
+	/// TME Chat (min) em hh:mm:ss (para cartão).
+	measure 'TME Chat' = VAR _m = [TME Chat (min)] RETURN IF( ISBLANK( _m ), "", VAR _s = ROUND( _m * 60, 0 ) RETURN FORMAT( INT( _s / 3600 ), "00" ) & ":" & FORMAT( INT( MOD( _s, 3600 ) / 60 ), "00" ) & ":" & FORMAT( MOD( _s, 60 ), "00" ) )
+		displayFolder: Atendimento
+		lineageTag: 42fd2bcd-ff19-5263-859c-028cf035aa68
+
+	/// Tempo médio de atendimento no WhatsApp. Em minutos, por data de fechamento.
+	measure 'TMA WhatsApp (min)' = DIVIDE( CALCULATE( AVERAGE( Helpdesk_Tickets[Tempo de Atendimento (s)] ), Helpdesk_Tickets[origin] IN { 18, 23, 25 }, NOT ISBLANK( Helpdesk_Tickets[Data_Fechamento_Ticket] ) ), 60 )
+		displayFolder: Atendimento
+		lineageTag: d4e27ae0-7c85-5b85-9ce4-de5014075465
+
+		formatStringDefinition = VAR _s = ROUND( SELECTEDMEASURE() * 60, 0 ) RETURN """" & FORMAT( INT( _s / 3600 ), "00" ) & ":" & FORMAT( INT( MOD( _s, 3600 ) / 60 ), "00" ) & ":" & FORMAT( MOD( _s, 60 ), "00" ) & """"
+
+	/// Tempo médio de espera no WhatsApp. Em minutos, por data de fechamento.
+	measure 'TME WhatsApp (min)' = DIVIDE( CALCULATE( AVERAGE( Helpdesk_Tickets[Tempo de Espera (s)] ), Helpdesk_Tickets[origin] IN { 18, 23, 25 }, NOT ISBLANK( Helpdesk_Tickets[Data_Fechamento_Ticket] ) ), 60 )
+		displayFolder: Atendimento
+		lineageTag: 1cf12414-faab-57d7-ba17-5ed2678c4ec8
+
+		formatStringDefinition = VAR _s = ROUND( SELECTEDMEASURE() * 60, 0 ) RETURN """" & FORMAT( INT( _s / 3600 ), "00" ) & ":" & FORMAT( INT( MOD( _s, 3600 ) / 60 ), "00" ) & ":" & FORMAT( MOD( _s, 60 ), "00" ) & """"
+
+	/// Tempo médio de atendimento no chat. Em minutos, por data de fechamento.
+	measure 'TMA Chat (min)' = DIVIDE( CALCULATE( AVERAGE( Helpdesk_Tickets[Tempo de Atendimento (s)] ), Helpdesk_Tickets[origin] IN { 5 }, NOT ISBLANK( Helpdesk_Tickets[Data_Fechamento_Ticket] ) ), 60 )
+		displayFolder: Atendimento
+		lineageTag: eaa5ed40-6c40-5fd4-a8ee-26689f16567a
+
+		formatStringDefinition = VAR _s = ROUND( SELECTEDMEASURE() * 60, 0 ) RETURN """" & FORMAT( INT( _s / 3600 ), "00" ) & ":" & FORMAT( INT( MOD( _s, 3600 ) / 60 ), "00" ) & ":" & FORMAT( MOD( _s, 60 ), "00" ) & """"
+
+	/// Tempo médio de espera no chat. Em minutos, por data de fechamento.
+	measure 'TME Chat (min)' = DIVIDE( CALCULATE( AVERAGE( Helpdesk_Tickets[Tempo de Espera (s)] ), Helpdesk_Tickets[origin] IN { 5 }, NOT ISBLANK( Helpdesk_Tickets[Data_Fechamento_Ticket] ) ), 60 )
+		displayFolder: Atendimento
+		lineageTag: 0fd780fd-3284-51a4-910c-530afa54badc
+
+		formatStringDefinition = VAR _s = ROUND( SELECTEDMEASURE() * 60, 0 ) RETURN """" & FORMAT( INT( _s / 3600 ), "00" ) & ":" & FORMAT( INT( MOD( _s, 3600 ) / 60 ), "00" ) & ":" & FORMAT( MOD( _s, 60 ), "00" ) & """"
+
+	/// Parte dos tickets fechados que entrou pela API (assistente virtual / bot).
+	measure '% via API / Assistente' = DIVIDE( CALCULATE( [Tickets Fechados], Helpdesk_Tickets[Canal] = "API / Assistente virtual" ), [Tickets Fechados] )
+		formatString: 0.00%
+		displayFolder: Atendimento
+		lineageTag: c603c1cc-886d-598a-a769-233abe356e73
+
+	/// Parte dos tickets fechados que veio do WhatsApp.
+	measure '% via WhatsApp' = DIVIDE( CALCULATE( [Tickets Fechados], Helpdesk_Tickets[Canal] = "WhatsApp" ), [Tickets Fechados] )
+		formatString: 0.00%
+		displayFolder: Atendimento
+		lineageTag: d77c3c1f-2cf5-532e-91c4-71d5bce7b2b0
+
+	/// Parte dos tickets fechados que veio do chat.
+	measure '% via Chat' = DIVIDE( CALCULATE( [Tickets Fechados], Helpdesk_Tickets[Canal] = "Chat" ), [Tickets Fechados] )
+		formatString: 0.00%
+		displayFolder: Atendimento
+		lineageTag: 1c31b9f1-639c-5e12-97a2-5632db428251
+
+	/// Clientes (solicitantes do Helpdesk) com ticket fechado no período.
+	measure 'Clientes com Ticket' = CALCULATE( DISTINCTCOUNTNOBLANK( Helpdesk_Tickets[id_client] ), NOT ISBLANK( Helpdesk_Tickets[Data_Fechamento_Ticket] ) )
+		formatString: #,0
+		displayFolder: Atendimento
+		lineageTag: e6d0512c-bca3-597b-b1c4-9c02c6c0052d
+
+	/// Meta de No Show do Onboarding (intranet: No Show - Onboarding, setor Onboarding). Meta ÷ 100.
+	measure 'Meta % No Show' = VAR v = FILTER( Meta_Vinculo, Meta_Vinculo[Medida] = "Meta % No Show" ) VAR d = MAXX( v, Meta_Vinculo[def_id] ) VAR s = MAXX( v, Meta_Vinculo[setor_id] ) RETURN IF( d > 0, DIVIDE( CALCULATE( [Meta Alvo (período)], Meta_Def[id] = d, Meta_Valor[setor_id] = s ), 100 ) )
+		formatString: 0.00%
+		displayFolder: No Show (Onboarding)
+		lineageTag: 10a73f0c-065e-58c4-bd75-eb732579b587
+
+	/// Tickets de tentativa de contato, por data de FECHAMENTO.
+	measure 'Tentativas de Contato' = CALCULATE( [Tickets Fechados], Helpdesk_Tickets[category] = "Tentativa de Contato" )
+		formatString: #,0
+		displayFolder: Contatos
+		lineageTag: 140d7ed4-de5d-50d1-869d-5af512572328
+
+	/// Tickets de contato efetivo, por data de FECHAMENTO.
+	measure 'Contatos Efetivos' = CALCULATE( [Tickets Fechados], Helpdesk_Tickets[category] = "Contato Efetivo" )
+		formatString: #,0
+		displayFolder: Contatos
+		lineageTag: d97264c5-823f-54d4-8e2d-d3dd93e55537
+
+	/// Quedas ÷ (quedas + reuniões feitas) — mesma conta do OKR 2026. Por data de criação.
+	measure '% No Show' = DIVIDE( [Quedas (No Show)], [Quedas (No Show)] + [Reuniões Feitas (Checkout)] )
+		formatString: 0.00%
+		displayFolder: No Show
+		lineageTag: 80faf467-7ae9-5817-930c-7550923d624d
+
+	/// Quedas no treinamento + no agendamento.
+	measure 'Quedas (No Show)' = [Quedas no Treinamento] + [Quedas no Agendamento]
+		formatString: #,0
+		displayFolder: No Show
+		lineageTag: 4ea0479d-8209-5e95-a66c-b40ae8cebb52
+
+	/// Falta, remarcação ou cancelamento de treinamento registrados no Agendamento (setor Consultoria). Por data de CRIAÇÃO do ticket (regra do No Show).
+	measure 'Quedas no Agendamento' = CALCULATE( COUNTROWS( Helpdesk_Tickets ), Helpdesk_Tickets[Reunião Onboarding] = "Queda no agendamento", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: No Show
+		lineageTag: 8e2efa34-dc47-511d-b87d-59e4a020853c
+
+	/// Falta ou remarcação registrada no Treinamento. Por data de CRIAÇÃO do ticket (regra do No Show).
+	measure 'Quedas no Treinamento' = CALCULATE( COUNTROWS( Helpdesk_Tickets ), Helpdesk_Tickets[Reunião Onboarding] = "Queda no treinamento", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: No Show
+		lineageTag: d61f000e-b4e5-5507-940d-f0d77444cfcc
+
+	/// Reuniões feitas: tickets de checkout do serviço Treinamento (lista de categorias do OKR 2026). Por data de CRIAÇÃO do ticket (regra do No Show).
+	measure 'Reuniões Feitas (Checkout)' = CALCULATE( COUNTROWS( Helpdesk_Tickets ), Helpdesk_Tickets[Reunião Onboarding] = "Checkout (reunião feita)", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: No Show
+		lineageTag: 584160ed-e988-5bd7-add4-ce3305af0601
+
+	/// Tira-dúvidas com origem Interna. Fila Sucesso do Cliente, por data de FECHAMENTO.
+	measure 'Tira-Dúvidas Internos' = CALCULATE( [Tickets Fechados], Helpdesk_Tickets[owner_team] = "Sucesso do Cliente", Helpdesk_Tickets[category] = "Tira Dúvidas", Helpdesk_Tickets[origem_cs] = "Interna" )
+		formatString: #,0
+		displayFolder: Contatos (Ongoing)
+		lineageTag: db06a7d2-e135-5b2d-b1e9-7df4e48777fb
+
+	/// Tira-dúvidas com origem WhatsApp. Fila Sucesso do Cliente, por data de FECHAMENTO.
+	measure 'Tira-Dúvidas por WhatsApp' = CALCULATE( [Tickets Fechados], Helpdesk_Tickets[owner_team] = "Sucesso do Cliente", Helpdesk_Tickets[category] = "Tira Dúvidas", Helpdesk_Tickets[origem_cs] = "WhatsApp" )
+		formatString: #,0
+		displayFolder: Contatos (Ongoing)
+		lineageTag: 8473df3d-a754-5d16-84b3-b450f6d9186a
+
+	/// Tira-dúvidas com origem Ticket. Fila Sucesso do Cliente, por data de FECHAMENTO.
+	measure 'Tira-Dúvidas por Ticket' = CALCULATE( [Tickets Fechados], Helpdesk_Tickets[owner_team] = "Sucesso do Cliente", Helpdesk_Tickets[category] = "Tira Dúvidas", Helpdesk_Tickets[origem_cs] = "Ticket" )
+		formatString: #,0
+		displayFolder: Contatos (Ongoing)
+		lineageTag: 2ebf7f8b-3a02-5276-90d8-7df28095510d
+
+	/// Tickets de Negociação. Fila Sucesso do Cliente, por data de FECHAMENTO.
+	measure 'Tratativas de Negociação' = CALCULATE( [Tickets Fechados], Helpdesk_Tickets[owner_team] = "Sucesso do Cliente", Helpdesk_Tickets[category] = "Negociação" )
+		formatString: #,0
+		displayFolder: Contatos (Ongoing)
+		lineageTag: db888ac5-8a2f-5078-b74d-3800f0d0cb23
+
+	/// Tickets de Desenvolvimento. Fila Sucesso do Cliente, por data de FECHAMENTO.
+	measure 'Tratativas de Desenvolvimento' = CALCULATE( [Tickets Fechados], Helpdesk_Tickets[owner_team] = "Sucesso do Cliente", Helpdesk_Tickets[category] = "Desenvolvimento" )
+		formatString: #,0
+		displayFolder: Contatos (Ongoing)
+		lineageTag: 6e0045c6-514b-5751-9a67-9ca30423ce9c
+
+	/// Tickets 'Ongoing sem contato'. Fila Sucesso do Cliente, por data de FECHAMENTO.
+	measure 'Ongoing sem Contato' = CALCULATE( [Tickets Fechados], Helpdesk_Tickets[owner_team] = "Sucesso do Cliente", Helpdesk_Tickets[category] = "Ongoing sem contato" )
+		formatString: #,0
+		displayFolder: Contatos (Ongoing)
+		lineageTag: 4846621a-3c67-5255-bf4d-d391a822ef4d
+
+	/// Tickets de tentativa de contato. Fila Sucesso do Cliente, por data de FECHAMENTO.
+	measure 'Tentativas de Contato Ongoing' = CALCULATE( [Tickets Fechados], Helpdesk_Tickets[owner_team] = "Sucesso do Cliente", Helpdesk_Tickets[category] = "Tentativa de Contato" )
+		formatString: #,0
+		displayFolder: Contatos (Ongoing)
+		lineageTag: df059bd1-e9ea-5101-89ac-289c8eb69b82
+
+	/// Checkouts (lista do OKR 2026; o No Show conta os mesmos pela criação). Fila Sucesso do Cliente, por data de FECHAMENTO.
+	measure 'Checkouts Feitos' = CALCULATE( [Tickets Fechados], Helpdesk_Tickets[owner_team] = "Sucesso do Cliente", Helpdesk_Tickets[category] IN { "Checkout - Acompanhamento", "Checkout - Onboarding", "Checkout - Aplicativo e Área VIP", "Checkout - Configurações Iniciais", "Checkout - Departamentos", "Checkout - e-Continuo", "Checkout - Gestão de Processos", "Checkout - Kappa", "Checkout - Lista de Entregas", "Checkout - Método APLA", "Checkout - Novo Colaborador", "Checkout - Retomada", "Checkout - AF Docs" } )
+		formatString: #,0
+		displayFolder: Contatos (Ongoing)
+		lineageTag: c0931c09-efd4-538d-b556-303ed6856302
+
+	/// Tratativas (Tratativa Onboarding, Tratativa Mayday, Tratativa Alert, Tratativa En Route, Tratativa Cruzeiro, Tratativa Clientes Bloqueados). Fila Sucesso do Cliente, por data de FECHAMENTO.
+	measure 'Tratativas Feitas' = CALCULATE( [Tickets Fechados], Helpdesk_Tickets[owner_team] = "Sucesso do Cliente", Helpdesk_Tickets[category] IN { "Tratativa Onboarding", "Tratativa Mayday", "Tratativa Alert", "Tratativa En Route", "Tratativa Cruzeiro", "Tratativa Clientes Bloqueados" } )
+		formatString: #,0
+		displayFolder: Contatos (Ongoing)
+		lineageTag: 6b5d9739-a1bd-5c01-a603-8e0d19a4762b
+
+	/// Meta de No Show do Ongoing (intranet: No Show - Ongoing, setor Ongoing). Meta ÷ 100.
+	measure 'Meta % No Show Ongoing' = VAR v = FILTER( Meta_Vinculo, Meta_Vinculo[Medida] = "Meta % No Show Ongoing" ) VAR d = MAXX( v, Meta_Vinculo[def_id] ) VAR s = MAXX( v, Meta_Vinculo[setor_id] ) RETURN IF( d > 0, DIVIDE( CALCULATE( [Meta Alvo (período)], Meta_Def[id] = d, Meta_Valor[setor_id] = s ), 100 ) )
+		formatString: 0.00%
+		displayFolder: No Show (Ongoing)
+		lineageTag: 5fb7b39e-a82c-5d2d-ab7b-96776e7fa042
+
+	/// Quedas ÷ (quedas + reuniões feitas) — mesma conta do OKR 2026. Por data de criação.
+	measure '% No Show Ongoing' = DIVIDE( [Quedas Ongoing], [Quedas Ongoing] + [Reuniões Feitas Ongoing] )
+		formatString: 0.00%
+		displayFolder: No Show (Ongoing)
+		lineageTag: f0a03a06-cdbe-5cf6-8ab3-e68bcf9b348f
+
+	/// Quedas na reunião + no agendamento (Ongoing).
+	measure 'Quedas Ongoing' = [Quedas na Reunião Ongoing] + [Quedas no Agendamento Ongoing]
+		formatString: #,0
+		displayFolder: No Show (Ongoing)
+		lineageTag: e1e380f0-8b96-57bd-bdab-ca71f044099e
+
+	/// Falta, remarcação ou cancelamento de treinamento no Agendamento (setor Sucesso do Cliente). Por data de CRIAÇÃO do ticket (regra do No Show).
+	measure 'Quedas no Agendamento Ongoing' = CALCULATE( COUNTROWS( Helpdesk_Tickets ), Helpdesk_Tickets[Reunião Ongoing] = "Queda no agendamento", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: No Show (Ongoing)
+		lineageTag: ea6b5502-0a22-5cf3-bede-ce03308f6de1
+
+	/// Falta ou remarcação no serviço Sucesso do Cliente. Por data de CRIAÇÃO do ticket (regra do No Show).
+	measure 'Quedas na Reunião Ongoing' = CALCULATE( COUNTROWS( Helpdesk_Tickets ), Helpdesk_Tickets[Reunião Ongoing] = "Queda na reunião", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: No Show (Ongoing)
+		lineageTag: e0cde9a8-df86-5add-8f10-129022e154ac
+
+	/// Reuniões feitas do Ongoing: serviço Sucesso do Cliente + lista de checkouts do OKR 2026. Por data de CRIAÇÃO do ticket (regra do No Show).
+	measure 'Reuniões Feitas Ongoing' = CALCULATE( COUNTROWS( Helpdesk_Tickets ), Helpdesk_Tickets[Reunião Ongoing] = "Checkout (reunião feita)", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: No Show (Ongoing)
+		lineageTag: d869208b-eb5c-5bc8-a15b-61bf91f4be2d
+
+	/// Atendimentos da Ouvidoria com avaliação ÷ atendimentos (criação).
+	measure '% Atendimentos com Avaliação' = DIVIDE( CALCULATE( [Atendimentos Ouvidoria], Helpdesk_Tickets[Houve Avaliação] = "Sim" ), [Atendimentos Ouvidoria] )
+		formatString: 0.00%
+		displayFolder: Ouvidoria
+		lineageTag: 5c17c51b-fa68-5135-99b5-efcd0aa3af24
+
+	/// Tickets do serviço Ouvidoria, por data de RESOLUÇÃO.
+	measure 'Atendimentos Ouvidoria Resolvidos' = CALCULATE( [Tickets Resolvidos], Helpdesk_Tickets[service] = "Ouvidoria" )
+		formatString: #,0
+		displayFolder: Ouvidoria
+		lineageTag: ed1f70fb-e26e-5b3e-9669-28a6b3133ac4
+
+	/// Tickets do serviço Ouvidoria, por data de CRIAÇÃO.
+	measure 'Atendimentos Ouvidoria' = CALCULATE( [Tickets Criados], Helpdesk_Tickets[service] = "Ouvidoria" )
+		formatString: #,0
+		displayFolder: Ouvidoria
+		lineageTag: 9d05d709-4949-5739-bf39-c0548314360e
+
+	/// Entregas (Área VIP) fechadas no período.
+	measure 'Entregas Área VIP' = CALCULATE( [Tickets Fechados], KEEPFILTERS( Helpdesk_Tickets[Tipo de Entrega] IN { "Área VIP" } ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 7c79d8b6-16c0-55bf-8681-793dcbb6ad5d
+
+	/// Entregas (Apple) fechadas no período.
+	measure 'Entregas Apple' = CALCULATE( [Tickets Fechados], KEEPFILTERS( Helpdesk_Tickets[Tipo de Entrega] IN { "Apple" } ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: ecb7c743-85d8-57c6-8694-c0ee6ffc87cf
+
+	/// Entregas (Android) fechadas no período.
+	measure 'Entregas Android' = CALCULATE( [Tickets Fechados], KEEPFILTERS( Helpdesk_Tickets[Tipo de Entrega] IN { "Android" } ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: f89a79a3-a115-5cd7-b7f2-7c99c8253d47
+
+	/// Média de dias da criação até a resolução — Android + Apple (média dos tickets).
+	measure 'Média de Dias Mobile' = CALCULATE( [Média de Dias até a Resolução], KEEPFILTERS( Helpdesk_Tickets[Tipo de Entrega] IN { "Android", "Apple" } ) )
+		formatString: 0.00
+		displayFolder: Homologação
+		lineageTag: a822e0fa-bff2-5c77-a709-5e71fa8fa2c4
+
+	/// Média de dias da criação até a resolução — Área VIP (média dos tickets).
+	measure 'Média de Dias Área VIP' = CALCULATE( [Média de Dias até a Resolução], KEEPFILTERS( Helpdesk_Tickets[Tipo de Entrega] IN { "Área VIP" } ) )
+		formatString: 0.00
+		displayFolder: Homologação
+		lineageTag: 5b9bb9ac-221b-537f-9d1e-ce4ee072f93c
+
+	/// Média de dias da criação até a resolução — Apple (média dos tickets).
+	measure 'Média de Dias Apple' = CALCULATE( [Média de Dias até a Resolução], KEEPFILTERS( Helpdesk_Tickets[Tipo de Entrega] IN { "Apple" } ) )
+		formatString: 0.00
+		displayFolder: Homologação
+		lineageTag: 9c7464b3-062b-5b68-9304-0651e769ac22
+
+	/// Média de dias da criação até a resolução — Android (média dos tickets).
+	measure 'Média de Dias Android' = CALCULATE( [Média de Dias até a Resolução], KEEPFILTERS( Helpdesk_Tickets[Tipo de Entrega] IN { "Android" } ) )
+		formatString: 0.00
+		displayFolder: Homologação
+		lineageTag: 09097e4f-209e-56e5-aab7-cdfaf62589bc
+
+	/// Média de dias da criação até a resolução dos tickets fechados no período (Tempo de entrega do app).
+	measure 'Média de Dias até a Resolução' = CALCULATE( AVERAGE( Helpdesk_Tickets[Dias até a Resolução] ), NOT ISBLANK( Helpdesk_Tickets[Data_Fechamento_Ticket] ) )
+		formatString: 0.00
+		displayFolder: Homologação
+		lineageTag: 1a760d3b-fccf-5aa3-81c7-160971a4df90
+
+	/// Homologações de guias de configuração/orientação. Por data de fechamento.
+	measure 'Configuração/Orientação (Guias)' = CALCULATE( [Tickets Homologação], KEEPFILTERS( Helpdesk_Tickets[Serviço Homologação] = "Homologação Guias" ), KEEPFILTERS( Helpdesk_Tickets[Categoria Homologação] IN { "Homologação - Configuração/Orientação" } ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 09d04780-2dae-59a2-a8dd-03b74e973992
+
+	/// Homologações de guias com documento ilegível. Por data de fechamento.
+	measure 'Documentos Ilegíveis' = CALCULATE( [Tickets Homologação], KEEPFILTERS( Helpdesk_Tickets[Serviço Homologação] = "Homologação Guias" ), KEEPFILTERS( Helpdesk_Tickets[Categoria Homologação] IN { "Homologação - Documento Ilegível" } ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 7abc5739-108d-5d94-a738-23f9411227dc
+
+	/// Homologações de guias finalizadas (homologado). Por data de fechamento.
+	measure 'Guias Finalizadas' = CALCULATE( [Tickets Homologação], KEEPFILTERS( Helpdesk_Tickets[Serviço Homologação] = "Homologação Guias" ), KEEPFILTERS( Helpdesk_Tickets[Categoria Homologação] IN { "Homologação - Finalização/Homologado" } ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: a625d194-5bbc-5586-a617-43be1201492b
+
+	/// Serviço Ajuste de Homologação de Guias. Por data de fechamento.
+	measure 'Ajustes Guias' = CALCULATE( [Tickets Homologação], KEEPFILTERS( Helpdesk_Tickets[Serviço Homologação] = "Ajuste Guias" ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: da1314cf-5aef-5f49-8bc1-7e9be3dd9d43
+
+	/// Serviço Homologação de Guias do e-Contínuo. Por data de fechamento.
+	measure 'Homologações Guias' = CALCULATE( [Tickets Homologação], KEEPFILTERS( Helpdesk_Tickets[Serviço Homologação] = "Homologação Guias" ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: df4bae6b-288d-5ae6-9510-68b2bfdd2a24
+
+	/// Homologações do App encerradas sem retorno do cliente. Por data de fechamento.
+	measure 'Sem Retorno do Cliente (App)' = CALCULATE( [Tickets Homologação], KEEPFILTERS( Helpdesk_Tickets[Serviço Homologação] = "Homologação App" ), KEEPFILTERS( Helpdesk_Tickets[Categoria Homologação] IN { "Sem retorno do Cliente" } ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 518349b6-877d-5996-9cf4-761ba968b5fd
+
+	/// Publicações na Apple. Por data de fechamento.
+	measure 'Publicações Apple' = CALCULATE( [Tickets Homologação], KEEPFILTERS( Helpdesk_Tickets[Serviço Homologação] = "Homologação App" ), KEEPFILTERS( Helpdesk_Tickets[Categoria Homologação] IN { "Publicação Apple" } ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 485b78c2-0842-567c-a958-48ef134f2016
+
+	/// App/Área VIP disponível (inclui Área Vip e Android). Por data de fechamento.
+	measure 'Apps Disponíveis' = CALCULATE( [Tickets Homologação], KEEPFILTERS( Helpdesk_Tickets[Serviço Homologação] = "Homologação App" ), KEEPFILTERS( Helpdesk_Tickets[Categoria Homologação] IN { "APP/Área VIP Disponível", "Área Vip Disponível", "Android Disponível" } ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 11cd415d-6f04-568e-a997-3657df4a5fb9
+
+	/// Serviço Ajuste de Homologação da Área VIP e Aplicativo. Por data de fechamento.
+	measure 'Ajustes App' = CALCULATE( [Tickets Homologação], KEEPFILTERS( Helpdesk_Tickets[Serviço Homologação] = "Ajuste App" ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 24dc700f-a134-5a1a-9201-0214903b85b8
+
+	/// Serviço Homologação da Área Vip e Aplicativo. Por data de fechamento.
+	measure 'Homologações App' = CALCULATE( [Tickets Homologação], KEEPFILTERS( Helpdesk_Tickets[Serviço Homologação] = "Homologação App" ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 05ebb341-1ba3-56ac-8c90-b288c5098ddb
+
+	/// Tickets fechados dos serviços de homologação/ajuste (App e Guias) nas categorias que contam (lista do OKR 2026).
+	measure 'Tickets Homologação' = CALCULATE( [Tickets Fechados], KEEPFILTERS( NOT ISBLANK( Helpdesk_Tickets[Categoria Homologação] ) ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 0d8a021d-81c7-5a61-bdf1-ed5e3f9a6fd6
+
+	/// FOTO: dias desde a abertura do ticket ainda não resolvido até a última extração do Helpdesk (no total, o mais antigo).
+	measure 'Dias em Aberto' = VAR ref = CALCULATE( MAX( Helpdesk_Tickets[data_extracao] ), REMOVEFILTERS( Helpdesk_Tickets ) ) RETURN MAXX( CALCULATETABLE( Helpdesk_Tickets, REMOVEFILTERS( Calendario ), KEEPFILTERS( Helpdesk_Tickets[Serviço Homologação] IN { "Homologação App", "Ajuste App" } ), KEEPFILTERS( NOT Helpdesk_Tickets[status] IN { "Resolvido", "Fechado", "Cancelado" } ) ), DATEDIFF( Helpdesk_Tickets[Data_Criacao_Ticket], ref, DAY ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 43c1eeeb-b4b1-5ee0-858c-49021cd72c13
+
+	/// FOTO: homologações e ajustes do App ainda não resolvidos (ignora o Período).
+	measure 'Tickets em Aberto (App)' = CALCULATE( COUNTROWS( Helpdesk_Tickets ), REMOVEFILTERS( Calendario ), KEEPFILTERS( Helpdesk_Tickets[Serviço Homologação] IN { "Homologação App", "Ajuste App" } ), KEEPFILTERS( NOT Helpdesk_Tickets[status] IN { "Resolvido", "Fechado", "Cancelado" } ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 9c8ebd57-dac0-5825-ad51-0db6abf14a50
+
+	/// Média de dias da criação até a resolução de todas as entregas (cada ticket pesa igual).
+	measure 'Média de Dias das Entregas' = CALCULATE( [Média de Dias até a Resolução], KEEPFILTERS( NOT ISBLANK( Helpdesk_Tickets[Tipo de Entrega] ) ) )
+		formatString: 0.00
+		displayFolder: Homologação
+		lineageTag: 04873034-8173-53e6-a065-f52525207ef5
+
+	/// Entregas (tickets fechados) de Android, Apple e Área VIP no período (coluna Tipo de Entrega).
+	measure 'Entregas de App' = CALCULATE( [Tickets Fechados], KEEPFILTERS( NOT ISBLANK( Helpdesk_Tickets[Tipo de Entrega] ) ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 8b2ca79a-bdb2-5c78-8f15-b3e4099738fe
+
+	/// Soma dos campos de alteração de receita do ticket (vazio = ticket sem alteração; usado na lista).
+	measure 'Valor Alterado (ticket)' = VAR v = SUMX( Helpdesk_Tickets, COALESCE( Helpdesk_Tickets[Desconto Mensalidade], 0 ) + COALESCE( Helpdesk_Tickets[Isencao Mensalidade], 0 ) + COALESCE( Helpdesk_Tickets[Isencao Aviso], 0 ) + COALESCE( Helpdesk_Tickets[Reducao Mensalidade], 0 ) + COALESCE( Helpdesk_Tickets[Aumento Mensalidade], 0 ) + COALESCE( Helpdesk_Tickets[Estorno Total], 0 ) + COALESCE( Helpdesk_Tickets[Boletos Cancelados], 0 ) ) RETURN IF( v <> 0, v )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 752b1e82-7939-5261-84f5-af278de0a476
+
+	/// Quais alterações de receita o ticket tem (uma coluna só na lista, no lugar de uma coluna por tipo).
+	measure 'Alterações do Ticket' = VAR s = IF( SUM( Helpdesk_Tickets[Desconto Mensalidade] ) <> 0, ", Desconto" ) & IF( SUM( Helpdesk_Tickets[Isencao Mensalidade] ) <> 0, ", Isenção de mensalidade" ) & IF( SUM( Helpdesk_Tickets[Isencao Aviso] ) <> 0, ", Isenção de aviso" ) & IF( SUM( Helpdesk_Tickets[Reducao Mensalidade] ) <> 0, ", Redução" ) & IF( SUM( Helpdesk_Tickets[Aumento Mensalidade] ) <> 0, ", Aumento" ) & IF( SUM( Helpdesk_Tickets[Estorno Total] ) <> 0, ", Estorno" ) & IF( SUM( Helpdesk_Tickets[Boletos Cancelados] ) <> 0, ", Boletos" ) RETURN IF( HASONEVALUE( Helpdesk_Tickets[id] ) && s <> "", MID( s, 3, 300 ) )
+		displayFolder: Global
+		lineageTag: 75f8d847-c8c8-5c42-92a6-cd05cb066586
+
+	/// Áreas VIP disponibilizadas (Área Vip Disponível + a antiga APP/Área VIP Disponível, usada antes de set/2026). Por data de fechamento.
+	measure 'Área VIP Disponível (App)' = CALCULATE( [Tickets Homologação], KEEPFILTERS( Helpdesk_Tickets[Serviço Homologação] = "Homologação App" ), KEEPFILTERS( Helpdesk_Tickets[Categoria Homologação] IN { "APP/Área VIP Disponível", "Área Vip Disponível" } ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 359d56c5-d95a-5494-aa1c-214cf01d423a
+
+	/// Apps Android disponibilizados (categoria Android Disponível). Por data de fechamento.
+	measure 'Android Disponível (App)' = CALCULATE( [Tickets Homologação], KEEPFILTERS( Helpdesk_Tickets[Serviço Homologação] = "Homologação App" ), KEEPFILTERS( Helpdesk_Tickets[Categoria Homologação] IN { "Android Disponível" } ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: beb9eb0c-257e-5959-b485-124fbce0fddc
+
+	/// Homologações + ajustes do App dos clientes da linha. Por data de fechamento.
+	measure 'Tickets do App (cliente)' = [Homologações App (cliente)] + [Ajustes App (cliente)]
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 623fddf8-daae-5f9b-8731-68065387adc0
+
+	/// [Ajustes App] dos clientes da linha (dCarteira[ID Legado] = ID Legado do Cliente do ticket). Por data de fechamento.
+	measure 'Ajustes App (cliente)' = CALCULATE( [Ajustes App], TREATAS( VALUES( dCarteira[ID Legado] ), Helpdesk_Tickets[ID Legado do Cliente] ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: 23a970e6-550e-5101-9de6-4447bbbde2e7
+
+	/// [Homologações App] dos clientes da linha (dCarteira[ID Legado] = ID Legado do Cliente do ticket). Por data de fechamento.
+	measure 'Homologações App (cliente)' = CALCULATE( [Homologações App], TREATAS( VALUES( dCarteira[ID Legado] ), Helpdesk_Tickets[ID Legado do Cliente] ) )
+		formatString: #,0
+		displayFolder: Homologação
+		lineageTag: b8b7dde0-f468-5a32-93cf-29d47a880e96
+
+	/// Tickets resolvidos até o SLA previsto do Helpdesk ÷ tickets fechados com SLA, nas categorias que contam. Por data de fechamento.
+	measure '% SLA Homologação' = CALCULATE( [% no Prazo do SLA], KEEPFILTERS( NOT ISBLANK( Helpdesk_Tickets[Categoria Homologação] ) ) )
+		formatString: 0.00%
+		displayFolder: Homologação
+		lineageTag: fe04e0be-57e9-5216-bff6-03e76a812e48
+
+	/// CS do cliente no CRM no dia da live (lista de participantes, 1 linha por ticket). Medida para a lista seguir a data da live.
+	measure 'Responsável do Cliente (Lives)' = IF( [Participantes (Lives)] = 1, COALESCE( CALCULATE( MAX( Helpdesk_Tickets[Responsável do Cliente] ), Helpdesk_Tickets[service] = "Live", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) ), "Sem responsável" ) )
+		displayFolder: Lives
+		lineageTag: 64a011d2-e706-5913-a353-7dc819cc292c
+
+	/// ID (Cruzeiro) do cliente do ticket da Ouvidoria, por data de CRIAÇÃO (lista de atendimentos, 1 linha por ticket).
+	measure 'ID do Cliente (Ouvidoria)' = IF( [Atendimentos Ouvidoria] = 1, VAR i = CALCULATE( MAX( Helpdesk_Tickets[ID Legado do Cliente] ), Helpdesk_Tickets[service] = "Ouvidoria", USERELATIONSHIP( Helpdesk_Tickets[Data_Criacao_Ticket], Calendario[Date] ) ) RETURN IF( ISBLANK( i ) || i = "", "—", i ) )
+		displayFolder: Ouvidoria
+		lineageTag: 786c83a9-1e9e-512c-8112-d95c76eb5df5
+
+	column 'Início do Mês de Resolução'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: b286c625-0314-4f67-9661-b828965f4d1c
+		summarizeBy: none
+		sourceColumn: Início do Mês de Resolução
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Início do Mês de Criação'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: fd5cef66-ec58-48d3-bfc9-f4a2c6f33882
+		summarizeBy: none
+		sourceColumn: Início do Mês de Criação
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: f19036b8-a81a-44ea-b458-883ffd9c829b
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column type
+		dataType: int64
+		formatString: 0
+		lineageTag: bd2689c5-0a5d-4f9b-aed3-815da665a4dd
+		summarizeBy: sum
+		sourceColumn: type
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		lineageTag: 996f9eca-1cd3-48ae-8d72-a43140a50d06
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data_Fechamento_Ticket
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: f5019889-273e-4103-9a0a-a3457ff01fb4
+		summarizeBy: none
+		sourceColumn: Data_Fechamento_Ticket
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Hora_Fechamento_Ticket
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: 358a4f11-a440-43a5-a0e0-03cc10bfb3c6
+		summarizeBy: none
+		sourceColumn: Hora_Fechamento_Ticket
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Time
+
+	column Data_SLA_Previsto
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 286fcf0a-4df4-4f04-8554-f0c39f2831d5
+		summarizeBy: none
+		sourceColumn: Data_SLA_Previsto
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Hora_SLA_Previsto
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: 7d907eb6-c423-452e-b481-35acd08a4e5a
+		summarizeBy: none
+		sourceColumn: Hora_SLA_Previsto
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Time
+
+	column Data_Criacao_Ticket
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: e65b0fca-82d0-40f1-b589-6ce64d365028
+		summarizeBy: none
+		sourceColumn: Data_Criacao_Ticket
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Hora_Criacao_Ticket
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: 29b14297-d18b-44f5-9049-e2959e2d5723
+		summarizeBy: none
+		sourceColumn: Hora_Criacao_Ticket
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Time
+
+	column Data_Resolucao_Ticket
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 7aec5855-8fcd-4ac0-9e1f-1a5a0bdf94e9
+		summarizeBy: none
+		sourceColumn: Data_Resolucao_Ticket
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Hora_Resolucao_Ticket
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: c3858d36-c96a-4ae7-92ff-4c52b2e8b533
+		summarizeBy: none
+		sourceColumn: Hora_Resolucao_Ticket
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Time
+
+	column etapa_dispensa
+		dataType: string
+		lineageTag: 8012b50d-f879-4b2b-8507-0bcb552473dc
+		summarizeBy: none
+		sourceColumn: etapa_dispensa
+
+		annotation SummarizationSetBy = Automatic
+
+	column owner_team
+		dataType: string
+		lineageTag: 1f41832d-3ae1-48cd-87cc-44966d89fdd4
+		summarizeBy: none
+		sourceColumn: owner_team
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: 4d0fba8b-95f7-4bee-a641-c483ba238d86
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column tags
+		dataType: string
+		lineageTag: ed8a94fa-b42c-4570-bfd1-0e2417a0be4d
+		summarizeBy: none
+		sourceColumn: tags
+
+		annotation SummarizationSetBy = Automatic
+
+	column origin
+		dataType: int64
+		formatString: 0
+		lineageTag: 7d710bf9-a2f5-47ca-9b9f-7838185469ce
+		summarizeBy: sum
+		sourceColumn: origin
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_client
+		dataType: string
+		lineageTag: 37269ed0-54d8-49c1-9e5e-d38dcd9d1ab5
+		summarizeBy: none
+		sourceColumn: id_client
+
+		annotation SummarizationSetBy = Automatic
+
+	column service
+		dataType: string
+		lineageTag: bb9004c5-f96b-435c-b4dc-570d1332f97a
+		summarizeBy: none
+		sourceColumn: service
+
+		annotation SummarizationSetBy = Automatic
+
+	column setor_ag_ouv
+		dataType: string
+		lineageTag: 61eae37b-c660-43e3-abce-12d85d72b331
+		summarizeBy: none
+		sourceColumn: setor_ag_ouv
+
+		annotation SummarizationSetBy = Automatic
+
+	column origem_cs
+		dataType: string
+		lineageTag: 1d89d24c-d88b-439e-a101-1b7e411696c4
+		summarizeBy: none
+		sourceColumn: origem_cs
+
+		annotation SummarizationSetBy = Automatic
+
+	column owner
+		dataType: string
+		lineageTag: 5b373199-f362-4bd9-82cf-62bef053900b
+		summarizeBy: none
+		sourceColumn: owner
+
+		annotation SummarizationSetBy = Automatic
+
+	column resp_cliente
+		dataType: string
+		lineageTag: ef7a19ec-a81e-4cb8-b0d0-0d9b49979803
+		summarizeBy: none
+		sourceColumn: resp_cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column lastActionDate
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 0166b1de-6628-4b36-8fc6-f69c23f7939c
+		summarizeBy: none
+		sourceColumn: lastActionDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column lastUpdate
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: d99d9bef-8d47-4c27-a45f-5422f9b0d81b
+		summarizeBy: none
+		sourceColumn: lastUpdate
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sistema
+		dataType: string
+		lineageTag: 4ff51a49-6f96-43db-9515-3772230d4694
+		summarizeBy: none
+		sourceColumn: Sistema
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Reducao Mensalidade'
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: 0545acdc-57d8-4c72-8662-05428921b8b2
+		summarizeBy: sum
+		sourceColumn: Reducao Mensalidade
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column 'Isencao Mensalidade'
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: a7dc43a4-2ca2-4777-b7d5-40590b33c20f
+		summarizeBy: sum
+		sourceColumn: Isencao Mensalidade
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column 'Isencao Aviso'
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: 8ec60f7c-66e0-4ab7-8b91-c7198959afc4
+		summarizeBy: sum
+		sourceColumn: Isencao Aviso
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column 'Aumento Mensalidade'
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: f8b196db-4391-4540-825d-e55808369cea
+		summarizeBy: sum
+		sourceColumn: Aumento Mensalidade
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column 'Estorno Total'
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: 4716c074-3143-4c8c-824a-28906cf63510
+		summarizeBy: sum
+		sourceColumn: Estorno Total
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column 'Desconto Mensalidade'
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: 1fc9cec5-c0fb-4047-9ce6-b67dec987fc8
+		summarizeBy: sum
+		sourceColumn: Desconto Mensalidade
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column 'Boletos Cancelados'
+		dataType: decimal
+		formatString: \R$ #,0.00
+		lineageTag: e8852cbf-e9cf-49a4-b72a-bde725c42a66
+		summarizeBy: sum
+		sourceColumn: Boletos Cancelados
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column 'Aviso Teste'
+		dataType: string
+		lineageTag: 54ceb52e-e54f-4fdd-9aec-a3a4214835de
+		summarizeBy: none
+		sourceColumn: Aviso Teste
+
+		annotation SummarizationSetBy = Automatic
+
+	column area_responsavel
+		dataType: string
+		lineageTag: 7d12df12-4bef-41b7-ac15-6d0f9c3ef8d7
+		summarizeBy: none
+		sourceColumn: area_responsavel
+
+		annotation SummarizationSetBy = Automatic
+
+	column solicitantes
+		dataType: string
+		lineageTag: 6f2f6176-f701-4120-9e90-49c8d3c76e65
+		summarizeBy: none
+		sourceColumn: solicitantes
+
+		annotation SummarizationSetBy = Automatic
+
+	column histórico_times
+		dataType: string
+		lineageTag: 0e17c8e9-833b-4ab3-832f-33d98250f1a1
+		summarizeBy: none
+		sourceColumn: histórico_times
+
+		annotation SummarizationSetBy = Automatic
+
+	column createdByName
+		dataType: string
+		lineageTag: 933acd7d-3124-4e40-be08-08088926993b
+		summarizeBy: none
+		sourceColumn: createdByName
+
+		annotation SummarizationSetBy = Automatic
+
+	column faseClienteFaltaRemarcacao
+		dataType: string
+		lineageTag: 2f8781e6-4692-4511-b703-b4bf4c6d5aac
+		summarizeBy: none
+		sourceColumn: faseClienteFaltaRemarcacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column OuvOrigemTicket
+		dataType: string
+		lineageTag: c432e059-cb1f-4aa2-b69c-8d6820fedd02
+		summarizeBy: none
+		sourceColumn: OuvOrigemTicket
+
+		annotation SummarizationSetBy = Automatic
+
+	column OuvOrigemTratativa
+		dataType: string
+		lineageTag: d4d44391-424a-4dcc-bb3e-1c498158ae09
+		summarizeBy: none
+		sourceColumn: OuvOrigemTratativa
+
+		annotation SummarizationSetBy = Automatic
+
+	column OuvEquipeDemanda
+		dataType: string
+		lineageTag: 244ae98f-acdc-467e-b6e7-b98282ee48d3
+		summarizeBy: none
+		sourceColumn: OuvEquipeDemanda
+
+		annotation SummarizationSetBy = Automatic
+
+	column OuvAreaResponsavel
+		dataType: string
+		lineageTag: 6c6be668-104a-4dc8-a4ae-604b4e25ad78
+		summarizeBy: none
+		sourceColumn: OuvAreaResponsavel
+
+		annotation SummarizationSetBy = Automatic
+
+	column chatWaitingTime
+		dataType: string
+		lineageTag: d871f9a6-729b-4799-be74-5c43d348e9f6
+		summarizeBy: none
+		sourceColumn: chatWaitingTime
+
+		annotation SummarizationSetBy = Automatic
+
+	column chatTalkTime
+		dataType: string
+		lineageTag: 05ebdc09-ea7e-465b-93e5-ff9bbef6f2dc
+		summarizeBy: none
+		sourceColumn: chatTalkTime
+
+		annotation SummarizationSetBy = Automatic
+
+	column task
+		dataType: string
+		lineageTag: e7c2cfe2-aa21-4f2e-9907-5ccbf4c7057f
+		summarizeBy: none
+		sourceColumn: task
+
+		annotation SummarizationSetBy = Automatic
+
+	column Equipe
+		dataType: string
+		lineageTag: 72f73909-5a3b-409c-bfb9-37991b605c6e
+		summarizeBy: none
+		sourceColumn: Equipe
+
+		annotation SummarizationSetBy = Automatic
+
+	column IncidenteTipo
+		dataType: string
+		lineageTag: 8b794172-f2f2-4ef8-b8c9-b3623a1213d0
+		summarizeBy: none
+		sourceColumn: IncidenteTipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column SolicitacaoHardware
+		dataType: string
+		lineageTag: e233205e-0f50-41f2-8ad4-1380cdb8f96b
+		summarizeBy: none
+		sourceColumn: SolicitacaoHardware
+
+		annotation SummarizationSetBy = Automatic
+
+	column SolicitacaoEmail
+		dataType: string
+		lineageTag: 74bf38ac-9a7f-46e5-bae9-300e90305ffe
+		summarizeBy: none
+		sourceColumn: SolicitacaoEmail
+
+		annotation SummarizationSetBy = Automatic
+
+	column SolicitacaoRede
+		dataType: string
+		lineageTag: cf610f09-104d-4e4f-83fe-03dd3eaab944
+		summarizeBy: none
+		sourceColumn: SolicitacaoRede
+
+		annotation SummarizationSetBy = Automatic
+
+	column SolicitacaoTelefonia
+		dataType: string
+		lineageTag: 0583963e-3ac7-431e-a21d-cc9205f4cd73
+		summarizeBy: none
+		sourceColumn: SolicitacaoTelefonia
+
+		annotation SummarizationSetBy = Automatic
+
+	column RequisicaoTipo
+		dataType: string
+		lineageTag: a1cfd0b3-328f-4d10-a592-77c14dde70eb
+		summarizeBy: none
+		sourceColumn: RequisicaoTipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column SolicitacaoLayout
+		dataType: string
+		lineageTag: abe681ea-2076-48d9-ac23-3fe281c46dbf
+		summarizeBy: none
+		sourceColumn: SolicitacaoLayout
+
+		annotation SummarizationSetBy = Automatic
+
+	column SolicitacaoCompras
+		dataType: string
+		lineageTag: ad8cd228-360a-49a4-826e-a9e2a976ef40
+		summarizeBy: none
+		sourceColumn: SolicitacaoCompras
+
+		annotation SummarizationSetBy = Automatic
+
+	column organization
+		dataType: string
+		lineageTag: cf2bb0b8-5e62-45a4-9ea7-3f783c78f947
+		summarizeBy: none
+		sourceColumn: organization
+
+		annotation SummarizationSetBy = Automatic
+
+	column resp_tratamento_guia
+		dataType: string
+		lineageTag: 0030d59d-49ec-452b-84ea-7d99f7d7006b
+		summarizeBy: none
+		sourceColumn: resp_tratamento_guia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor = LOOKUPVALUE(dDeParaOwnerTeam[Setor], dDeParaOwnerTeam[owner_team], Helpdesk_Tickets[owner_team])
+		dataType: string
+		lineageTag: d5f7fc45-521d-48f8-91c9-91bdbecf77b8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_extracao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: d49fd798-b80b-45d3-865f-6749b1b4503f
+		summarizeBy: none
+		sourceColumn: data_extracao
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Live (data e tema)' = IF( Helpdesk_Tickets[service] = "Live", FORMAT( Helpdesk_Tickets[Data_Criacao_Ticket], "dd/mm/yy" ) & " · " & Helpdesk_Tickets[category] )
+		dataType: string
+		displayFolder: Lives
+		lineageTag: bddd4645-bbfd-5404-9e28-2b65580d264e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data da Live' = IF( Helpdesk_Tickets[service] = "Live", Helpdesk_Tickets[Data_Criacao_Ticket] )
+		dataType: dateTime
+		formatString: dd/mm/yy
+		displayFolder: Lives
+		lineageTag: da52a79b-4e70-5eda-bf8c-c597f559ef7f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dia da Semana da Live Nº' = IF( Helpdesk_Tickets[service] = "Live", WEEKDAY( Helpdesk_Tickets[Data_Criacao_Ticket], 2 ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Lives
+		lineageTag: d387a34b-d3c6-5b36-943f-7526e434b3cb
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dia da Semana da Live' = IF( Helpdesk_Tickets[service] = "Live", FORMAT( Helpdesk_Tickets[Data_Criacao_Ticket], "dddd" ) )
+		dataType: string
+		displayFolder: Lives
+		lineageTag: 9e0676f7-2dfe-5159-bf98-7dd66cf5e463
+		summarizeBy: none
+		sortByColumn: 'Dia da Semana da Live Nº'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Primeira Live do Cliente' = VAR c = Helpdesk_Tickets[id_client] RETURN IF( Helpdesk_Tickets[service] = "Live" && NOT ISBLANK( c ), MINX( FILTER( Helpdesk_Tickets, Helpdesk_Tickets[id_client] = c && Helpdesk_Tickets[service] = "Live" ), Helpdesk_Tickets[Data_Criacao_Ticket] ) )
+		dataType: dateTime
+		formatString: dd/mm/yy
+		displayFolder: Lives
+		lineageTag: 50b0ab29-7c6d-5a54-8f3d-3922ca25e5d6
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cliente Novo na Live' = Helpdesk_Tickets[service] = "Live" && NOT ISBLANK( Helpdesk_Tickets[Primeira Live do Cliente] ) && Helpdesk_Tickets[Data_Criacao_Ticket] = Helpdesk_Tickets[Primeira Live do Cliente]
+		dataType: boolean
+		isHidden
+		displayFolder: Lives
+		lineageTag: 924c314a-a85b-58fd-bd90-21ec4d32c15e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tempo de Espera (s)' = IFERROR( VALUE( Helpdesk_Tickets[chatWaitingTime] ), BLANK() )
+		dataType: double
+		isHidden
+		formatString: 0
+		displayFolder: Atendimento
+		lineageTag: 1f62b9c9-f37b-5d7e-a532-c8cfd901de05
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tempo de Atendimento (s)' = IFERROR( VALUE( Helpdesk_Tickets[chatTalkTime] ), BLANK() )
+		dataType: double
+		isHidden
+		formatString: 0
+		displayFolder: Atendimento
+		lineageTag: 9533e863-61f2-55d8-b822-7d2ab1229085
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Canal = SWITCH( TRUE(), Helpdesk_Tickets[origin] IN { 5, 6 }, "Chat", Helpdesk_Tickets[origin] IN { 18, 23, 25 }, "WhatsApp", Helpdesk_Tickets[origin] = 9, "API / Assistente virtual", Helpdesk_Tickets[origin] IN { 3, 7 }, "E-mail", Helpdesk_Tickets[origin] IN { 1, 2 }, "Web", "Outros" )
+		dataType: string
+		displayFolder: Atendimento
+		lineageTag: 1232e9f6-63c0-5b19-9f51-d5a5cfdaa8b0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Status SLA' = VAR r = Helpdesk_Tickets[Data_Resolucao_Ticket] + Helpdesk_Tickets[Hora_Resolucao_Ticket] VAR p = Helpdesk_Tickets[Data_SLA_Previsto] + Helpdesk_Tickets[Hora_SLA_Previsto] RETURN IF( ISBLANK( Helpdesk_Tickets[Data_Resolucao_Ticket] ) || ISBLANK( Helpdesk_Tickets[Data_SLA_Previsto] ), BLANK(), IF( r <= p, "No prazo", "Fora do prazo" ) )
+		dataType: string
+		displayFolder: SLA
+		lineageTag: 91ac5c02-f9ba-58f0-aa1b-b66904e8db3f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Empresa = VAR o = TRIM( Helpdesk_Tickets[organization] ) RETURN IF( ISBLANK( o ) || o IN { "", "None", "Null", "Estrutura modelo" }, BLANK(), o )
+		dataType: string
+		displayFolder: Atendimento
+		lineageTag: 5b432840-44bc-5246-80f9-46e0ab2edd18
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email do Analista' = VAR n = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( LOWER( TRIM( Helpdesk_Tickets[owner] ) ), "á", "a" ), "à", "a" ), "â", "a" ), "ã", "a" ), "ä", "a" ), "é", "e" ), "è", "e" ), "ê", "e" ), "ë", "e" ), "í", "i" ), "ì", "i" ), "î", "i" ), "ï", "i" ), "ó", "o" ), "ò", "o" ), "ô", "o" ), "õ", "o" ), "ö", "o" ), "ú", "u" ), "ù", "u" ), "û", "u" ), "ü", "u" ), "ç", "c" ), "ñ", "n" ), "  ", " " ) VAR p = SUBSTITUTE( n, " ", "|" ) VAR curto = IF( PATHLENGTH( p ) > 1, PATHITEM( p, 1 ) & " " & PATHITEMREVERSE( p, 1 ), n ) VAR e1 = IF( n = "", BLANK(), LOOKUPVALUE( dColaborador[email], dColaborador[Nome Normalizado], n, BLANK() ) ) RETURN IF( ISBLANK( e1 ) && n <> "", LOOKUPVALUE( dColaborador[email], dColaborador[Nome Curto Normalizado], curto, BLANK() ), e1 )
+		dataType: string
+		isHidden
+		displayFolder: Pessoa
+		lineageTag: 1fe5a943-1b9c-5173-bde5-27d12f330e2a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe do Analista' = IF( ISBLANK( Helpdesk_Tickets[Email do Analista] ), IF( TRIM( Helpdesk_Tickets[owner] ) <> "", "(sem cadastro)" ), COALESCE( LOOKUPVALUE( dColaboradorMes[Equipe], dColaboradorMes[email], Helpdesk_Tickets[Email do Analista], dColaboradorMes[AnoMes], Helpdesk_Tickets[Mês da Composição], BLANK() ), "(sem equipe)" ) )
+		dataType: string
+		displayFolder: Pessoa
+		lineageTag: 64510862-ddb1-5d7a-88eb-a2a738ebd97d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Setor do Analista' = LOOKUPVALUE( dColaboradorMes[Setor], dColaboradorMes[email], Helpdesk_Tickets[Email do Analista], dColaboradorMes[AnoMes], Helpdesk_Tickets[Mês da Composição], BLANK() )
+		dataType: string
+		displayFolder: Pessoa
+		lineageTag: c31403d2-a1bd-5523-a759-bd50986280f4
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Reunião Onboarding' = VAR fila = Helpdesk_Tickets[owner_team] VAR cat = Helpdesk_Tickets[category] VAR serv = Helpdesk_Tickets[service] RETURN SWITCH( TRUE(), serv = "Treinamento" && fila IN { "Treinamento", "Sucesso do Cliente" } && cat IN { "Checkout Alinhamento Inicial + configurações", "Checkout - Acompanhamento", "Checkout - Aplicativo e Área VIP", "Checkout - Configurações Iniciais", "Checkout - Departamentos", "Checkout - e-Continuo", "Checkout - Gestão de Processos", "Checkout - Kappa", "Checkout - Lista de Entregas", "Checkout - Método APLA", "Checkout - Retomada", "Checkout - AF Docs" }, "Checkout (reunião feita)", serv = "Treinamento" && fila IN { "Treinamento", "Sucesso do Cliente" } && cat IN { "Falta", "Remarcação" }, "Queda no treinamento", serv = "Agendamento" && fila = "Agendamento" && Helpdesk_Tickets[setor_ag_ouv] = "Consultoria" && cat IN { "Falta", "Remarcação", "Cancelamento de Treinamento" }, "Queda no agendamento" )
+		dataType: string
+		displayFolder: No Show
+		lineageTag: b204aa89-ec28-57e5-9bb9-a729a7b3daf1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Responsável pela Reunião' = SWITCH( Helpdesk_Tickets[Reunião Onboarding], "Queda no agendamento", Helpdesk_Tickets[resp_cliente], "Queda no treinamento", Helpdesk_Tickets[owner], "Checkout (reunião feita)", Helpdesk_Tickets[owner] )
+		dataType: string
+		displayFolder: No Show
+		lineageTag: 627819f3-cb12-5ed0-aee7-9431231fc3d8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email da Reunião' = IF( Helpdesk_Tickets[Reunião Onboarding] = "Queda no agendamento", VAR n = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( LOWER( TRIM( Helpdesk_Tickets[resp_cliente] ) ), "á", "a" ), "à", "a" ), "â", "a" ), "ã", "a" ), "ä", "a" ), "é", "e" ), "è", "e" ), "ê", "e" ), "ë", "e" ), "í", "i" ), "ì", "i" ), "î", "i" ), "ï", "i" ), "ó", "o" ), "ò", "o" ), "ô", "o" ), "õ", "o" ), "ö", "o" ), "ú", "u" ), "ù", "u" ), "û", "u" ), "ü", "u" ), "ç", "c" ), "ñ", "n" ), "  ", " " ) VAR p = SUBSTITUTE( n, " ", "|" ) VAR curto = IF( PATHLENGTH( p ) > 1, PATHITEM( p, 1 ) & " " & PATHITEMREVERSE( p, 1 ), n ) VAR e1 = IF( n = "", BLANK(), LOOKUPVALUE( dColaborador[email], dColaborador[Nome Normalizado], n, BLANK() ) ) RETURN IF( ISBLANK( e1 ) && n <> "", LOOKUPVALUE( dColaborador[email], dColaborador[Nome Curto Normalizado], curto, BLANK() ), e1 ), IF( NOT ISBLANK( Helpdesk_Tickets[Reunião Onboarding] ), Helpdesk_Tickets[Email do Analista] ) )
+		dataType: string
+		isHidden
+		displayFolder: No Show
+		lineageTag: 708aeb55-d066-5367-a35a-7fa4b33066fa
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe da Reunião' = IF( NOT ISBLANK( Helpdesk_Tickets[Reunião Onboarding] ), IF( ISBLANK( Helpdesk_Tickets[Email da Reunião] ), IF( TRIM( Helpdesk_Tickets[Responsável pela Reunião] ) <> "", "(sem cadastro)" ), COALESCE( LOOKUPVALUE( dColaboradorMes[Equipe], dColaboradorMes[email], Helpdesk_Tickets[Email da Reunião], dColaboradorMes[AnoMes], ( VAR _d = Helpdesk_Tickets[Data_Criacao_Ticket] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) ), BLANK() ), "(sem equipe)" ) ) )
+		dataType: string
+		displayFolder: No Show
+		lineageTag: 24c7eaf0-20a7-5538-81cc-cbdd251d9f36
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Setor da Reunião' = LOOKUPVALUE( dColaboradorMes[Setor], dColaboradorMes[email], Helpdesk_Tickets[Email da Reunião], dColaboradorMes[AnoMes], ( VAR _d = Helpdesk_Tickets[Data_Criacao_Ticket] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) ), BLANK() )
+		dataType: string
+		displayFolder: No Show
+		lineageTag: 123efefa-1bbf-5fe7-b7e8-9d7aaa1d272b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID Legado do Cliente' = VAR c = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( TRIM( LOOKUPVALUE( Helpdesk_Empresas[cnpj], Helpdesk_Empresas[id], Helpdesk_Tickets[id_client], BLANK() ) ), ".", "" ), "/", "" ), "-", "" ), " ", "" ) VAR porCnpj = IF( LEN( c ) IN { 11, 14 }, LOOKUPVALUE( CRM_Backup_Diario[ID_Legado], CRM_Backup_Diario[CNPJ (dígitos)], c, BLANK() ) ) VAR e = TRIM( LOOKUPVALUE( Helpdesk_Empresas[idLegado], Helpdesk_Empresas[id], Helpdesk_Tickets[id_client], BLANK() ) ) VAR porId = SWITCH( TRUE(), e = "" || e = "Null", BLANK(), LEFT( e, 1 ) = "O", MID( e, 2, 20 ), LOOKUPVALUE( CRM_Backup_Diario[ID_Legado], CRM_Backup_Diario[Id_CRM], IFERROR( VALUE( e ), -1 ), BLANK() ) ) RETURN COALESCE( porCnpj, porId )
+		dataType: string
+		isHidden
+		displayFolder: Cliente
+		lineageTag: 26cec923-9756-5c86-ab79-a756db88a5d1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Reunião Ongoing' = VAR cat = Helpdesk_Tickets[category] VAR serv = Helpdesk_Tickets[service] RETURN SWITCH( TRUE(), serv = "Sucesso do Cliente" && cat IN { "Checkout - Acompanhamento", "Checkout - Onboarding", "Checkout - Aplicativo e Área VIP", "Checkout - Configurações Iniciais", "Checkout - Departamentos", "Checkout - e-Continuo", "Checkout - Gestão de Processos", "Checkout - Kappa", "Checkout - Lista de Entregas", "Checkout - Método APLA", "Checkout - Novo Colaborador", "Checkout - Retomada", "Checkout - AF Docs" }, "Checkout (reunião feita)", serv = "Sucesso do Cliente" && cat IN { "Falta", "Remarcação" }, "Queda na reunião", serv = "Agendamento" && Helpdesk_Tickets[setor_ag_ouv] = "Sucesso do Cliente" && cat IN { "Falta", "Remarcação", "Cancelamento de Treinamento" }, "Queda no agendamento" )
+		dataType: string
+		displayFolder: No Show (Ongoing)
+		lineageTag: 9ecdad40-7282-536f-94ad-88b0e769fcde
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Responsável pela Reunião Ongoing' = VAR fila = Helpdesk_Tickets[owner_team] RETURN SWITCH( Helpdesk_Tickets[Reunião Ongoing], "Queda no agendamento", IF( fila = "Agendamento", Helpdesk_Tickets[resp_cliente] ), "Queda na reunião", IF( fila IN { "Sucesso do Cliente", "Treinamento" }, Helpdesk_Tickets[owner] ), "Checkout (reunião feita)", IF( fila IN { "Sucesso do Cliente", "Treinamento" }, Helpdesk_Tickets[owner] ) )
+		dataType: string
+		displayFolder: No Show (Ongoing)
+		lineageTag: 3f006e9e-cb3a-5bff-9a0c-b432ad11606c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email da Reunião Ongoing' = VAR r = Helpdesk_Tickets[Responsável pela Reunião Ongoing] RETURN IF( NOT ISBLANK( r ), IF( r = Helpdesk_Tickets[owner], Helpdesk_Tickets[Email do Analista], VAR n = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( LOWER( TRIM( r ) ), "á", "a" ), "à", "a" ), "â", "a" ), "ã", "a" ), "ä", "a" ), "é", "e" ), "è", "e" ), "ê", "e" ), "ë", "e" ), "í", "i" ), "ì", "i" ), "î", "i" ), "ï", "i" ), "ó", "o" ), "ò", "o" ), "ô", "o" ), "õ", "o" ), "ö", "o" ), "ú", "u" ), "ù", "u" ), "û", "u" ), "ü", "u" ), "ç", "c" ), "ñ", "n" ), "  ", " " ) VAR p = SUBSTITUTE( n, " ", "|" ) VAR curto = IF( PATHLENGTH( p ) > 1, PATHITEM( p, 1 ) & " " & PATHITEMREVERSE( p, 1 ), n ) VAR e1 = IF( n = "", BLANK(), LOOKUPVALUE( dColaborador[email], dColaborador[Nome Normalizado], n, BLANK() ) ) RETURN IF( ISBLANK( e1 ) && n <> "", LOOKUPVALUE( dColaborador[email], dColaborador[Nome Curto Normalizado], curto, BLANK() ), e1 ) ) )
+		dataType: string
+		isHidden
+		displayFolder: No Show (Ongoing)
+		lineageTag: 6c123dcc-670d-5a89-8abf-ef9d427193db
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe da Reunião Ongoing' = IF( NOT ISBLANK( Helpdesk_Tickets[Responsável pela Reunião Ongoing] ), IF( ISBLANK( Helpdesk_Tickets[Email da Reunião Ongoing] ), IF( TRIM( Helpdesk_Tickets[Responsável pela Reunião Ongoing] ) <> "", "(sem cadastro)" ), COALESCE( LOOKUPVALUE( dColaboradorMes[Equipe], dColaboradorMes[email], Helpdesk_Tickets[Email da Reunião Ongoing], dColaboradorMes[AnoMes], ( VAR _d = Helpdesk_Tickets[Data_Criacao_Ticket] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) ), BLANK() ), "(sem equipe)" ) ) )
+		dataType: string
+		displayFolder: No Show (Ongoing)
+		lineageTag: e6eeadfb-52c7-53c2-a0ff-66fb304ae0e5
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Houve Avaliação' = VAR i = Helpdesk_Tickets[id] RETURN IF( Helpdesk_Tickets[service] = "Ouvidoria", IF( CALCULATE( COUNTROWS( Helpdesk_Survey ), REMOVEFILTERS(), Helpdesk_Survey[ticketId] = i, NOT ISBLANK( Helpdesk_Survey[value] ) ) > 0, "Sim", "Não" ) )
+		dataType: string
+		displayFolder: Ouvidoria
+		lineageTag: 42755ae3-d42a-5196-9a67-d7b7ebbf2027
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Serviço Homologação' = SWITCH( TRIM( Helpdesk_Tickets[service] ), "Homologação da Área Vip e Aplicativo", "Homologação App", "Ajuste de Homologação da Área VIP e Aplicativo", "Ajuste App", "Homologação de Guias do e-Contínuo", "Homologação Guias", "Ajuste de Homologação de Guias", "Ajuste Guias" )
+		dataType: string
+		displayFolder: Homologação
+		lineageTag: 61b95f10-efa6-5c7d-88f2-121693c54d7a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Categoria Homologação' = VAR s = Helpdesk_Tickets[Serviço Homologação] VAR c = TRIM( Helpdesk_Tickets[category] ) RETURN IF( SWITCH( s, "Homologação App", c IN { "Alterações de App/Área VIP", "APP/Área VIP Disponível", "Correção de App/Área VIP", "Office Inativo", "Publicação Apple", "Sem retorno do Cliente", "Área Vip Disponível", "Android Disponível" }, "Ajuste App", c IN { "Alterações de APP/Área VIP", "App/Área VIP Disponível", "Correção de App/Área VIP", "Office Inativo" }, "Homologação Guias", c IN { "Homologação - Ajuste Definição Compt.", "Homologação - Ajuste identificador", "Homologação - Ajuste Palavra Chave", "Homologação - Ativação Multipages", "Homologação - Cabeçalho e Rodapé", "Homologação - Configuração/Orientação", "Homologação - Documento Ilegível", "Homologação - Documentos já Homologados", "Homologação - Documentos sem Datas", "Homologação - Falso Positivo", "Homologação - Finalização/Homologado", "Homologação - Inscrição Municipal", "Homologação - Mascara fora do Padrão", "Homologação - Outros", "Homologação - Produção", "Homologação - Recepção", "Homologação - Sem identificador", "Homologação - Validação" }, "Ajuste Guias", c IN { "Ajuste - Competência", "Ajuste - Identificador", "Ajuste - Multipages", "Ajuste - Outros", "Ajuste - Palavras Chaves", "Ajuste - Prioridade", "Ajuste - Vencimento" }, FALSE() ), c )
+		dataType: string
+		displayFolder: Homologação
+		lineageTag: bf031471-fe93-5627-ac8c-3481d279a00b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias até a Resolução' = IF( ISBLANK( Helpdesk_Tickets[Data_Criacao_Ticket] ) || ISBLANK( Helpdesk_Tickets[Data_Resolucao_Ticket] ), BLANK(), DATEDIFF( Helpdesk_Tickets[Data_Criacao_Ticket], Helpdesk_Tickets[Data_Resolucao_Ticket], DAY ) )
+		dataType: int64
+		formatString: 0
+		displayFolder: Homologação
+		lineageTag: 5a706cd1-9d1a-5c96-98c2-268c6cf3290b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Entrega' = SWITCH( TRIM( Helpdesk_Tickets[category] ), "Publicação Apple", "Apple", "Android Disponível", "Android", "Área Vip Disponível", "Área VIP", "APP/Área VIP Disponível", "Área VIP" )
+		dataType: string
+		displayFolder: Homologação
+		lineageTag: a1bbedeb-f75e-53b4-908f-3acf4dbb46df
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Faixa de Dias da Entrega Nº' = VAR d = Helpdesk_Tickets[Dias até a Resolução] RETURN IF( ISBLANK( Helpdesk_Tickets[Tipo de Entrega] ) || ISBLANK( d ), BLANK(), SWITCH( TRUE(), d <= 1, 1, d <= 3, 2, d <= 7, 3, d <= 15, 4, d <= 30, 5, 6 ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Homologação
+		lineageTag: d1da6eab-222a-53af-963d-2a09fea57e90
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Faixa de Dias da Entrega' = VAR d = Helpdesk_Tickets[Dias até a Resolução] RETURN IF( ISBLANK( Helpdesk_Tickets[Tipo de Entrega] ) || ISBLANK( d ), BLANK(), SWITCH( TRUE(), d <= 1, "Até 1 dia", d <= 3, "2 a 3 dias", d <= 7, "4 a 7 dias", d <= 15, "8 a 15 dias", d <= 30, "16 a 30 dias", "Mais de 30 dias" ) )
+		dataType: string
+		displayFolder: Homologação
+		lineageTag: af92c640-069b-5132-855b-ba875e6b532b
+		summarizeBy: none
+		sortByColumn: 'Faixa de Dias da Entrega Nº'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID do Cliente (busca)' = VAR i = TRIM( "" & Helpdesk_Tickets[ID Legado do Cliente] ) RETURN IF( i = "" || i = "0", BLANK(), i )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: f483925f-eeda-592d-ab74-b338cb7d556f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ do Cliente (busca)' = VAR c = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( TRIM( LOOKUPVALUE( Helpdesk_Empresas[cnpj], Helpdesk_Empresas[id], Helpdesk_Tickets[id_client], BLANK() ) ), ".", "" ), "/", "" ), "-", "" ), " ", "" ) RETURN IF( c = "", BLANK(), c )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 92a5852b-da92-55c4-a163-516fdde4fbc0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês da Composição' = ( VAR _d = Helpdesk_Tickets[Data_Fechamento_Ticket] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Pessoa
+		lineageTag: 4c3e108e-5b15-562f-abea-d10aee68bde9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Categoria do App Ordem' = VAR s = Helpdesk_Tickets[Serviço Homologação] VAR c = Helpdesk_Tickets[Categoria Homologação] RETURN IF( NOT ISBLANK( c ) && s IN { "Homologação App", "Ajuste App" }, IF( s = "Ajuste App", "2 ", "1 " ) & c )
+		dataType: string
+		isHidden
+		displayFolder: Homologação
+		lineageTag: 6390df1e-d593-5e1f-a722-7ac0bda90036
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Categoria do App' = VAR s = Helpdesk_Tickets[Serviço Homologação] VAR c = Helpdesk_Tickets[Categoria Homologação] RETURN IF( NOT ISBLANK( c ) && s IN { "Homologação App", "Ajuste App" }, IF( s = "Ajuste App", "Ajuste · " & c, c ) )
+		dataType: string
+		displayFolder: Homologação
+		lineageTag: 04b270bc-fd7b-5514-8fbd-6b910f668ae9
+		summarizeBy: none
+		sortByColumn: 'Categoria do App Ordem'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fase do Cliente' = IF( Helpdesk_Tickets[service] = "Live", VAR f = Helpdesk_Tickets[ID Legado do Cliente] VAR s = IF( f <> "", LOOKUPVALUE( CRM_Backup_Diario[Setor do CS], CRM_Backup_Diario[ID_Legado], f, CRM_Backup_Diario[Periodo], Helpdesk_Tickets[Data_Criacao_Ticket], BLANK() ) ) RETURN IF( s IN { "Onboarding", "Ongoing" }, s, "Sem fase" ) )
+		dataType: string
+		displayFolder: Lives
+		lineageTag: d3bfdeb5-ca8a-5ea3-8104-ee8ff54b3e0c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Responsável do Cliente' = IF( Helpdesk_Tickets[service] = "Live", VAR f = Helpdesk_Tickets[ID Legado do Cliente] RETURN IF( f <> "", LOOKUPVALUE( CRM_Backup_Diario[Responsavel], CRM_Backup_Diario[ID_Legado], f, CRM_Backup_Diario[Periodo], Helpdesk_Tickets[Data_Criacao_Ticket], BLANK() ) ) )
+		dataType: string
+		isHidden
+		displayFolder: Lives
+		lineageTag: 5dcbd476-3d64-51eb-9f37-87c52a0dd011
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Resultado da Consultoria' = VAR s = TRIM( Helpdesk_Tickets[service] ) VAR c = TRIM( Helpdesk_Tickets[category] ) RETURN IF( s IN { "Treinamento", "Sucesso do Cliente" }, SWITCH( TRUE(), c IN { "Falta", "Falta recorrente", "Remarcação", "Tentativa de Contato", "Tentativa de Contato - KP", "Ongoing sem contato" }, "Falha", c IN { "Contato efetivo", "Finalização de Consultoria", "Finalização de consultoria - Não ativado", "Formalização", "Alinhamento de expectativas" } || LEFT( c, 8 ) = "Checkout" || LEFT( c, 9 ) = "Tratativa", "Sucesso", "Outros" ) )
+		dataType: string
+		displayFolder: Migrações dos Clientes
+		lineageTag: e2dd32d9-cafe-52e4-9e54-0a1922acc190
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês da Reunião' = ( VAR _d = Helpdesk_Tickets[Data_Criacao_Ticket] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Pessoa
+		lineageTag: 3fcb0140-d0a4-59a3-badd-569dd3081a01
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Helpdesk_Tickets = m
+		mode: import
+		queryGroup: Helpdesk
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Helpdesk_Tickets",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"Início do Mês de Resolução", type datetime}, {"Início do Mês de Criação", type datetime}, {"id", Int64.Type}, {"type", Int64.Type}, {"status", type text}, {"Data_Fechamento_Ticket", type datetime}, {"Hora_Fechamento_Ticket", type datetime}, {"Data_SLA_Previsto", type datetime}, {"Hora_SLA_Previsto", type datetime}, {"Data_Criacao_Ticket", type datetime}, {"Hora_Criacao_Ticket", type datetime}, {"Data_Resolucao_Ticket", type datetime}, {"Hora_Resolucao_Ticket", type datetime}, {"etapa_dispensa", type text}, {"owner_team", type text}, {"category", type text}, {"tags", type text}, {"origin", Int64.Type}, {"id_client", type text}, {"service", type text}, {"setor_ag_ouv", type text}, {"origem_cs", type text}, {"owner", type text}, {"resp_cliente", type text}, {"lastActionDate", type datetime}, {"lastUpdate", type datetime}, {"Sistema", type text}, {"Reducao Mensalidade", Currency.Type}, {"Isencao Mensalidade", Currency.Type}, {"Isencao Aviso", Currency.Type}, {"Aumento Mensalidade", Currency.Type}, {"Estorno Total", Currency.Type}, {"Desconto Mensalidade", Currency.Type}, {"Boletos Cancelados", Currency.Type}, {"Aviso Teste", type text}, {"area_responsavel", type text}, {"solicitantes", type text}, {"histórico_times", type text}, {"createdByName", type text}, {"faseClienteFaltaRemarcacao", type text}, {"OuvOrigemTicket", type text}, {"OuvOrigemTratativa", type text}, {"OuvEquipeDemanda", type text}, {"OuvAreaResponsavel", type text}, {"chatWaitingTime", type text}, {"chatTalkTime", type text}, {"task", type text}, {"Equipe", type text}, {"IncidenteTipo", type text}, {"SolicitacaoHardware", type text}, {"SolicitacaoEmail", type text}, {"SolicitacaoRede", type text}, {"SolicitacaoTelefonia", type text}, {"RequisicaoTipo", type text}, {"SolicitacaoLayout", type text}, {"SolicitacaoCompras", type text}, {"organization", type text}, {"resp_tratamento_guia", type text}, {"data_extracao", type datetime}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

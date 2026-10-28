@@ -1,0 +1,367 @@
+table dSaudeTabelas
+	lineageTag: 94db0f79-b769-588a-9807-94be307ee156
+
+	measure 'Dados até' =
+			
+			-- 1ª linha do "Dados até": a data da tabela principal DESTA tela (extração > atualização > data do registro;
+			-- dReferenciaDados). Cada tela filtra dReferenciaDados[Pagina] = ela mesma (filtro de página oculto); a tabela
+			-- não se liga a nada.
+			VAR _q = SELECTEDVALUE ( dReferenciaDados[Quando] )
+			RETURN IF ( ISBLANK ( _q ), "", "Dados até " & _q )
+		displayFolder: Saúde dos dados
+		lineageTag: 2a35b029-e7ce-54ac-82a4-c76d578e25f4
+
+	measure 'Cor Saúde' =
+			
+			SWITCH ( SELECTEDVALUE ( dSaudeTabelas[Status] ),
+			    "Em dia", "#2E7D32",
+			    "Atrasada", "#C62828",
+			    "#8A8F98" )
+		displayFolder: Saúde dos dados
+		lineageTag: 4d5f4299-9427-58b0-bf05-5b2e65c2f938
+
+	measure 'Tabelas Atrasadas' =
+			
+			-- só as tabelas que alguma tela usa ("Fora das telas" não deixa o botão vermelho)
+			COUNTROWS ( FILTER ( ALL ( dSaudeTabelas ), dSaudeTabelas[Status] IN { "Atrasada", "Sem dados" } ) ) + 0
+		formatString: 0
+		displayFolder: Saúde dos dados
+		lineageTag: 846806b1-0984-5495-a6b6-8b6024d02870
+
+	measure 'Cor Botão Saúde' =
+			
+			IF ( [Tabelas Atrasadas] > 0, "#C62828", "#2E7D32" )
+		displayFolder: Saúde dos dados
+		lineageTag: ca322f2a-e9ef-5922-a19f-2bba6449939a
+
+	measure 'Texto Botão Saúde' =
+			
+			VAR n = [Tabelas Atrasadas]
+			RETURN "Saúde dos dados" & IF ( n > 0, "  ·  " & n & IF ( n = 1, " atrasada", " atrasadas" ), "  ·  ok" )
+		displayFolder: Saúde dos dados
+		lineageTag: 99a8edd9-a0bb-561a-8132-1c851aed8ab6
+
+	measure 'Dados até (item)' =
+			
+			-- 2ª linha do "Dados até": de onde veio a data e o registro mais recente da tabela
+			-- em 2 linhas (ex.: última extração dos tickets (Helpdesk) ↵ mais recente: ticket nº 123, aberto em 13/10 17:00).
+			SELECTEDVALUE ( dReferenciaDados[Item] ) & ""
+		displayFolder: Saúde dos dados
+		lineageTag: fef97a88-3dfd-522a-b8e8-9b066e5d5862
+
+	column Tabela
+		lineageTag: ed67e351-b265-524a-a8f4-1dfd37e38b1f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tabela]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nome
+		lineageTag: 92907a34-e20e-548b-bcdb-40dd384b2543
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nome]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Coluna
+		lineageTag: 6b6357cd-a844-58e6-a9ef-9a6ddca48b43
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Coluna]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Último registro'
+		formatString: dd/mm/yy hh:nn
+		lineageTag: b563e724-1e13-5616-8be3-ed32b1b72589
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Último registro]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Limite (h)'
+		formatString: 0
+		lineageTag: 885850f0-fd84-5140-ae9f-1f63e04c3cba
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Limite (h)]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Horas desde o registro'
+		formatString: #,0.00
+		lineageTag: 8e36f960-a8c2-5f25-99b2-768b39bb19f0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Horas desde o registro]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		lineageTag: 801037c7-7fe9-513a-8e6f-d159999e74a2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Status]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Usada nas telas'
+		lineageTag: 6397dae7-da3f-5eea-9cb5-37657e94794d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Usada nas telas]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mais recente'
+		lineageTag: 59d0d121-a324-5698-a242-bb7fc2ac5952
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mais recente]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tempo até o BI'
+		lineageTag: 70ee27fc-10cc-557d-9e3b-21d00687a910
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tempo até o BI]
+		sortByColumn: 'Horas desde o registro'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Limite
+		lineageTag: d8e8c22e-a86f-5d9b-8036-3841bbebea9d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Limite]
+		sortByColumn: 'Limite (h)'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dSaudeTabelas = calculated
+		mode: import
+		source =
+				
+				-- GERADO por scripts/saude_dados.py (não editar aqui: editar FONTES no script e rodar de novo).
+				-- Data de cada tabela (extração > atualização > data do registro) x atualização do BI; Mais recente = o
+				-- registro mais recente da tabela. Calculada no refresh (não sofre RLS nem filtros).
+				VAR _atualizado = MAX ( 'Atualizacao'[Data e Hora] )
+				VAR _e1 = MAX ( 'Helpdesk_Tickets'[data_extracao] )
+				VAR _u1 = MAX ( 'Helpdesk_Tickets'[lastUpdate] )
+				VAR _n1 = MAXX ( Helpdesk_Tickets, Helpdesk_Tickets[Data_Criacao_Ticket] + Helpdesk_Tickets[Hora_Criacao_Ticket] )
+				VAR _d1 = COALESCE ( _e1, _u1, _n1 )
+				VAR _c1 = IF ( NOT ISBLANK ( _e1 ), "última extração", IF ( NOT ISBLANK ( _u1 ), "última atualização", "última abertura" ) )
+				VAR _k1 = IF ( NOT ISBLANK ( _e1 ), "extração (data_extracao)", IF ( NOT ISBLANK ( _u1 ), "atualização (lastUpdate)", "última abertura (data do registro)" ) )
+				VAR _io1 = MAXX ( Helpdesk_Tickets, Helpdesk_Tickets[id] )
+				VAR _i1 = MAXX ( FILTER ( Helpdesk_Tickets, Helpdesk_Tickets[id] = _io1 ), "ticket nº " & Helpdesk_Tickets[id] & ", aberto em " & FORMAT ( Helpdesk_Tickets[Data_Criacao_Ticket] + Helpdesk_Tickets[Hora_Criacao_Ticket], "dd/mm/yy hh:nn" ) )
+				VAR _e2 = MAX ( 'Helpdesk_Cancelamentos'[data_extracao] )
+				VAR _u2 = MAX ( 'Helpdesk_Cancelamentos'[Data da Ultima Atualização] )
+				VAR _n2 = MAXX ( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Data de Criação] )
+				VAR _d2 = COALESCE ( _e2, _u2, _n2 )
+				VAR _c2 = IF ( NOT ISBLANK ( _e2 ), "última extração", IF ( NOT ISBLANK ( _u2 ), "última atualização", "última abertura" ) )
+				VAR _k2 = IF ( NOT ISBLANK ( _e2 ), "extração (data_extracao)", IF ( NOT ISBLANK ( _u2 ), "atualização (Data da Ultima Atualização)", "última abertura (data do registro)" ) )
+				VAR _io2 = MAXX ( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[id] )
+				VAR _i2 = MAXX ( FILTER ( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[id] = _io2 ), "ticket nº " & Helpdesk_Cancelamentos[id] & ", aberto em " & FORMAT ( Helpdesk_Cancelamentos[Data de Criação], "dd/mm/yy" ) )
+				VAR _e3 = MAX ( 'Helpdesk_Survey'[data_extracao] )
+				VAR _n3 = MAXX ( Helpdesk_Survey, Helpdesk_Survey[Data Avaliacao] )
+				VAR _d3 = COALESCE ( _e3, _n3 )
+				VAR _c3 = IF ( NOT ISBLANK ( _e3 ), "última extração", "última avaliação" )
+				VAR _k3 = IF ( NOT ISBLANK ( _e3 ), "extração (data_extracao)", "última avaliação (data do registro)" )
+				VAR _io3 = MAXX ( Helpdesk_Survey, Helpdesk_Survey[Data Avaliacao] )
+				VAR _id3 = MAXX ( FILTER ( Helpdesk_Survey, Helpdesk_Survey[Data Avaliacao] = _io3 ), Helpdesk_Survey[ticketId] )
+				VAR _i3 = MAXX ( FILTER ( Helpdesk_Survey, Helpdesk_Survey[Data Avaliacao] = _io3 && Helpdesk_Survey[ticketId] = _id3 ), "ticket nº " & Helpdesk_Survey[ticketId] & ", avaliado em " & FORMAT ( Helpdesk_Survey[Data Avaliacao], "dd/mm/yy" ) )
+				VAR _e4 = MAX ( 'Helpdesk_Clientes'[data_extracao] )
+				VAR _d4 = _e4
+				VAR _c4 = "última extração"
+				VAR _k4 = "extração (data_extracao)"
+				VAR _i4 = BLANK ()
+				VAR _e5 = MAX ( 'Helpdesk_Empresas'[data_extracao] )
+				VAR _d5 = _e5
+				VAR _c5 = "última extração"
+				VAR _k5 = "extração (data_extracao)"
+				VAR _i5 = BLANK ()
+				VAR _e6 = MAX ( 'Helpdesk_Clientes_Empresas'[data_extracao] )
+				VAR _d6 = _e6
+				VAR _c6 = "última extração"
+				VAR _k6 = "extração (data_extracao)"
+				VAR _i6 = BLANK ()
+				VAR _e7 = MAX ( 'Ligacoes_API'[data_extracao] )
+				VAR _n7 = MAXX ( Ligacoes_API, Ligacoes_API[Data_hora_inicio] )
+				VAR _d7 = COALESCE ( _e7, _n7 )
+				VAR _c7 = IF ( NOT ISBLANK ( _e7 ), "última extração", "última ligação" )
+				VAR _k7 = IF ( NOT ISBLANK ( _e7 ), "extração (data_extracao)", "última ligação (data do registro)" )
+				VAR _io7 = MAXX ( Ligacoes_API, Ligacoes_API[Data_hora_inicio] )
+				VAR _i7 = MAXX ( FILTER ( Ligacoes_API, Ligacoes_API[Data_hora_inicio] = _io7 ), "ligação de " & FORMAT ( Ligacoes_API[Data_hora_inicio], "dd/mm/yy hh:nn" ) & " (" & COALESCE ( Ligacoes_API[Responsável (Ramal)], "sem responsável" ) & ")" )
+				VAR _e8 = MAX ( 'WhatsApp_Atendimentos'[Extracao] )
+				VAR _n8 = MAXX ( WhatsApp_Atendimentos, WhatsApp_Atendimentos[Abertura] )
+				VAR _d8 = COALESCE ( _e8, _n8 )
+				VAR _c8 = IF ( NOT ISBLANK ( _e8 ), "última extração", "última abertura" )
+				VAR _k8 = IF ( NOT ISBLANK ( _e8 ), "extração (Extracao)", "última abertura (data do registro)" )
+				VAR _io8 = MAXX ( WhatsApp_Atendimentos, WhatsApp_Atendimentos[Abertura] )
+				VAR _id8 = MAXX ( FILTER ( WhatsApp_Atendimentos, WhatsApp_Atendimentos[Abertura] = _io8 ), WhatsApp_Atendimentos[Ticket] )
+				VAR _i8 = MAXX ( FILTER ( WhatsApp_Atendimentos, WhatsApp_Atendimentos[Abertura] = _io8 && WhatsApp_Atendimentos[Ticket] = _id8 ), "ticket " & WhatsApp_Atendimentos[Ticket] & ", aberto em " & FORMAT ( WhatsApp_Atendimentos[Abertura], "dd/mm/yy hh:nn" ) )
+				VAR _e9 = MAX ( 'WhatsApp_CSAT'[Extracao] )
+				VAR _n9 = MAXX ( WhatsApp_CSAT, WhatsApp_CSAT[Respondido em] )
+				VAR _d9 = COALESCE ( _e9, _n9 )
+				VAR _c9 = IF ( NOT ISBLANK ( _e9 ), "última extração", "última resposta" )
+				VAR _k9 = IF ( NOT ISBLANK ( _e9 ), "extração (Extracao)", "última resposta (data do registro)" )
+				VAR _io9 = MAXX ( WhatsApp_CSAT, WhatsApp_CSAT[Respondido em] )
+				VAR _i9 = MAXX ( FILTER ( WhatsApp_CSAT, WhatsApp_CSAT[Respondido em] = _io9 ), "avaliação respondida em " & FORMAT ( WhatsApp_CSAT[Respondido em], "dd/mm/yy hh:nn" ) )
+				VAR _e10 = MAX ( 'WhatsApp_Envios'[Extracao] )
+				VAR _n10 = MAXX ( WhatsApp_Envios, WhatsApp_Envios[Enviado em] )
+				VAR _d10 = COALESCE ( _e10, _n10 )
+				VAR _c10 = IF ( NOT ISBLANK ( _e10 ), "última extração", "último envio" )
+				VAR _k10 = IF ( NOT ISBLANK ( _e10 ), "extração (Extracao)", "último envio (data do registro)" )
+				VAR _io10 = MAXX ( WhatsApp_Envios, WhatsApp_Envios[Enviado em] )
+				VAR _i10 = MAXX ( FILTER ( WhatsApp_Envios, WhatsApp_Envios[Enviado em] = _io10 ), "template " & WhatsApp_Envios[Template] & ", enviado em " & FORMAT ( WhatsApp_Envios[Enviado em], "dd/mm/yy hh:nn" ) )
+				VAR _e11 = MAX ( 'WhatsApp_Contatos'[Extracao] )
+				VAR _n11 = MAXX ( WhatsApp_Contatos, WhatsApp_Contatos[Última mensagem] )
+				VAR _d11 = COALESCE ( _e11, _n11 )
+				VAR _c11 = IF ( NOT ISBLANK ( _e11 ), "última extração", "última mensagem" )
+				VAR _k11 = IF ( NOT ISBLANK ( _e11 ), "extração (Extracao)", "última mensagem (data do registro)" )
+				VAR _io11 = MAXX ( WhatsApp_Contatos, WhatsApp_Contatos[Última mensagem] )
+				VAR _i11 = MAXX ( FILTER ( WhatsApp_Contatos, WhatsApp_Contatos[Última mensagem] = _io11 ), "mensagem de " & FORMAT ( WhatsApp_Contatos[Última mensagem], "dd/mm/yy hh:nn" ) )
+				VAR _e12 = MAX ( 'CRM_Atividades'[Extracao] )
+				VAR _n12 = MAXX ( CRM_Atividades, CRM_Atividades[Criado_em] )
+				VAR _d12 = COALESCE ( _e12, _n12 )
+				VAR _c12 = IF ( NOT ISBLANK ( _e12 ), "última extração", "última criação" )
+				VAR _k12 = IF ( NOT ISBLANK ( _e12 ), "extração (Extracao)", "última criação (data do registro)" )
+				VAR _io12 = MAXX ( CRM_Atividades, CRM_Atividades[Criado_em] )
+				VAR _i12 = MAXX ( FILTER ( CRM_Atividades, CRM_Atividades[Criado_em] = _io12 ), "atividade " & CRM_Atividades[Tipo de Atividade] & ", criada em " & FORMAT ( CRM_Atividades[Criado_em], "dd/mm/yy hh:nn" ) )
+				VAR _e13 = MAX ( 'CRM_Backup_Diario'[Extracao] )
+				VAR _n13 = MAXX ( CRM_Backup_Diario, CRM_Backup_Diario[Periodo] )
+				VAR _d13 = COALESCE ( _e13, _n13 )
+				VAR _c13 = IF ( NOT ISBLANK ( _e13 ), "última extração", "último retrato" )
+				VAR _k13 = IF ( NOT ISBLANK ( _e13 ), "extração (Extracao)", "último retrato (data do registro)" )
+				VAR _io13 = MAXX ( CRM_Backup_Diario, CRM_Backup_Diario[Periodo] )
+				VAR _i13 = "retrato de " & FORMAT ( _io13, "dd/mm/yy" ) & " com " & FORMAT ( CALCULATE ( DISTINCTCOUNT ( CRM_Backup_Diario[Id_CRM] ), CRM_Backup_Diario[Periodo] = _io13 ), "#,0" ) & " clientes"
+				VAR _e14 = MAX ( 'Legado_Clientes'[Extracao] )
+				VAR _d14 = _e14
+				VAR _c14 = "última extração"
+				VAR _k14 = "extração (Extracao)"
+				VAR _io14 = MAXX ( Legado_Clientes, Legado_Clientes[Extracao] )
+				VAR _i14 = FORMAT ( COUNTROWS ( Legado_Clientes ), "#,0" ) & " clientes na consulta"
+				VAR _n15 = MAXX ( Gestao_Contratos_AF_Prod, 'Gestao_Contratos_AF_Prod'[Data Aprovacao] )
+				VAR _d15 = _n15
+				VAR _c15 = "última aprovação"
+				VAR _k15 = "última aprovação (data do registro)"
+				VAR _i15 = BLANK ()
+				VAR _n16 = MAXX ( Gestao_Contratos_Gama_Prod, 'Gestao_Contratos_Gama_Prod'[Data Aprovacao] )
+				VAR _d16 = _n16
+				VAR _c16 = "última aprovação"
+				VAR _k16 = "última aprovação (data do registro)"
+				VAR _i16 = BLANK ()
+				VAR _n17 = MAXX ( Contratos_historico_contratos, Contratos_historico_contratos[periodo] )
+				VAR _d17 = _n17
+				VAR _c17 = "último retrato"
+				VAR _k17 = "último retrato (data do registro)"
+				VAR _i17 = BLANK ()
+				VAR _n18 = MAXX ( Contratos_historico_items, Contratos_historico_items[periodo] )
+				VAR _d18 = _n18
+				VAR _c18 = "último retrato"
+				VAR _k18 = "último retrato (data do registro)"
+				VAR _i18 = BLANK ()
+				VAR _n19 = MAXX ( Contratos_historico_emails, Contratos_historico_emails[periodo] )
+				VAR _d19 = _n19
+				VAR _c19 = "último retrato"
+				VAR _k19 = "último retrato (data do registro)"
+				VAR _i19 = BLANK ()
+				VAR _n20 = MAXX ( Contratos_historico_fones, Contratos_historico_fones[periodo] )
+				VAR _d20 = _n20
+				VAR _c20 = "último retrato"
+				VAR _k20 = "último retrato (data do registro)"
+				VAR _i20 = BLANK ()
+				VAR _n21 = MAXX ( Contratos_historico_status, Contratos_historico_status[periodo] )
+				VAR _d21 = _n21
+				VAR _c21 = "último retrato"
+				VAR _k21 = "último retrato (data do registro)"
+				VAR _i21 = BLANK ()
+				VAR _n22 = MAXX ( Contratos_historico_plano, Contratos_historico_plano[periodo] )
+				VAR _d22 = _n22
+				VAR _c22 = "último retrato"
+				VAR _k22 = "último retrato (data do registro)"
+				VAR _i22 = BLANK ()
+				VAR _n23 = MAXX ( Contratos_historico_periodicidade, Contratos_historico_periodicidade[periodo] )
+				VAR _d23 = _n23
+				VAR _c23 = "último retrato"
+				VAR _k23 = "último retrato (data do registro)"
+				VAR _i23 = BLANK ()
+				VAR _n24 = MAXX ( Contratos_historico_mercado, Contratos_historico_mercado[periodo] )
+				VAR _d24 = _n24
+				VAR _c24 = "último retrato"
+				VAR _k24 = "último retrato (data do registro)"
+				VAR _i24 = BLANK ()
+				VAR _n25 = MAXX ( Contratos_historico_item_catalogo, Contratos_historico_item_catalogo[periodo] )
+				VAR _d25 = _n25
+				VAR _c25 = "último retrato"
+				VAR _k25 = "último retrato (data do registro)"
+				VAR _i25 = BLANK ()
+				VAR _n26 = MAXX ( Contratos_historico_indice_reajuste, Contratos_historico_indice_reajuste[periodo] )
+				VAR _d26 = _n26
+				VAR _c26 = "último retrato"
+				VAR _k26 = "último retrato (data do registro)"
+				VAR _i26 = BLANK ()
+				VAR _n27 = MAXX ( Contratos_historico_gerente_conta, Contratos_historico_gerente_conta[periodo] )
+				VAR _d27 = _n27
+				VAR _c27 = "último retrato"
+				VAR _k27 = "último retrato (data do registro)"
+				VAR _i27 = BLANK ()
+				VAR _n28 = MAXX ( Contratos_historico_Vendedor, Contratos_historico_Vendedor[periodo] )
+				VAR _d28 = _n28
+				VAR _c28 = "último retrato"
+				VAR _k28 = "último retrato (data do registro)"
+				VAR _i28 = BLANK ()
+				VAR _t =
+				    UNION (
+				        ROW ( "Tabela", "Helpdesk_Tickets", "Nome", "Tickets (Helpdesk)", "Coluna", _k1, "Último registro", _d1, "Mais recente", _i1, "Limite (h)", 24, "Usada nas telas", "Sim" ),
+				        ROW ( "Tabela", "Helpdesk_Cancelamentos", "Nome", "Cancelamentos (Helpdesk)", "Coluna", _k2, "Último registro", _d2, "Mais recente", _i2, "Limite (h)", 24, "Usada nas telas", "Sim" ),
+				        ROW ( "Tabela", "Helpdesk_Survey", "Nome", "Pesquisas de satisfação (Helpdesk)", "Coluna", _k3, "Último registro", _d3, "Mais recente", _i3, "Limite (h)", 24, "Usada nas telas", "Sim" ),
+				        ROW ( "Tabela", "Helpdesk_Clientes", "Nome", "Clientes (Helpdesk)", "Coluna", _k4, "Último registro", _d4, "Mais recente", _i4, "Limite (h)", 24, "Usada nas telas", "Não" ),
+				        ROW ( "Tabela", "Helpdesk_Empresas", "Nome", "Empresas (Helpdesk)", "Coluna", _k5, "Último registro", _d5, "Mais recente", _i5, "Limite (h)", 24, "Usada nas telas", "Não" ),
+				        ROW ( "Tabela", "Helpdesk_Clientes_Empresas", "Nome", "Clientes × Empresas (Helpdesk)", "Coluna", _k6, "Último registro", _d6, "Mais recente", _i6, "Limite (h)", 24, "Usada nas telas", "Não" ),
+				        ROW ( "Tabela", "Ligacoes_API", "Nome", "Ligações", "Coluna", _k7, "Último registro", _d7, "Mais recente", _i7, "Limite (h)", 24, "Usada nas telas", "Sim" ),
+				        ROW ( "Tabela", "WhatsApp_Atendimentos", "Nome", "WhatsApp - atendimentos (WhatsApp)", "Coluna", _k8, "Último registro", _d8, "Mais recente", _i8, "Limite (h)", 48, "Usada nas telas", "Sim" ),
+				        ROW ( "Tabela", "WhatsApp_CSAT", "Nome", "WhatsApp - CSAT (WhatsApp)", "Coluna", _k9, "Último registro", _d9, "Mais recente", _i9, "Limite (h)", 48, "Usada nas telas", "Sim" ),
+				        ROW ( "Tabela", "WhatsApp_Envios", "Nome", "WhatsApp - templates enviados (WhatsApp)", "Coluna", _k10, "Último registro", _d10, "Mais recente", _i10, "Limite (h)", 48, "Usada nas telas", "Sim" ),
+				        ROW ( "Tabela", "WhatsApp_Contatos", "Nome", "WhatsApp - contatos (WhatsApp)", "Coluna", _k11, "Último registro", _d11, "Mais recente", _i11, "Limite (h)", 48, "Usada nas telas", "Sim" ),
+				        ROW ( "Tabela", "CRM_Atividades", "Nome", "Atividades (CRM)", "Coluna", _k12, "Último registro", _d12, "Mais recente", _i12, "Limite (h)", 24, "Usada nas telas", "Sim" ),
+				        ROW ( "Tabela", "CRM_Backup_Diario", "Nome", "Carteira - retrato diário (CRM)", "Coluna", _k13, "Último registro", _d13, "Mais recente", _i13, "Limite (h)", 24, "Usada nas telas", "Sim" ),
+				        ROW ( "Tabela", "Legado_Clientes", "Nome", "Clientes - API do sistema legado", "Coluna", _k14, "Último registro", _d14, "Mais recente", _i14, "Limite (h)", 24, "Usada nas telas", "Sim" ),
+				        ROW ( "Tabela", "Gestao_Contratos_AF_Prod", "Nome", "Gestão de contratos AF", "Coluna", _k15, "Último registro", _d15, "Mais recente", _i15, "Limite (h)", 24, "Usada nas telas", "Não" ),
+				        ROW ( "Tabela", "Gestao_Contratos_Gama_Prod", "Nome", "Gestão de contratos GAMA", "Coluna", _k16, "Último registro", _d16, "Mais recente", _i16, "Limite (h)", 24, "Usada nas telas", "Não" ),
+				        ROW ( "Tabela", "Contratos_historico_contratos", "Nome", "Contratos - contratos", "Coluna", _k17, "Último registro", _d17, "Mais recente", _i17, "Limite (h)", 24, "Usada nas telas", "Sim" ),
+				        ROW ( "Tabela", "Contratos_historico_items", "Nome", "Contratos - itens", "Coluna", _k18, "Último registro", _d18, "Mais recente", _i18, "Limite (h)", 24, "Usada nas telas", "Sim" ),
+				        ROW ( "Tabela", "Contratos_historico_emails", "Nome", "Contratos - e-mails", "Coluna", _k19, "Último registro", _d19, "Mais recente", _i19, "Limite (h)", 24, "Usada nas telas", "Não" ),
+				        ROW ( "Tabela", "Contratos_historico_fones", "Nome", "Contratos - telefones", "Coluna", _k20, "Último registro", _d20, "Mais recente", _i20, "Limite (h)", 24, "Usada nas telas", "Não" ),
+				        ROW ( "Tabela", "Contratos_historico_status", "Nome", "Contratos - status", "Coluna", _k21, "Último registro", _d21, "Mais recente", _i21, "Limite (h)", 24, "Usada nas telas", "Não" ),
+				        ROW ( "Tabela", "Contratos_historico_plano", "Nome", "Contratos - planos", "Coluna", _k22, "Último registro", _d22, "Mais recente", _i22, "Limite (h)", 24, "Usada nas telas", "Não" ),
+				        ROW ( "Tabela", "Contratos_historico_periodicidade", "Nome", "Contratos - periodicidade", "Coluna", _k23, "Último registro", _d23, "Mais recente", _i23, "Limite (h)", 24, "Usada nas telas", "Não" ),
+				        ROW ( "Tabela", "Contratos_historico_mercado", "Nome", "Contratos - mercados", "Coluna", _k24, "Último registro", _d24, "Mais recente", _i24, "Limite (h)", 24, "Usada nas telas", "Não" ),
+				        ROW ( "Tabela", "Contratos_historico_item_catalogo", "Nome", "Contratos - catálogo de itens", "Coluna", _k25, "Último registro", _d25, "Mais recente", _i25, "Limite (h)", 24, "Usada nas telas", "Não" ),
+				        ROW ( "Tabela", "Contratos_historico_indice_reajuste", "Nome", "Contratos - índices de reajuste", "Coluna", _k26, "Último registro", _d26, "Mais recente", _i26, "Limite (h)", 24, "Usada nas telas", "Não" ),
+				        ROW ( "Tabela", "Contratos_historico_gerente_conta", "Nome", "Contratos - gerentes de conta", "Coluna", _k27, "Último registro", _d27, "Mais recente", _i27, "Limite (h)", 24, "Usada nas telas", "Não" ),
+				        ROW ( "Tabela", "Contratos_historico_Vendedor", "Nome", "Contratos - vendedores", "Coluna", _k28, "Último registro", _d28, "Mais recente", _i28, "Limite (h)", 24, "Usada nas telas", "Não" )
+				    )
+				RETURN
+				    ADDCOLUMNS (
+				        ADDCOLUMNS ( _t, "Horas desde o registro",
+				            IF ( ISBLANK ( [Último registro] ), BLANK (), ROUND ( MAX ( 0, ( _atualizado - [Último registro] ) * 24 ), 1 ) ) ),
+				        "Status",
+				            IF ( [Usada nas telas] = "Não", "Fora das telas",
+				            IF ( ISBLANK ( [Horas desde o registro] ), "Sem dados",
+				                IF ( [Horas desde o registro] < [Limite (h)], "Em dia", "Atrasada" ) ) ),
+				        -- horas sempre hh:mm:ss (passou de 24 h = 25:00:00, nunca dias); ordenam pelas colunas numéricas
+				        "Tempo até o BI",
+				            IF ( ISBLANK ( [Último registro] ), BLANK (),
+				                VAR _s = ROUND ( MAX ( 0, ( _atualizado - [Último registro] ) * 86400 ), 0 )
+				                RETURN FORMAT ( INT ( _s / 3600 ), "00" ) & ":" & FORMAT ( INT ( MOD ( _s, 3600 ) / 60 ), "00" ) & ":" & FORMAT ( MOD ( _s, 60 ), "00" ) ),
+				        "Limite",
+				            VAR _s = [Limite (h)] * 3600 RETURN FORMAT ( INT ( _s / 3600 ), "00" ) & ":" & FORMAT ( INT ( MOD ( _s, 3600 ) / 60 ), "00" ) & ":" & FORMAT ( MOD ( _s, 60 ), "00" )
+				    )
+
+	annotation PBI_Id = 4785a966d04d5d4d8512d05d5f580429
+

@@ -1,0 +1,44 @@
+table dPessoaSetor
+	lineageTag: 16b9f25e-bbf3-4e6d-8e0b-d2023441ae66
+
+	column email_norm
+		lineageTag: 45ec1047-a266-483d-b63f-9c6d8a18f0d0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [email_norm]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor
+		lineageTag: 10bfa203-d522-4c70-b5a1-6d10442eecc3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Setor]
+
+		annotation SummarizationSetBy = Automatic
+
+	column ramal_norm
+		lineageTag: c13e782e-8b51-49c7-99b7-600d5efc9bc1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ramal_norm]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dPessoaSetor = calculated
+		mode: import
+		source =
+				
+				-- 1 linha por pessoa. Setor = o mesmo do dColaborador (equipe via Time_Equipes, gerado por
+				-- gerar_whatsapp.py). Usado por Ligacoes_API[Setor] (ramal) e CRM_Atividades[Setor] (e-mail).
+				SELECTCOLUMNS(
+				    dColaborador,
+				    "email_norm", dColaborador[email],
+				    "ramal_norm",
+				        VAR e = dColaborador[email]
+				        RETURN MAXX( FILTER( Time_Usuarios, LOWER( TRIM( Time_Usuarios[email] ) ) = e ), TRIM( Time_Usuarios[ramal] ) ),
+				    "Setor", dColaborador[Setor]
+				)
+
+	annotation PBI_Id = 16b9f25ebbf34e6d8e0bd2023441ae66
+

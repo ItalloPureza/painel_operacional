@@ -1,0 +1,525 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "hom_chart_4",
+  "position": {
+    "x": 1106,
+    "y": 692,
+    "z": 44000,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 44000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "id"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.id",
+              "nativeQueryRef": "id",
+              "displayName": "Ticket"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "owner"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.owner",
+              "nativeQueryRef": "owner",
+              "displayName": "Analista"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "Tipo de Entrega"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.Tipo de Entrega",
+              "nativeQueryRef": "Tipo de Entrega",
+              "displayName": "Tipo"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "category"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.category",
+              "nativeQueryRef": "category",
+              "displayName": "Categoria"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "Data_Criacao_Ticket"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.Data_Criacao_Ticket",
+              "nativeQueryRef": "Data_Criacao_Ticket",
+              "displayName": "Aberto em"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "Data_Resolucao_Ticket"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.Data_Resolucao_Ticket",
+              "nativeQueryRef": "Data_Resolucao_Ticket",
+              "displayName": "Resolvido em"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "Dias até a Resolução"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.Dias até a Resolução",
+              "nativeQueryRef": "Dias até a Resolução",
+              "displayName": "Dias"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "organization"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.organization",
+              "nativeQueryRef": "organization",
+              "displayName": "Cliente"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Helpdesk_Tickets"
+                  }
+                },
+                "Property": "Dias até a Resolução"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "63.7651787188623D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.id"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "104.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.owner"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "69.3D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.Tipo de Entrega"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "156.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.category"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "76.53073044905616D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.Data_Criacao_Ticket"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "75.40586567144214D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.Data_Resolucao_Ticket"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "45.92294508136179D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.Dias até a Resolução"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "168.66995078596335D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.organization"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Lista de entregas'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Por data de fechamento do ticket'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "semVazio_Tipo_de_Entrega",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Helpdesk_Tickets"
+              }
+            },
+            "Property": "Tipo de Entrega"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "t",
+              "Entity": "Helpdesk_Tickets",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Not": {
+                  "Expression": {
+                    "In": {
+                      "Expressions": [
+                        {
+                          "Column": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Source": "t"
+                              }
+                            },
+                            "Property": "Tipo de Entrega"
+                          }
+                        }
+                      ],
+                      "Values": [
+                        [
+                          {
+                            "Literal": {
+                              "Value": "null"
+                            }
+                          }
+                        ],
+                        [
+                          {
+                            "Literal": {
+                              "Value": "''"
+                            }
+                          }
+                        ]
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

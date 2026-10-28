@@ -1,0 +1,22 @@
+table dSetorPagina
+	lineageTag: 3d3bc8d7-b28b-430b-a72c-f5f9b4994218
+
+	column Setor
+		lineageTag: d541bdc7-cf6c-49e4-a81f-16dbabaeb741
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Setor]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dSetorPagina = calculated
+		mode: import
+		source =
+				
+				DATATABLE("Setor", STRING, {
+				  {"Gerência"},{"Global"},{"Lives"},{"Suporte"},
+				  {"Onboarding"},{"Ongoing"},{"Relacionamento"},{"Homologação"}
+				})
+
+	annotation PBI_Id = e840937f08514ed785a2ed6fede29ad8
+

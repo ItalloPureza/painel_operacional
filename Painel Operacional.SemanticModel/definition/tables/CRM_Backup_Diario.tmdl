@@ -1,0 +1,471 @@
+table CRM_Backup_Diario
+	lineageTag: a8b5f9d0-c2c1-4cb2-8763-a42eb4cae202
+
+	/// Média, nos retratos diários do período, do % de entregas feitas (o 'entregas' do sistema legado no OKR 2026). Só ativos/bloqueados (o antigo tirava os cancelados).
+	measure '% Entregas Feitas (média)' = DIVIDE( CALCULATE( AVERAGE( CRM_Backup_Diario[Entrega_no_Prazo] ), CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" }, CRM_Backup_Diario[Só Kappa] = "Não" ), 100 )
+		formatString: 0.00%
+		displayFolder: Carteira
+		lineageTag: 444d316b-2741-5caa-9cbe-346d2376b715
+
+	/// Média, nos retratos diários do período, de entregas pelo eContinuo ÷ prazos gerados (o 'eContinuo' do sistema legado no OKR 2026); cliente sem prazo gerado conta 0. Só ativos/bloqueados (o antigo tirava os cancelados).
+	measure '% Uso eContinuo (média)' = DIVIDE( CALCULATE( AVERAGE( CRM_Backup_Diario[% Entregas pelo eContinuo] ), CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" }, CRM_Backup_Diario[Só Kappa] = "Não" ), 100 )
+		formatString: 0.00%
+		displayFolder: Carteira
+		lineageTag: 45eca362-7df3-59b9-9bfc-11799cbf7b9c
+
+	/// Média de interações na gestão de processos no retrato mais recente (OKR 2026: 'Interações nos Processos'). FOTO.
+	measure 'Interações em Processos (hoje)' = VAR ult = CALCULATE( MAX( CRM_Backup_Diario[Periodo] ), REMOVEFILTERS() ) RETURN CALCULATE( AVERAGE( CRM_Backup_Diario[Interações em Processos (nº)] ), REMOVEFILTERS( Calendario ), CRM_Backup_Diario[Periodo] = ult, CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" }, CRM_Backup_Diario[Só Kappa] = "Não" )
+		formatString: #,0.00
+		displayFolder: Carteira (Ongoing)
+		lineageTag: 83b527b5-653a-5612-ae84-8c33c1a3a344
+
+	/// Média de entregas pelo eContinuo ÷ prazos gerados no retrato mais recente (o 'Uso do Robô' do OKR 2026). FOTO.
+	measure '% eContinuo da Carteira (hoje)' = VAR ult = CALCULATE( MAX( CRM_Backup_Diario[Periodo] ), REMOVEFILTERS() ) RETURN CALCULATE( DIVIDE( AVERAGE( CRM_Backup_Diario[% Entregas pelo eContinuo] ), 100 ), REMOVEFILTERS( Calendario ), CRM_Backup_Diario[Periodo] = ult, CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" }, CRM_Backup_Diario[Só Kappa] = "Não" )
+		formatString: 0.00%
+		displayFolder: Carteira (Ongoing)
+		lineageTag: e94bc415-bbf3-5f20-a648-71ddf2123c28
+
+	/// Média do uso geral dos clientes no retrato mais recente (o 'Uso Geral' do sistema legado no OKR 2026). FOTO.
+	measure 'Uso Geral da Carteira (hoje)' = VAR ult = CALCULATE( MAX( CRM_Backup_Diario[Periodo] ), REMOVEFILTERS() ) RETURN CALCULATE( AVERAGE( CRM_Backup_Diario[Uso] ), REMOVEFILTERS( Calendario ), CRM_Backup_Diario[Periodo] = ult, CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" }, CRM_Backup_Diario[Só Kappa] = "Não" )
+		formatString: 0.00
+		displayFolder: Carteira (Ongoing)
+		lineageTag: 5d4d84c3-2b3f-5152-8fc0-130533731113
+
+	/// CNPJs distintos com Status KP = Ativo no 1º retrato do mês — no OKR 2026, StatusKC do Histórico Cruzeiro.
+	measure 'Clientes Ativos KP (início do mês)' = VAR d = MIN( CRM_Backup_Diario[Periodo] ) RETURN IF( NOT ISBLANK( d ) && DAY( d ) <= 3, CALCULATE( DISTINCTCOUNT( CRM_Backup_Diario[CNPJ] ), CRM_Backup_Diario[Periodo] = d, CRM_Backup_Diario[Status KP] = "Ativo" ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 75e9a25c-3bd3-59b3-b62b-4804c23c2e56
+
+	/// CNPJs distintos Ativo/Bloqueado/Suspenso (sem os só Kappa) no 1º retrato do mês do CRM (vazio se o 1º retrato for depois do dia 3) — no OKR 2026, Qtd_Ativos_AF do Histórico Cruzeiro.
+	measure 'Clientes Ativos AF (início do mês)' = VAR d = MIN( CRM_Backup_Diario[Periodo] ) RETURN IF( NOT ISBLANK( d ) && DAY( d ) <= 3, CALCULATE( DISTINCTCOUNT( CRM_Backup_Diario[CNPJ] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado", "Suspenso" } ), CRM_Backup_Diario[Só Kappa] = "Não" ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 4c5e8970-0fc6-5295-a9c8-f75baaff8cea
+
+	/// Mensalidade total no dia (só nos dias com mudança).
+	measure 'Histórico - Mensalidade' = VAR a = [Dia Anterior da Carteira] RETURN IF( [Mudou na Carteira] = 1, [Mensalidade Total (Contratos)] )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 181ae1aa-c11a-56e7-8e7f-776d519dd783
+
+	/// Mensalidade total no dia anterior (só nos dias com mudança).
+	measure 'Histórico - Mensalidade antes' = VAR a = [Dia Anterior da Carteira] RETURN IF( [Mudou na Carteira] = 1, CALCULATE( [Mensalidade Total (Contratos)], REMOVEFILTERS( Calendario ), Calendario[Date] = a ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 6677f420-c1ef-54cb-a737-ee6ef93911e6
+
+	/// Status de Saúde no dia (só nos dias com mudança).
+	measure 'Histórico - Status' = VAR a = [Dia Anterior da Carteira] RETURN IF( [Mudou na Carteira] = 1, COALESCE( [Status de Saúde no Dia], "—" ) )
+		displayFolder: Global
+		lineageTag: b87778fd-ff9f-5e81-9287-9b599d6a2354
+
+	/// Status de Saúde no dia anterior (só nos dias com mudança).
+	measure 'Histórico - Status antes' = VAR a = [Dia Anterior da Carteira] RETURN IF( [Mudou na Carteira] = 1, COALESCE( CALCULATE( [Status de Saúde no Dia], REMOVEFILTERS( Calendario ), Calendario[Date] = a ), "—" ) )
+		displayFolder: Global
+		lineageTag: a5df2f65-0d88-5857-879b-84554a8f3f32
+
+	/// CS no dia (só nos dias com mudança).
+	measure 'Histórico - CS' = VAR a = [Dia Anterior da Carteira] RETURN IF( [Mudou na Carteira] = 1, COALESCE( [CS no Dia], "(fora da carteira)" ) )
+		displayFolder: Global
+		lineageTag: 14dbc357-9f27-53b1-a948-8b97f447cf58
+
+	/// CS no dia anterior (só nos dias com mudança).
+	measure 'Histórico - CS antes' = VAR a = [Dia Anterior da Carteira] RETURN IF( [Mudou na Carteira] = 1, COALESCE( CALCULATE( [CS no Dia], REMOVEFILTERS( Calendario ), Calendario[Date] = a ), "—" ) )
+		displayFolder: Global
+		lineageTag: ac1fdd07-70c1-5e05-a2fe-a10767fdd926
+
+	/// 1 no dia em que o cliente (um só) entrou, saiu ou mudou de CS, status de saúde ou mensalidade total.
+	measure 'Mudou na Carteira' = VAR d = [Dia da Carteira] VAR a = [Dia Anterior da Carteira] VAR cs = [CS no Dia] VAR st = [Status de Saúde no Dia] VAR v = [Mensalidade Total (Contratos)] VAR cs0 = CALCULATE( [CS no Dia], REMOVEFILTERS( Calendario ), Calendario[Date] = a ) VAR st0 = CALCULATE( [Status de Saúde no Dia], REMOVEFILTERS( Calendario ), Calendario[Date] = a ) VAR v0 = CALCULATE( [Mensalidade Total (Contratos)], REMOVEFILTERS( Calendario ), Calendario[Date] = a ) RETURN IF( HASONEVALUE( CRM_Backup_Diario[ID_Legado] ) && NOT ISBLANK( d ) && NOT ( ISBLANK( cs ) && ISBLANK( cs0 ) && ISBLANK( v ) && ISBLANK( v0 ) ) && ( ISBLANK( a ) || NOT ( cs == cs0 ) || NOT ( st == st0 ) || NOT ( v == v0 ) ), 1 )
+		formatString: 0
+		displayFolder: Global
+		lineageTag: 6110acb7-e199-5249-896a-2212f588269f
+
+	/// Status de Saúde do cliente no dia da carteira (último dia do período com retrato do CRM e Contratos).
+	measure 'Status de Saúde no Dia' = VAR d = [Dia da Carteira] RETURN IF( NOT ISBLANK( d ) && HASONEVALUE( CRM_Backup_Diario[ID_Legado] ), CALCULATE( MAX( CRM_Backup_Diario[Status de Saúde] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) )
+		displayFolder: Global
+		lineageTag: f0e1b0f8-35af-531a-8c02-0356ae520203
+
+	/// Responsável (CS) do cliente no dia da carteira (último dia do período com retrato do CRM e Contratos); vazio fora da carteira.
+	measure 'CS no Dia' = VAR d = [Dia da Carteira] RETURN IF( NOT ISBLANK( d ) && HASONEVALUE( CRM_Backup_Diario[ID_Legado] ), CALCULATE( MAX( CRM_Backup_Diario[Responsavel] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) )
+		displayFolder: Global
+		lineageTag: da7bdbc1-52a2-5a4f-b31f-3611e13756bf
+
+	/// Clientes na carteira com status de saúde = Cruzeiro no dia da carteira (último dia do período com retrato do CRM e Contratos).
+	measure 'Clientes do Legado (no dia)' = CALCULATE( [Clientes na Carteira (no dia)], KEEPFILTERS( CRM_Backup_Diario[Status de Saúde] = "Cruzeiro" ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 8c25038f-e177-50af-8c6c-723dc6ccaf83
+
+	/// Clientes na carteira com status de saúde = En Route no dia da carteira (último dia do período com retrato do CRM e Contratos).
+	measure 'Clientes En Route (no dia)' = CALCULATE( [Clientes na Carteira (no dia)], KEEPFILTERS( CRM_Backup_Diario[Status de Saúde] = "En Route" ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: cd7ca0bf-6fe1-5d45-927f-65b8e23925a4
+
+	/// Clientes na carteira com status de saúde = Alert no dia da carteira (último dia do período com retrato do CRM e Contratos).
+	measure 'Clientes Alert (no dia)' = CALCULATE( [Clientes na Carteira (no dia)], KEEPFILTERS( CRM_Backup_Diario[Status de Saúde] = "Alert" ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 9225b679-21eb-5a54-a8fe-e7c90af218c3
+
+	/// Clientes na carteira com status de saúde = Mayday no dia da carteira (último dia do período com retrato do CRM e Contratos).
+	measure 'Clientes Mayday (no dia)' = CALCULATE( [Clientes na Carteira (no dia)], KEEPFILTERS( CRM_Backup_Diario[Status de Saúde] = "Mayday" ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: ad1133fb-9638-5036-a6a5-b3079058ced5
+
+	/// CNPJs distintos com Status KP = Ativo no dia da carteira (último dia do período com retrato do CRM e Contratos).
+	measure 'Clientes KP (no dia)' = VAR d = [Dia da Carteira] RETURN IF( NOT ISBLANK( d ), CALCULATE( DISTINCTCOUNT( CRM_Backup_Diario[CNPJ] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status KP] = "Ativo" ) ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: ce120c77-755c-5e88-a8de-86a430b5164e
+
+	/// CNPJs distintos Bloqueados (sem os só Kappa) no dia da carteira (último dia do período com retrato do CRM e Contratos).
+	measure 'Clientes Bloqueados (no dia)' = VAR d = [Dia da Carteira] RETURN IF( NOT ISBLANK( d ), CALCULATE( DISTINCTCOUNT( CRM_Backup_Diario[CNPJ] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] = "Bloqueado" ), CRM_Backup_Diario[Só Kappa] = "Não" ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 3973edbe-a028-53c4-8abb-080d09e71950
+
+	/// CNPJs distintos Ativo/Bloqueado, com os só Kappa, no dia da carteira (último dia do período com retrato do CRM e Contratos) (base da conferência com o sistema de contratos).
+	measure 'Clientes Ativos (no dia)' = VAR d = [Dia da Carteira] RETURN IF( NOT ISBLANK( d ), CALCULATE( DISTINCTCOUNT( CRM_Backup_Diario[CNPJ] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 649d0b56-d629-57da-aa68-7e8b2e74a92d
+
+	/// CNPJs distintos Ativo/Bloqueado (sem os só Kappa) no dia da carteira (último dia do período com retrato do CRM e Contratos).
+	measure 'Clientes na Carteira (no dia)' = VAR d = [Dia da Carteira] RETURN IF( NOT ISBLANK( d ), CALCULATE( DISTINCTCOUNT( CRM_Backup_Diario[CNPJ] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ), CRM_Backup_Diario[Só Kappa] = "Não" ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 5ef3a2ca-fc8c-5191-8b14-f0f230719078
+
+	/// Dia com retrato e Contratos imediatamente anterior ao dia da carteira (histórico de um cliente).
+	measure 'Dia Anterior da Carteira' = VAR d = [Dia da Carteira] RETURN IF( NOT ISBLANK( d ), CALCULATE( MAX( Calendario[Date] ), REMOVEFILTERS( Calendario ), Calendario[Date] < d, Calendario[Carteira no Dia] = 1 ) )
+		formatString: dd/mm/yy
+		displayFolder: Global
+		lineageTag: bd17f981-7656-57b0-9230-aba741e2fb20
+
+	/// Último dia do período com retrato do CRM E Contratos: todas as contas das Carteiras usam esse dia.
+	measure 'Dia da Carteira' = CALCULATE( MAX( Calendario[Date] ), KEEPFILTERS( Calendario[Carteira no Dia] = 1 ) )
+		formatString: dd/mm/yy
+		displayFolder: Global
+		lineageTag: 08670d7f-4eaf-5d96-a709-5c31a4a89f8a
+
+	column Periodo
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 8f832811-61f7-491a-93c2-e47b14b0978b
+		summarizeBy: none
+		sourceColumn: Periodo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Id_CRM
+		dataType: int64
+		formatString: 0
+		lineageTag: 8432d27e-6b5d-46a1-a72a-9179f814a75a
+		summarizeBy: sum
+		sourceColumn: Id_CRM
+
+		annotation SummarizationSetBy = Automatic
+
+	column CNPJ
+		dataType: string
+		lineageTag: d322d14f-33ac-43f7-9ea3-9e67d74f1687
+		summarizeBy: none
+		sourceColumn: CNPJ
+
+		annotation SummarizationSetBy = Automatic
+
+	column Responsavel
+		dataType: string
+		lineageTag: e4e30212-f46e-4b1a-9b59-c7547760ba82
+		summarizeBy: none
+		sourceColumn: Responsavel
+
+		annotation SummarizationSetBy = Automatic
+
+	column Entrega_no_Prazo
+		dataType: double
+		lineageTag: 2bdf77f3-871e-4dc0-a408-16e61d799126
+		summarizeBy: sum
+		sourceColumn: Entrega_no_Prazo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Qtd_Entrega_eContinuo
+		dataType: int64
+		formatString: 0
+		lineageTag: 436706b4-8bf6-4316-b64b-2b7dc5f4c1ae
+		summarizeBy: sum
+		sourceColumn: Qtd_Entrega_eContinuo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Interacoes_Gestao_Processos
+		dataType: string
+		lineageTag: 3e82c000-6f35-43a0-aac3-91b9f49c23ab
+		summarizeBy: none
+		sourceColumn: Interacoes_Gestao_Processos
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_helpdesk
+		dataType: string
+		lineageTag: 92b99f7c-773d-45d5-910f-6e326dc914f5
+		summarizeBy: none
+		sourceColumn: ID_helpdesk
+
+		annotation SummarizationSetBy = Automatic
+
+	column Plano
+		dataType: string
+		lineageTag: 94f2f962-af36-42ef-98ab-f1c691ea2bfe
+		summarizeBy: none
+		sourceColumn: Plano
+
+		annotation SummarizationSetBy = Automatic
+
+	column Qtd_CNPJs_Contrato
+		dataType: string
+		lineageTag: e813effa-5d0c-4a8b-9c08-b66650fff04d
+		summarizeBy: none
+		sourceColumn: Qtd_CNPJs_Contrato
+
+		annotation SummarizationSetBy = Automatic
+
+	column Qtd_CNPJs_Usados
+		dataType: string
+		lineageTag: bbfea78f-3faa-4a16-bb34-8294382a3157
+		summarizeBy: none
+		sourceColumn: Qtd_CNPJs_Usados
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Status de Saúde'
+		dataType: string
+		lineageTag: 98c2ad90-ac7e-446c-88ca-cfe290c015d7
+		summarizeBy: none
+		sourceColumn: Status de Saúde
+
+		annotation SummarizationSetBy = Automatic
+
+	column Qtd_Total_Entregas
+		dataType: int64
+		formatString: 0
+		lineageTag: 70fbdf7c-2824-4997-baf5-fdf351327ca8
+		summarizeBy: sum
+		sourceColumn: Qtd_Total_Entregas
+
+		annotation SummarizationSetBy = Automatic
+
+	column Qtd_Prazos_Gerados
+		dataType: int64
+		formatString: 0
+		lineageTag: 5edb5112-cea2-4335-addb-1208d3da8e7c
+		summarizeBy: sum
+		sourceColumn: Qtd_Prazos_Gerados
+
+		annotation SummarizationSetBy = Automatic
+
+	column Uso
+		dataType: double
+		lineageTag: 97c96e19-296a-4899-9155-84a2a753d3fd
+		summarizeBy: sum
+		sourceColumn: Uso
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Dt_Cadastro
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 45b604e2-f760-43e5-827a-f0eaa9859e7b
+		summarizeBy: none
+		sourceColumn: Dt_Cadastro
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ID_Legado
+		dataType: string
+		lineageTag: fca8e065-b5cd-4390-b367-e9738c7f5f2b
+		summarizeBy: none
+		sourceColumn: ID_Legado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nome_Fantasia
+		dataType: string
+		lineageTag: 3b9f2b3c-6c0f-4962-a377-82469dc18835
+		summarizeBy: none
+		sourceColumn: Nome_Fantasia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Razao_Social
+		dataType: string
+		lineageTag: b2dc3cf6-5f99-4b79-9bed-b79900b52618
+		summarizeBy: none
+		sourceColumn: Razao_Social
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status_Office
+		dataType: string
+		lineageTag: 5043ec92-8d57-45e4-965c-e4888b61b731
+		summarizeBy: none
+		sourceColumn: Status_Office
+
+		annotation SummarizationSetBy = Automatic
+
+	column Responsavel_Email
+		dataType: string
+		lineageTag: ad70271a-a1da-5813-aa8c-13443afc40f1
+		summarizeBy: none
+		sourceColumn: Responsavel_Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Atingiu Critério do TTFV' = VAR c = IFERROR( VALUE( CRM_Backup_Diario[Qtd_CNPJs_Contrato] ), BLANK() ) VAR u = IFERROR( VALUE( CRM_Backup_Diario[Qtd_CNPJs_Usados] ), BLANK() ) RETURN c > 0 && u >= c * 0.3 && CRM_Backup_Diario[Qtd_Total_Entregas] >= c * 0.3
+		dataType: boolean
+		isHidden
+		displayFolder: TTFV
+		lineageTag: b9f7269e-305e-5a9a-9518-a4853ed2a22b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column '% Entregas pelo eContinuo' = DIVIDE( CRM_Backup_Diario[Qtd_Entrega_eContinuo], CRM_Backup_Diario[Qtd_Prazos_Gerados], 0 ) * 100
+		dataType: double
+		isHidden
+		formatString: 0.00
+		displayFolder: Carteira
+		lineageTag: b2ef9ad0-59c9-54fb-a179-d8b34f9d150b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ (dígitos)' = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( TRIM( CRM_Backup_Diario[CNPJ] ), ".", "" ), "/", "" ), "-", "" ), " ", "" )
+		dataType: string
+		isHidden
+		displayFolder: Cliente
+		lineageTag: eb1cd023-677b-52ef-820d-63b3f8449032
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Só Kappa' = IF( ISERROR( VALUE( CRM_Backup_Diario[ID_Legado] ) ), "Sim", "Não" )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: e6de9720-f55b-532b-9bc8-bae3f0c9d3a7
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Interações em Processos (nº)' = IFERROR( VALUE( CRM_Backup_Diario[Interacoes_Gestao_Processos] ), BLANK() )
+		dataType: double
+		isHidden
+		formatString: 0
+		displayFolder: Carteira
+		lineageTag: fb5367ae-6d13-5ebe-917f-f59a4974c671
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Produtos
+		dataType: string
+		lineageTag: 7442ec5a-3ff8-53b1-946a-a30be63b6c3c
+		summarizeBy: none
+		sourceColumn: custom_fields_tipo_de_produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Status KP' = IF( ISBLANK( CRM_Backup_Diario[Produtos] ) || CRM_Backup_Diario[Produtos] = "", BLANK(), IF( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado", "Suspenso" } && CONTAINSSTRING( CRM_Backup_Diario[Produtos], "Kappa" ), "Ativo", "Inativo" ) )
+		dataType: string
+		displayFolder: Global
+		lineageTag: be2728d7-23db-5e5f-be9a-9743cf5f7486
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Setor do CS' = LOOKUPVALUE( dColaboradorMes[Setor], dColaboradorMes[email], CRM_Backup_Diario[Responsavel_Email], dColaboradorMes[AnoMes], CRM_Backup_Diario[Mês da Composição], BLANK() )
+		dataType: string
+		displayFolder: Global
+		lineageTag: 00f448b9-08e5-5d00-9e33-ab15f83e623f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe do CS' = LOOKUPVALUE( dColaboradorMes[Equipe], dColaboradorMes[email], CRM_Backup_Diario[Responsavel_Email], dColaboradorMes[AnoMes], CRM_Backup_Diario[Mês da Composição], BLANK() )
+		dataType: string
+		displayFolder: Global
+		lineageTag: b084632c-ef0d-5bfb-a90f-4d08b1aa2d79
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Extracao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 699f0d07-3a9b-548b-a49a-44bc4ad91030
+		summarizeBy: none
+		sourceColumn: Extracao
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID do Cliente (busca)' = VAR i = TRIM( "" & CRM_Backup_Diario[ID_Legado] ) RETURN IF( i = "" || i = "0", BLANK(), i )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 97f87bc1-636d-55f4-ba36-e4c94c45695f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ do Cliente (busca)' = VAR c = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( TRIM( CRM_Backup_Diario[CNPJ] ), ".", "" ), "/", "" ), "-", "" ), " ", "" ) RETURN IF( c = "", BLANK(), c )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: f909cdbf-ae89-5739-a355-d96f54a657c1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês da Composição' = ( VAR _d = CRM_Backup_Diario[Periodo] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Pessoa
+		lineageTag: dbbe76c5-5636-5624-ab5d-0f17f5ddba27
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fase_Jornada
+		dataType: string
+		lineageTag: bcb45494-3d69-56e3-8a77-b9e5be8ef1b9
+		summarizeBy: none
+		sourceColumn: Fase_Jornada
+
+		annotation SummarizationSetBy = Automatic
+
+	partition CRM_Backup_Diario = m
+		mode: import
+		queryGroup: CRM
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="CRM_Backup_Diario",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"Periodo", type datetime}, {"Id_CRM", Int64.Type}, {"CNPJ", type text}, {"Responsavel", type text}, {"Entrega_no_Prazo", type number}, {"Qtd_Entrega_eContinuo", Int64.Type}, {"Interacoes_Gestao_Processos", type text}, {"ID_helpdesk", type text}, {"Plano", type text}, {"Qtd_CNPJs_Contrato", type text}, {"Qtd_CNPJs_Usados", type text}, {"Status de Saúde", type text}, {"Qtd_Total_Entregas", Int64.Type}, {"Qtd_Prazos_Gerados", Int64.Type}, {"Uso", type number}, {"Dt_Cadastro", type datetime}, {"ID_Legado", type text}, {"Nome_Fantasia", type text}, {"Razao_Social", type text}, {"Status_Office", type text}, {"Responsavel_Email", type text}, {"custom_fields_tipo_de_produto", type text}, {"Extracao", type datetime}, {"Fase_Jornada", type text}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

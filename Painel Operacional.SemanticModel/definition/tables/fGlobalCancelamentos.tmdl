@@ -1,0 +1,242 @@
+table fGlobalCancelamentos
+	lineageTag: 249d5a3b-caba-54db-ab3c-02bf1271ff0e
+
+	/// R$ cancelado (Fechado) de Alfa, AF Docs e Kappa — Perda de Receita - Cancelamento. Segue o filtro Sistema da fGlobalReceita (tela Alteração de Receita); com Área escolhida fica vazio (cancelamento não tem área).
+	measure 'Perda por Cancelamento' = IF( NOT ISFILTERED( fGlobalReceita[Área Responsável] ), IF( ISFILTERED( fGlobalReceita[Sistema] ), CALCULATE( [R$ Cancelado (Fechado)], KEEPFILTERS( fGlobalCancelamentos[Sistema] IN { "Alfa", "Alfa Docs", "Kappa" } ), KEEPFILTERS( TREATAS( FILTERS( fGlobalReceita[Sistema] ), fGlobalCancelamentos[Sistema] ) ) ), CALCULATE( [R$ Cancelado (Fechado)], KEEPFILTERS( fGlobalCancelamentos[Sistema] IN { "Alfa", "Alfa Docs", "Kappa" } ) ) ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 7a3bb431-fe60-5e8d-b5e7-7a4140ff6775
+
+	/// Meta de % de cancelamento do produto (intranet: Cancelamentos - Alfa / KP, empresa). O produto vem do filtro Sistema; sem um único produto escolhido a meta fica vazia. Vazia com Alegação ou Setor escolhidos (meta da empresa: só no mesmo recorte — metas-intranet.md).
+	measure 'Meta % Cancelamento' = IF( NOT ( ISFILTERED( fGlobalCancelamentos[Alegação] ) || ISFILTERED( dSetor[Setor] ) ), VAR sis = SELECTEDVALUE( fGlobalCancelamentos[Sistema] ) VAR v = FILTER( Meta_Vinculo, Meta_Vinculo[Medida] = "Meta % Cancelamento" && ( Meta_Vinculo[Sistema] = sis || Meta_Vinculo[Sistema] = "" ) ) VAR d = MAXX( v, Meta_Vinculo[def_id] ) VAR s = MAXX( v, Meta_Vinculo[setor_id] ) RETURN IF( d > 0, DIVIDE( CALCULATE( [Meta Alvo (período)], Meta_Def[id] = d, Meta_Valor[setor_id] = s ), 100 ) ) )
+		formatString: 0.00%
+		displayFolder: Global
+		lineageTag: 3f04eb6c-2aec-564b-8276-a08ffd6b0acb
+
+	/// Meta mensal de R$ cancelado do produto = meta % de churn financeiro da intranet x mensalidade do 1º dia do mês (derivada). Só com um produto escolhido; soma os meses do período. Vazia com Alegação ou Setor escolhidos (meta da empresa: só no mesmo recorte — metas-intranet.md).
+	measure 'Meta de R$ Cancelado (Global)' = IF( NOT ( ISFILTERED( fGlobalCancelamentos[Alegação] ) || ISFILTERED( dSetor[Setor] ) ), VAR sis = SELECTEDVALUE( fGlobalCancelamentos[Sistema] ) VAR v = FILTER( Meta_Vinculo, Meta_Vinculo[Medida] = "Meta de R$ Cancelado (Global)" && Meta_Vinculo[Sistema] = sis ) VAR d = MAXX( v, Meta_Vinculo[def_id] ) RETURN IF( d > 0, SUMX( VALUES( Calendario[AnoMes] ), CALCULATE( DIVIDE( CALCULATE( [Meta Alvo (período)], Meta_Def[id] = d, Meta_Valor[setor_id] = 0 ), 100 ) * IF( sis = "Kappa", [Mensalidade KP (início do mês)], [Mensalidade AF (início do mês)] ) ) ) ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 7a0ca378-e59d-5e8a-9862-a406741e3b2a
+
+	/// Meta mensal de cancelamentos (quantidade) do produto = meta % de cancelamento da intranet x clientes ativos no 1º dia do mês (derivada). Só com um produto escolhido; soma os meses do período. Vazia com Alegação ou Setor escolhidos (meta da empresa: só no mesmo recorte — metas-intranet.md).
+	measure 'Meta de Cancelamentos (Global)' = IF( NOT ( ISFILTERED( fGlobalCancelamentos[Alegação] ) || ISFILTERED( dSetor[Setor] ) ), VAR sis = SELECTEDVALUE( fGlobalCancelamentos[Sistema] ) VAR v = FILTER( Meta_Vinculo, Meta_Vinculo[Medida] = "Meta de Cancelamentos (Global)" && Meta_Vinculo[Sistema] = sis ) VAR d = MAXX( v, Meta_Vinculo[def_id] ) RETURN IF( d > 0, SUMX( VALUES( Calendario[AnoMes] ), CALCULATE( DIVIDE( CALCULATE( [Meta Alvo (período)], Meta_Def[id] = d, Meta_Valor[setor_id] = 0 ), 100 ) * IF( sis = "Kappa", [Clientes Ativos KP (início do mês)], [Clientes Ativos AF (início do mês)] ) ) ) ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 78aad7e2-d734-50c5-8919-5cd075d2e637
+
+	/// Cancelamentos (Fechado) ÷ clientes KP ativos no início do mês (% Churn KP). A tela filtra Sistema = Kappa.
+	measure '% Cancelamento KP' = DIVIDE( [Cancelamentos (Fechado)], [Clientes Ativos KP (início do mês)] )
+		formatString: 0.00%
+		displayFolder: Global
+		lineageTag: 2c07d7f8-3aaa-586d-87f2-e9ee671fe43c
+
+	/// Cancelamentos (Fechado) ÷ clientes AF ativos no início do mês (% Churn AF). A tela filtra Sistema = Alfa.
+	measure '% Cancelamento AF' = DIVIDE( [Cancelamentos (Fechado)], [Clientes Ativos AF (início do mês)] )
+		formatString: 0.00%
+		displayFolder: Global
+		lineageTag: b1c4d637-4bdb-5033-824f-65f69b271f38
+
+	/// Cancelamentos (Fechado) com até 365 dias ativos.
+	measure 'Cancelados com até 1 Ano' = CALCULATE( [Cancelamentos (Fechado)], KEEPFILTERS( fGlobalCancelamentos[Faixa de Idade] IN { "Até 3 meses", "3 a 6 meses", "6 meses a 1 ano" } ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 03e12998-8f78-53d8-bf85-09702e94a05e
+
+	/// Média de dias ativos (data de contrato -> fechamento do ticket) dos cancelamentos (Fechado).
+	measure 'Idade Média ao Cancelar (dias)' = DIVIDE( CALCULATE( SUM( fGlobalCancelamentos[Soma de Dias Ativos] ), KEEPFILTERS( fGlobalCancelamentos[Contagem] = "Fechado" ) ), CALCULATE( SUM( fGlobalCancelamentos[Com Dias Ativos] ), KEEPFILTERS( fGlobalCancelamentos[Contagem] = "Fechado" ) ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 9d5ee2f6-9371-5a59-8ad3-d81ce3d9823b
+
+	/// Mensalidade dos cancelamentos (Resolvido), sem ajuste de carteira — R$ Empresas Canceladas (Resolvido).
+	measure 'R$ Cancelado (Resolvido)' = CALCULATE( SUM( fGlobalCancelamentos[R$ Cancelado] ), KEEPFILTERS( fGlobalCancelamentos[Contagem] = "Resolvido" ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: cf605127-bf17-5725-a334-07191ed8a3d6
+
+	/// Mensalidade dos cancelamentos (Fechado), sem ajuste de carteira — R$ Empresas Canceladas (Fechado).
+	measure 'R$ Cancelado (Fechado)' = CALCULATE( SUM( fGlobalCancelamentos[R$ Cancelado] ), KEEPFILTERS( fGlobalCancelamentos[Contagem] = "Fechado" ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 67d9a432-7344-5158-a352-90777b91dbb0
+
+	/// Efetivados tipo 2 sem estorno total com status Resolvido, pela data de RESOLUÇÃO (Qtd_Cancelamentos (Resolvido)).
+	measure 'Cancelamentos (Resolvido)' = CALCULATE( SUM( fGlobalCancelamentos[Cancelamentos] ), KEEPFILTERS( fGlobalCancelamentos[Contagem] = "Resolvido" ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: ddde43e8-eaa8-5487-b332-e72275367cb2
+
+	/// Efetivados tipo 2 sem estorno total com status Fechado, pela data de FECHAMENTO (Qtd_Cancelamentos (Fechado)).
+	measure 'Cancelamentos (Fechado)' = CALCULATE( SUM( fGlobalCancelamentos[Cancelamentos] ), KEEPFILTERS( fGlobalCancelamentos[Contagem] = "Fechado" ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 4cf25e07-9b67-5464-bbe6-011092300c20
+
+	/// Meta de % de churn financeiro do produto (intranet: Mensalidade Cancelamentos - Alfa / KP, empresa). Só aparece com UM produto escolhido no filtro Sistema (a taxa sem filtro soma todos os produtos e não é comparável com a meta de um produto). Vazia com Alegação ou Setor escolhidos (meta da empresa: só no mesmo recorte — metas-intranet.md).
+	measure 'Meta % Churn Financeiro' = IF( NOT ( ISFILTERED( fGlobalCancelamentos[Alegação] ) || ISFILTERED( dSetor[Setor] ) ), VAR sis = SELECTEDVALUE( fGlobalCancelamentos[Sistema] ) VAR v = FILTER( Meta_Vinculo, Meta_Vinculo[Medida] = "Meta % Churn Financeiro" && ( Meta_Vinculo[Sistema] = sis || Meta_Vinculo[Sistema] = "" ) ) VAR d = MAXX( v, Meta_Vinculo[def_id] ) VAR s = MAXX( v, Meta_Vinculo[setor_id] ) RETURN IF( d > 0, DIVIDE( CALCULATE( [Meta Alvo (período)], Meta_Def[id] = d, Meta_Valor[setor_id] = s ), 100 ) ) )
+		formatString: 0.00%
+		displayFolder: Global
+		lineageTag: dc1c8c56-c0f0-58c0-b40d-d3583e6ad466
+
+	/// R$ cancelado (Fechado, mensalidade preenchida nos tickets) ÷ mensalidade do Kappa no 1º dia do mês.
+	measure '% Churn Financeiro KP' = DIVIDE( [R$ Cancelado (Fechado)], [Mensalidade KP (início do mês)] )
+		formatString: 0.00%
+		displayFolder: Global
+		lineageTag: dab0e922-8fdb-58d7-a708-5f1a2b9ef275
+
+	/// R$ cancelado (Fechado, mensalidade preenchida nos tickets) ÷ mensalidade da carteira AF no 1º dia do mês.
+	measure '% Churn Financeiro AF' = DIVIDE( [R$ Cancelado (Fechado)], [Mensalidade AF (início do mês)] )
+		formatString: 0.00%
+		displayFolder: Global
+		lineageTag: 8622570f-fb1d-57b0-b5a7-0c473e5d11c7
+
+	/// Cancelamentos KP (setor) ÷ clientes KP no início do mês (setor). Nos cartões e na tabela, o mês mais recente.
+	measure '% Cancelamento KP (setor)' = DIVIDE( [Cancelamentos KP (setor)], [Clientes KP no Início do Mês (setor)] )
+		formatString: 0.00%
+		displayFolder: KP por Setor
+		lineageTag: 414ec018-0f69-57ee-a022-a03a78a330cf
+
+	/// Mensalidade dos cancelamentos (Fechado), pelo setor do treinador. Linhas da dSetorKC: Onboarding, Ongoing e Outros / sem setor (= empresa - os dois; a soma fecha com o total). Setor = cadastro do RH do mês (dSetor, como o filtro Setor da Global 02).
+	measure 'R$ Cancelado KP (setor)' = VAR total = CALCULATE( [R$ Cancelado (Fechado)], REMOVEFILTERS( dSetor ) ) VAR onb = CALCULATE( [R$ Cancelado (Fechado)], dSetor[Setor] = "Onboarding" ) VAR ong = CALCULATE( [R$ Cancelado (Fechado)], dSetor[Setor] = "Ongoing" ) RETURN IF( NOT ISBLANK( total ), SUMX( VALUES( dSetorKC[Setor] ), SWITCH( dSetorKC[Setor], "Onboarding", onb, "Ongoing", ong, total - onb - ong ) ) )
+		formatString: \R$ #,0.00
+		displayFolder: KP por Setor
+		lineageTag: d1b94dd6-c908-594f-b4b3-b84e3513d1dc
+
+	/// Cancelamentos efetivados (Fechado) pela data de fechamento, pelo setor do treinador. A tela filtra Sistema = Kappa. Linhas da dSetorKC: Onboarding, Ongoing e Outros / sem setor (= empresa - os dois; a soma fecha com o total). Setor = cadastro do RH do mês (dSetor, como o filtro Setor da Global 02).
+	measure 'Cancelamentos KP (setor)' = VAR total = CALCULATE( [Cancelamentos (Fechado)], REMOVEFILTERS( dSetor ) ) VAR onb = CALCULATE( [Cancelamentos (Fechado)], dSetor[Setor] = "Onboarding" ) VAR ong = CALCULATE( [Cancelamentos (Fechado)], dSetor[Setor] = "Ongoing" ) RETURN IF( NOT ISBLANK( total ), SUMX( VALUES( dSetorKC[Setor] ), SWITCH( dSetorKC[Setor], "Onboarding", onb, "Ongoing", ong, total - onb - ong ) ) )
+		formatString: #,0
+		displayFolder: KP por Setor
+		lineageTag: 2ace5036-f47d-5867-a462-5e1d4330b369
+
+	/// Clientes com Kappa ativo no 1º retrato do mês, pelo setor do CS. Linhas da dSetorKC: Onboarding, Ongoing e Outros / sem setor (= empresa - os dois; a soma fecha com o total). Setor = cadastro do RH do mês (dSetor, como o filtro Setor da Global 02).
+	measure 'Clientes KP no Início do Mês (setor)' = VAR total = CALCULATE( [Clientes Ativos KP (início do mês)], REMOVEFILTERS( dSetor ) ) VAR onb = CALCULATE( [Clientes Ativos KP (início do mês)], dSetor[Setor] = "Onboarding" ) VAR ong = CALCULATE( [Clientes Ativos KP (início do mês)], dSetor[Setor] = "Ongoing" ) RETURN IF( NOT ISBLANK( total ), SUMX( VALUES( dSetorKC[Setor] ), SWITCH( dSetorKC[Setor], "Onboarding", onb, "Ongoing", ong, total - onb - ong ) ) )
+		formatString: #,0
+		displayFolder: KP por Setor
+		lineageTag: 0c35c041-e3c3-517c-be77-66d04acd6710
+
+	column Data
+		formatString: dd/mm/yy
+		lineageTag: 021f9336-37dc-5674-8caa-6b6ab538fbea
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Data]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Contagem
+		lineageTag: 77250e35-25c0-59f5-ab06-26064809d008
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Contagem]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sistema
+		lineageTag: 06804405-9e8d-556e-bb04-f1c4e2bcf89b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Sistema]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Alegação
+		lineageTag: 96acafff-fa10-57fe-aff8-12ccd2b4afc4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Alegação]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Faixa de Idade'
+		lineageTag: 9b95db4d-37cb-5782-a7c9-f25a2fd53ee4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Faixa de Idade]
+		sortByColumn: 'Ordem da Faixa'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ordem da Faixa'
+		formatString: 0
+		lineageTag: 75758a0b-41e9-538a-b391-96d30daead78
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ordem da Faixa]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cancelamentos
+		formatString: #,0
+		lineageTag: 0c1f10b7-0f51-537f-95d5-bb2f0b0f363c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cancelamentos]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'R$ Cancelado'
+		formatString: \R$ #,0.00
+		lineageTag: e142afa9-7931-55bf-8ba3-36b023da3fac
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [R$ Cancelado]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Soma de Dias Ativos'
+		formatString: #,0
+		lineageTag: 66dbd304-aef4-5f06-8895-97d75c09ae81
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Soma de Dias Ativos]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Com Dias Ativos'
+		formatString: #,0
+		lineageTag: 6a680e47-7e0f-53b5-8569-716e95e89136
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Com Dias Ativos]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor
+		lineageTag: 48a3c2c1-9f01-5c42-930a-44ce58748cd0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Setor]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fGlobalCancelamentos = calculated
+		mode: import
+		source =
+				
+				-- Resumo dos cancelamentos EFETIVADOS (tipo 2, sem estorno total) por dia, contagem (Fechado = status Fechado
+				-- pela data de fechamento; Resolvido = status Resolvido pela data de resolução), produto, alegação, idade e
+				-- setor (do treinador = último responsável pelo cliente, pelo cadastro do RH).
+				-- Calculada no refresh, fora do RLS: o Global mostra o total da empresa para todos. Gerado por gerar_global.py.
+				VAR base = FILTER( Helpdesk_Cancelamentos,
+				    Helpdesk_Cancelamentos[category] = "Cancelamento Efetivado" && Helpdesk_Cancelamentos[estornoTotal] <> "Sim"
+				        && Helpdesk_Cancelamentos[type] = 2 )
+				VAR fechado = SELECTCOLUMNS( FILTER( base, Helpdesk_Cancelamentos[status] = "Fechado" && NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ) ),
+				    "@data", DATE( YEAR( Helpdesk_Cancelamentos[Data de Fechamento] ), MONTH( Helpdesk_Cancelamentos[Data de Fechamento] ), DAY( Helpdesk_Cancelamentos[Data de Fechamento] ) ), "@contagem", "Fechado", "@sistema", Helpdesk_Cancelamentos[sistema],
+				    "@alegacao", Helpdesk_Cancelamentos[alegacao], "@dias", Helpdesk_Cancelamentos[Dias Ativos],
+				    "@setor", Helpdesk_Cancelamentos[Setor do Treinador],
+				    "@rs", IF( Helpdesk_Cancelamentos[ajusteCarteira] <> "Sim", Helpdesk_Cancelamentos[mensalidade] ) )
+				VAR resolvido = SELECTCOLUMNS( FILTER( base, Helpdesk_Cancelamentos[status] = "Resolvido" && NOT ISBLANK( Helpdesk_Cancelamentos[Data Resolvido] ) ),
+				    "@data", DATE( YEAR( Helpdesk_Cancelamentos[Data Resolvido] ), MONTH( Helpdesk_Cancelamentos[Data Resolvido] ), DAY( Helpdesk_Cancelamentos[Data Resolvido] ) ), "@contagem", "Resolvido", "@sistema", Helpdesk_Cancelamentos[sistema],
+				    "@alegacao", Helpdesk_Cancelamentos[alegacao], "@dias", Helpdesk_Cancelamentos[Dias Ativos],
+				    "@setor", Helpdesk_Cancelamentos[Setor do Treinador],
+				    "@rs", IF( Helpdesk_Cancelamentos[ajusteCarteira] <> "Sim", Helpdesk_Cancelamentos[mensalidade] ) )
+				VAR linhas = ADDCOLUMNS( UNION( fechado, resolvido ), "@faixa", SWITCH( TRUE(), ISBLANK( [@dias] ), BLANK(), [@dias] <= 90, "Até 3 meses", [@dias] <= 180, "3 a 6 meses", [@dias] <= 365, "6 meses a 1 ano", [@dias] <= 730, "1 a 2 anos", [@dias] <= 1095, "2 a 3 anos", "Mais de 3 anos" ), "@ordem", SWITCH( TRUE(), ISBLANK( [@dias] ), BLANK(), [@dias] <= 90, 1, [@dias] <= 180, 2, [@dias] <= 365, 3, [@dias] <= 730, 4, [@dias] <= 1095, 5, 6 ) )
+				VAR g = GROUPBY( linhas, [@data], [@contagem], [@sistema], [@alegacao], [@faixa], [@ordem], [@setor],
+				    "@qtd", SUMX( CURRENTGROUP(), 1 ), "@valor", SUMX( CURRENTGROUP(), [@rs] ),
+				    "@somadias", SUMX( CURRENTGROUP(), [@dias] ), "@comdias", COUNTX( CURRENTGROUP(), [@dias] ) )
+				RETURN
+				    SELECTCOLUMNS( g, "Data", [@data], "Contagem", [@contagem], "Sistema", [@sistema], "Alegação", [@alegacao],
+				        "Faixa de Idade", [@faixa], "Ordem da Faixa", [@ordem], "Cancelamentos", [@qtd], "R$ Cancelado", [@valor],
+				        "Soma de Dias Ativos", [@somadias], "Com Dias Ativos", [@comdias], "Setor", [@setor] )
+

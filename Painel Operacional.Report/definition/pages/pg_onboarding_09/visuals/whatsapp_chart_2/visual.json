@@ -1,0 +1,428 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "whatsapp_chart_2",
+  "position": {
+    "x": 1106,
+    "y": 296,
+    "z": 32000,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 32000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaboradorMes"
+                    }
+                  },
+                  "Property": "Colaborador"
+                }
+              },
+              "queryRef": "dColaboradorMes.Colaborador",
+              "nativeQueryRef": "Colaborador",
+              "displayName": "Analista"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "WhatsApp_Atendimentos"
+                    }
+                  },
+                  "Property": "Atendimentos"
+                }
+              },
+              "queryRef": "WhatsApp_Atendimentos.Atendimentos",
+              "nativeQueryRef": "Atendimentos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "WhatsApp_Atendimentos"
+                    }
+                  },
+                  "Property": "Clientes Atendidos"
+                }
+              },
+              "queryRef": "WhatsApp_Atendimentos.Clientes Atendidos",
+              "nativeQueryRef": "Clientes Atendidos",
+              "displayName": "Clientes"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "WhatsApp_Atendimentos"
+                    }
+                  },
+                  "Property": "% Receptivos"
+                }
+              },
+              "queryRef": "WhatsApp_Atendimentos.% Receptivos",
+              "nativeQueryRef": "% Receptivos",
+              "displayName": "% Receptivos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "WhatsApp_Atendimentos"
+                    }
+                  },
+                  "Property": "Duração Mediana (h)"
+                }
+              },
+              "queryRef": "WhatsApp_Atendimentos.Duração Mediana (h)",
+              "nativeQueryRef": "Duração Mediana (h)",
+              "displayName": "Duração mediana"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "WhatsApp_CSAT"
+                    }
+                  },
+                  "Property": "CSAT Médio"
+                }
+              },
+              "queryRef": "WhatsApp_CSAT.CSAT Médio",
+              "nativeQueryRef": "CSAT Médio",
+              "displayName": "CSAT"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "WhatsApp_CSAT"
+                    }
+                  },
+                  "Property": "Respostas CSAT"
+                }
+              },
+              "queryRef": "WhatsApp_CSAT.Respostas CSAT",
+              "nativeQueryRef": "Respostas CSAT",
+              "displayName": "Respostas CSAT"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "WhatsApp_Atendimentos"
+                  }
+                },
+                "Property": "Atendimentos"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "289.2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaboradorMes.Colaborador"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "100.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "WhatsApp_Atendimentos.Atendimentos"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "71.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "WhatsApp_Atendimentos.Clientes Atendidos"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "86.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "WhatsApp_Atendimentos.% Receptivos"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "74.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "WhatsApp_Atendimentos.Duração Mediana (h)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "WhatsApp_CSAT.CSAT Médio"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "78.8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "WhatsApp_CSAT.Respostas CSAT"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Por analista'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Atendimentos por data de abertura · CSAT por data da resposta'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

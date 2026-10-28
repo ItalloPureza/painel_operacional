@@ -1,0 +1,574 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "rel_chart_4",
+  "position": {
+    "x": 1106,
+    "y": 692,
+    "z": 34000,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 34000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "id"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.id",
+              "nativeQueryRef": "id",
+              "displayName": "Ticket"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "Data_Criacao_Ticket"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.Data_Criacao_Ticket",
+              "nativeQueryRef": "Data_Criacao_Ticket",
+              "displayName": "Criado em"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "category"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.category",
+              "nativeQueryRef": "category",
+              "displayName": "Categoria"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "owner"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.owner",
+              "nativeQueryRef": "owner",
+              "displayName": "Atendente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "Sistema"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.Sistema",
+              "nativeQueryRef": "Sistema",
+              "displayName": "Sistema"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "OuvOrigemTicket"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.OuvOrigemTicket",
+              "nativeQueryRef": "OuvOrigemTicket",
+              "displayName": "Origem"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "OuvOrigemTratativa"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.OuvOrigemTratativa",
+              "nativeQueryRef": "OuvOrigemTratativa",
+              "displayName": "Origem da tratativa"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "OuvAreaResponsavel"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.OuvAreaResponsavel",
+              "nativeQueryRef": "OuvAreaResponsavel",
+              "displayName": "Área responsável"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "OuvEquipeDemanda"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.OuvEquipeDemanda",
+              "nativeQueryRef": "OuvEquipeDemanda",
+              "displayName": "Equipe da demanda"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "status"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.status",
+              "nativeQueryRef": "status",
+              "displayName": "Status"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "Houve Avaliação"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.Houve Avaliação",
+              "nativeQueryRef": "Houve Avaliação",
+              "displayName": "Avaliado?"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Helpdesk_Tickets"
+                    }
+                  },
+                  "Property": "ID do Cliente (Ouvidoria)"
+                }
+              },
+              "queryRef": "Helpdesk_Tickets.ID do Cliente (Ouvidoria)",
+              "nativeQueryRef": "ID do Cliente (Ouvidoria)",
+              "displayName": "ID"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Helpdesk_Tickets"
+                  }
+                },
+                "Property": "Data_Criacao_Ticket"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.64468102256856D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.id"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.3D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.Data_Criacao_Ticket"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "98.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.category"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "76.64040048707888D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.owner"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "80.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.Sistema"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "66.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.OuvOrigemTicket"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "77.97045054796374D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.OuvOrigemTratativa"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "81.96060073061832D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.OuvAreaResponsavel"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "72.6502503044243D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.OuvEquipeDemanda"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "80.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.status"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "80.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.Houve Avaliação"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Helpdesk_Tickets.ID do Cliente (Ouvidoria)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Atendimentos da Ouvidoria'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Por data de criação do ticket'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

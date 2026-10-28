@@ -1,0 +1,82 @@
+table Contratos_historico_emails
+	lineageTag: 39a11cf6-a120-4cd7-90f3-72fc995aa350
+
+	column periodo
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 2179fa72-0bad-4ac0-8336-271c67ce2d14
+		summarizeBy: none
+		sourceColumn: periodo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column contrato_id
+		dataType: int64
+		formatString: 0
+		lineageTag: be701e8f-a52e-4dc1-916c-c93fe74d395c
+		summarizeBy: sum
+		sourceColumn: contrato_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 78234bd8-f3d2-4f88-9269-2c51908a23ca
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column email
+		dataType: string
+		lineageTag: e2e984cd-ed46-426f-931c-c604cec99497
+		summarizeBy: none
+		sourceColumn: email
+
+		annotation SummarizationSetBy = Automatic
+
+	column ativo
+		dataType: int64
+		formatString: 0
+		lineageTag: 1b9df13c-dbbd-499a-b3af-6e3ff1afadf8
+		summarizeBy: sum
+		sourceColumn: ativo
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 6e747117-eb4e-4395-a87c-9e96df91b739
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 1e34fd22-e081-4736-94d7-87e1f4549b76
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Contratos_historico_emails = m
+		mode: import
+		queryGroup: Contratos
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Contratos_historico_emails",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"periodo", type datetime}, {"contrato_id", Int64.Type}, {"id", Int64.Type}, {"email", type text}, {"ativo", Int64.Type}, {"created_at", type datetime}, {"updated_at", type datetime}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

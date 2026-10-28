@@ -1,0 +1,104 @@
+table Meta_Valor
+	isHidden
+	lineageTag: c43fe1d5-9a40-4f9d-8474-d659e9855d3a
+
+	/// Meta (valor_alvo) no período, agregada pela regra da definição (trimestre_modo): soma, último mês ou média. Use dentro de CALCULATE com Meta_Def[id] e Meta_Valor[setor_id]. Percentuais ficam em pontos (24 = 24%).
+	measure 'Meta Alvo (período)' = VAR modo = SELECTEDVALUE( Meta_Def[trimestre_modo], "media" ) VAR ult = MAX( Meta_Valor[Data] ) RETURN SWITCH( modo, "soma", SUM( Meta_Valor[valor_alvo] ), "ultimo", CALCULATE( SUM( Meta_Valor[valor_alvo] ), Meta_Valor[Data] = ult ), AVERAGE( Meta_Valor[valor_alvo] ) )
+		formatString: #,0.00
+		displayFolder: Metas (intranet)
+		lineageTag: a56fa11b-dbf6-4384-bcb1-9b9bfb0a5d7d
+
+	/// Realizado informado na intranet (valor_realizado), mesma agregação da meta. Serve de conferência com o número calculado no BI.
+	measure 'Realizado na Intranet (período)' = VAR modo = SELECTEDVALUE( Meta_Def[trimestre_modo], "media" ) VAR ult = MAX( Meta_Valor[Data] ) RETURN SWITCH( modo, "soma", SUM( Meta_Valor[valor_realizado] ), "ultimo", CALCULATE( SUM( Meta_Valor[valor_realizado] ), Meta_Valor[Data] = ult ), AVERAGE( Meta_Valor[valor_realizado] ) )
+		formatString: #,0.00
+		displayFolder: Metas (intranet)
+		lineageTag: 74e7fe21-18b5-4acc-b005-1d54967d333d
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: bc058d7c-40d6-4121-a4cf-49efaf5e12e0
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column def_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 95f1eacc-9cf3-4a82-b678-a9b52fba4aee
+		summarizeBy: none
+		sourceColumn: def_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column competencia
+		dataType: string
+		lineageTag: 56afbc7a-8bd3-44c0-966d-8beb5a4b7765
+		summarizeBy: none
+		sourceColumn: competencia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 6c632d1e-3ea8-4bda-8c7a-481f1c6bf865
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column setor_id
+		dataType: int64
+		formatString: 0
+		lineageTag: fe79c5ac-0a45-4821-be27-f09f8d10cd16
+		summarizeBy: none
+		sourceColumn: setor_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column ref_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 7dc60bc9-619c-462a-a699-a2351db8861b
+		summarizeBy: none
+		sourceColumn: ref_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column valor_alvo
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 93bddd66-0bdb-47a0-913a-88982af5211f
+		summarizeBy: none
+		sourceColumn: valor_alvo
+
+		annotation SummarizationSetBy = Automatic
+
+	column valor_realizado
+		dataType: double
+		formatString: #,0.00
+		lineageTag: b6e4e27b-a512-4fe7-aded-8f6e06c44d75
+		summarizeBy: none
+		sourceColumn: valor_realizado
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Meta_Valor = m
+		mode: import
+		queryGroup: Estrutura
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Meta_Valor",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"id", Int64.Type}, {"def_id", Int64.Type}, {"competencia", type text}, {"Data", type datetime}, {"setor_id", Int64.Type}, {"ref_id", Int64.Type}, {"valor_alvo", type number}, {"valor_realizado", type number}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

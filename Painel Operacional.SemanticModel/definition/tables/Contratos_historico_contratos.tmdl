@@ -1,0 +1,745 @@
+table Contratos_historico_contratos
+	lineageTag: 2575e64f-4576-4aa6-86df-99b523fdf1a5
+
+	/// Mensalidade (itens AF, GB Extra, AF Docs, KP, Pacote de GB) dos contratos 3/5 sem cliente na carteira no dia da carteira (último dia do período com retrato do CRM e Contratos). Mensalidade Total + esta = total do sistema de contratos (sem filtro de CS).
+	measure 'Mensalidade sem Cliente na Carteira' = VAR d = [Dia da Carteira] VAR todos = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Periodo] = d, CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) VAR contratos = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 } ) VAR fora = EXCEPT( contratos, todos ) RETURN IF( NOT ISBLANK( d ), CALCULATE( SUMX( GROUPBY( SELECTCOLUMNS( Contratos_historico_items, "@c", RELATED( Contratos_historico_contratos[cnpj_cpf] ), "@i", Contratos_historico_items[item_catalogo_id], "@v", Contratos_historico_items[vr_total] ), [@c], [@i], "@m", MAXX( CURRENTGROUP(), [@v] ) ), [@m] ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( fora, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 2, 3, 4, 5, 6 } ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 896de654-d723-5f23-8a78-b163d1b5951f
+
+	/// CNPJs com contrato status 3/5 no sistema de contratos que não são cliente Ativo/Bloqueado no CRM no dia da carteira (último dia do período com retrato do CRM e Contratos) (não segue os filtros de CS: esses CNPJs não têm CS).
+	measure 'Contratos sem Cliente na Carteira' = VAR d = [Dia da Carteira] VAR todos = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Periodo] = d, CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) VAR contratos = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 } ) RETURN IF( NOT ISBLANK( d ), COUNTROWS( EXCEPT( contratos, todos ) ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 0b14043d-8dbd-5710-aa13-b281f02b8bfe
+
+	/// CS do cliente da carteira que não tem contrato 3/5 no sistema de contratos (lista da conferência).
+	measure 'CS do Cliente sem Contrato' = IF( HASONEVALUE( CRM_Backup_Diario[ID_Legado] ) && [Clientes sem Contrato no sistema de contratos] > 0, COALESCE( [CS no Dia], "(sem CS)" ) )
+		displayFolder: Global
+		lineageTag: 51e21dd7-ddc0-589f-a450-7b0e6aa3f01d
+
+	/// Clientes Ativo/Bloqueado no CRM SEM contrato status 3/5 no sistema de contratos (pelo CNPJ) no dia da carteira (último dia do período com retrato do CRM e Contratos).
+	measure 'Clientes sem Contrato no sistema de contratos' = VAR d = [Dia da Carteira] VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) VAR contratos = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), REMOVEFILTERS( Contratos_historico_contratos ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 } ) RETURN IF( NOT ISBLANK( d ), COUNTROWS( EXCEPT( clientes, contratos ) ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 3cdbc1da-7118-5dc4-b6f8-76beb7da5503
+
+	/// Clientes Ativo/Bloqueado no CRM com contrato status 3/5 no sistema de contratos no dia da carteira (último dia do período com retrato do CRM e Contratos).
+	measure 'Clientes com Contrato no sistema de contratos' = VAR d = [Dia da Carteira] VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) VAR contratos = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), REMOVEFILTERS( Contratos_historico_contratos ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 } ) RETURN IF( NOT ISBLANK( d ), COUNTROWS( INTERSECT( clientes, contratos ) ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 227b4e05-09c5-569e-9c34-edf18a8af76f
+
+	/// Mensalidade Alfa (AF + GB Extra + AF Docs + Pacote de GB, como a 'Mensalidade AF' do OKR 2026) ÷ clientes com o item AF, no dia da carteira.
+	measure 'Ticket Médio AF (Contratos)' = DIVIDE( [Mensalidade Alfa (Contratos)], [Clientes AF (Contratos)] )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 2c60484e-39b8-585c-b705-f7f1a4921ee2
+
+	/// Alfa + Kappa dos clientes da carteira no dia da carteira (último dia do período com retrato do CRM e Contratos). Com Produto (itens) na série, separa por item.
+	measure 'Mensalidade Total (Contratos)' = VAR d = [Dia da Carteira] VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) VAR base = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, TREATAS( clientes, Contratos_historico_contratos[cnpj_cpf] ) ) RETURN IF( NOT ISBLANK( d ), CALCULATE( SUMX( GROUPBY( SELECTCOLUMNS( Contratos_historico_items, "@c", RELATED( Contratos_historico_contratos[cnpj_cpf] ), "@i", Contratos_historico_items[item_catalogo_id], "@v", Contratos_historico_items[vr_total] ), [@c], [@i], "@m", MAXX( CURRENTGROUP(), [@v] ) ), [@m] ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( base, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 2, 3, 4, 5, 6 } ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 83423372-045f-5a84-a8c0-4006c737e0ae
+
+	/// AF + GB Extra + AF Docs + Pacote de GB (Mensalidade_Alfa_Contratos do OKR 2026), clientes da carteira no dia da carteira (último dia do período com retrato do CRM e Contratos).
+	measure 'Mensalidade Alfa (Contratos)' = VAR d = [Dia da Carteira] VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) VAR base = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, TREATAS( clientes, Contratos_historico_contratos[cnpj_cpf] ) ) RETURN IF( NOT ISBLANK( d ), CALCULATE( SUMX( GROUPBY( SELECTCOLUMNS( Contratos_historico_items, "@c", RELATED( Contratos_historico_contratos[cnpj_cpf] ), "@i", Contratos_historico_items[item_catalogo_id], "@v", Contratos_historico_items[vr_total] ), [@c], [@i], "@m", MAXX( CURRENTGROUP(), [@v] ) ), [@m] ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( base, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 2, 3, 4, 6 } ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 38e23172-18ab-56a8-b4ee-39197f7cec33
+
+	/// Valor do item Pacote de GB dos clientes da carteira no dia da carteira (último dia do período com retrato do CRM e Contratos) (por CNPJ, o maior valor, como o OKR 2026).
+	measure 'Mensalidade Pacote de GB (Contratos)' = VAR d = [Dia da Carteira] VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) VAR base = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, TREATAS( clientes, Contratos_historico_contratos[cnpj_cpf] ) ) RETURN IF( NOT ISBLANK( d ), CALCULATE( SUMX( GROUPBY( SELECTCOLUMNS( Contratos_historico_items, "@c", RELATED( Contratos_historico_contratos[cnpj_cpf] ), "@i", Contratos_historico_items[item_catalogo_id], "@v", Contratos_historico_items[vr_total] ), [@c], [@i], "@m", MAXX( CURRENTGROUP(), [@v] ) ), [@m] ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( base, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 6 } ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: bc261fbd-7588-5424-82af-807a332305ab
+
+	/// Valor do item KP dos clientes da carteira no dia da carteira (último dia do período com retrato do CRM e Contratos) (por CNPJ, o maior valor, como o OKR 2026).
+	measure 'Mensalidade KP (Contratos)' = VAR d = [Dia da Carteira] VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) VAR base = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, TREATAS( clientes, Contratos_historico_contratos[cnpj_cpf] ) ) RETURN IF( NOT ISBLANK( d ), CALCULATE( SUMX( GROUPBY( SELECTCOLUMNS( Contratos_historico_items, "@c", RELATED( Contratos_historico_contratos[cnpj_cpf] ), "@i", Contratos_historico_items[item_catalogo_id], "@v", Contratos_historico_items[vr_total] ), [@c], [@i], "@m", MAXX( CURRENTGROUP(), [@v] ) ), [@m] ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( base, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 5 } ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 18ccfdc6-09ed-5467-9c04-293c81c6700c
+
+	/// Valor do item AF Docs dos clientes da carteira no dia da carteira (último dia do período com retrato do CRM e Contratos) (por CNPJ, o maior valor, como o OKR 2026).
+	measure 'Mensalidade AF Docs (Contratos)' = VAR d = [Dia da Carteira] VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) VAR base = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, TREATAS( clientes, Contratos_historico_contratos[cnpj_cpf] ) ) RETURN IF( NOT ISBLANK( d ), CALCULATE( SUMX( GROUPBY( SELECTCOLUMNS( Contratos_historico_items, "@c", RELATED( Contratos_historico_contratos[cnpj_cpf] ), "@i", Contratos_historico_items[item_catalogo_id], "@v", Contratos_historico_items[vr_total] ), [@c], [@i], "@m", MAXX( CURRENTGROUP(), [@v] ) ), [@m] ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( base, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 4 } ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: ce314ab5-8c49-5b11-8cda-35540cae1a9e
+
+	/// Valor do item GB Extra dos clientes da carteira no dia da carteira (último dia do período com retrato do CRM e Contratos) (por CNPJ, o maior valor, como o OKR 2026).
+	measure 'Mensalidade GB Extra (Contratos)' = VAR d = [Dia da Carteira] VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) VAR base = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, TREATAS( clientes, Contratos_historico_contratos[cnpj_cpf] ) ) RETURN IF( NOT ISBLANK( d ), CALCULATE( SUMX( GROUPBY( SELECTCOLUMNS( Contratos_historico_items, "@c", RELATED( Contratos_historico_contratos[cnpj_cpf] ), "@i", Contratos_historico_items[item_catalogo_id], "@v", Contratos_historico_items[vr_total] ), [@c], [@i], "@m", MAXX( CURRENTGROUP(), [@v] ) ), [@m] ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( base, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 3 } ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 77be4dbb-a230-5d67-aa2b-1448593986ed
+
+	/// Valor do item AF dos clientes da carteira no dia da carteira (último dia do período com retrato do CRM e Contratos) (por CNPJ, o maior valor, como o OKR 2026).
+	measure 'Mensalidade AF (Contratos)' = VAR d = [Dia da Carteira] VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) VAR base = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, TREATAS( clientes, Contratos_historico_contratos[cnpj_cpf] ) ) RETURN IF( NOT ISBLANK( d ), CALCULATE( SUMX( GROUPBY( SELECTCOLUMNS( Contratos_historico_items, "@c", RELATED( Contratos_historico_contratos[cnpj_cpf] ), "@i", Contratos_historico_items[item_catalogo_id], "@v", Contratos_historico_items[vr_total] ), [@c], [@i], "@m", MAXX( CURRENTGROUP(), [@v] ) ), [@m] ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( base, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 2 } ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 93382722-ce72-5875-840a-b1bd721b63b1
+
+	/// Clientes da carteira com item Pacote de GB ativo no sistema de contratos no dia da carteira (último dia do período com retrato do CRM e Contratos) (contrato 3/5; item de contrato sem responsável financeiro).
+	measure 'Clientes Pacote de GB (Contratos)' = VAR d = [Dia da Carteira] VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) VAR base = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, TREATAS( clientes, Contratos_historico_contratos[cnpj_cpf] ) ) RETURN IF( NOT ISBLANK( d ), CALCULATE( COUNTROWS( SUMMARIZE( Contratos_historico_items, Contratos_historico_contratos[cnpj_cpf] ) ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( base, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 6 } ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 6b7886eb-1792-586f-bd5b-715e07f41551
+
+	/// Clientes da carteira com item KP ativo no sistema de contratos no dia da carteira (último dia do período com retrato do CRM e Contratos) (contrato 3/5; item de contrato sem responsável financeiro).
+	measure 'Clientes KP (Contratos)' = VAR d = [Dia da Carteira] VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) VAR base = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, TREATAS( clientes, Contratos_historico_contratos[cnpj_cpf] ) ) RETURN IF( NOT ISBLANK( d ), CALCULATE( COUNTROWS( SUMMARIZE( Contratos_historico_items, Contratos_historico_contratos[cnpj_cpf] ) ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( base, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 5 } ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: a10db86d-71c9-5e9b-a512-1961ecc46252
+
+	/// Clientes da carteira com item AF Docs ativo no sistema de contratos no dia da carteira (último dia do período com retrato do CRM e Contratos) (contrato 3/5; item de contrato sem responsável financeiro).
+	measure 'Clientes AF Docs (Contratos)' = VAR d = [Dia da Carteira] VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) VAR base = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, TREATAS( clientes, Contratos_historico_contratos[cnpj_cpf] ) ) RETURN IF( NOT ISBLANK( d ), CALCULATE( COUNTROWS( SUMMARIZE( Contratos_historico_items, Contratos_historico_contratos[cnpj_cpf] ) ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( base, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 4 } ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 784c7939-8e9b-59bb-8561-53f0914fe88e
+
+	/// Clientes da carteira com item GB Extra ativo no sistema de contratos no dia da carteira (último dia do período com retrato do CRM e Contratos) (contrato 3/5; item de contrato sem responsável financeiro).
+	measure 'Clientes GB Extra (Contratos)' = VAR d = [Dia da Carteira] VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) VAR base = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, TREATAS( clientes, Contratos_historico_contratos[cnpj_cpf] ) ) RETURN IF( NOT ISBLANK( d ), CALCULATE( COUNTROWS( SUMMARIZE( Contratos_historico_items, Contratos_historico_contratos[cnpj_cpf] ) ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( base, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 3 } ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 9be14f5d-842d-54d2-8bdc-6f6e909122f9
+
+	/// Clientes da carteira com item AF ativo no sistema de contratos no dia da carteira (último dia do período com retrato do CRM e Contratos) (contrato 3/5; item de contrato sem responsável financeiro).
+	measure 'Clientes AF (Contratos)' = VAR d = [Dia da Carteira] VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado" } ) ) VAR base = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, TREATAS( clientes, Contratos_historico_contratos[cnpj_cpf] ) ) RETURN IF( NOT ISBLANK( d ), CALCULATE( COUNTROWS( SUMMARIZE( Contratos_historico_items, Contratos_historico_contratos[cnpj_cpf] ) ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( base, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 2 } ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 3fb84aa8-cc1b-5343-85e7-f9fa437f2232
+
+	/// Mensalidade do item Kappa (Contratos, contrato 3/5) dos clientes com Status KP Ativo no 1º dia do mês com retrato e Contratos (vazio se depois do dia 3). Base do churn financeiro KP.
+	measure 'Mensalidade KP (início do mês)' = VAR d = CALCULATE( MIN( Calendario[Date] ), KEEPFILTERS( Calendario[Carteira no Dia] = 1 ) ) VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, CRM_Backup_Diario[Status KP] = "Ativo" ) VAR base = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, TREATAS( clientes, Contratos_historico_contratos[cnpj_cpf] ) ) RETURN IF( NOT ISBLANK( d ) && DAY( d ) <= 3, CALCULATE( SUMX( GROUPBY( SELECTCOLUMNS( Contratos_historico_items, "@c", RELATED( Contratos_historico_contratos[cnpj_cpf] ), "@i", Contratos_historico_items[item_catalogo_id], "@v", Contratos_historico_items[vr_total] ), [@c], [@i], "@m", MAXX( CURRENTGROUP(), [@v] ) ), [@m] ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( base, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 5 } ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 863927cd-68de-5831-b5d1-4d0c5d6eb156
+
+	/// Mensalidade Alfa (AF + GB Extra + AF Docs + Pacote de GB, Contratos, contrato 3/5) dos clientes AF ativos no 1º dia do mês com retrato do CRM e Contratos (vazio se esse dia for depois do dia 3). Base do churn financeiro AF.
+	measure 'Mensalidade AF (início do mês)' = VAR d = CALCULATE( MIN( Calendario[Date] ), KEEPFILTERS( Calendario[Carteira no Dia] = 1 ) ) VAR clientes = CALCULATETABLE( DISTINCT( CRM_Backup_Diario[CNPJ (dígitos)] ), CRM_Backup_Diario[Periodo] = d, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado", "Suspenso" } ), CRM_Backup_Diario[Só Kappa] = "Não" ) VAR base = CALCULATETABLE( DISTINCT( Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, TREATAS( clientes, Contratos_historico_contratos[cnpj_cpf] ) ) RETURN IF( NOT ISBLANK( d ) && DAY( d ) <= 3, CALCULATE( SUMX( GROUPBY( SELECTCOLUMNS( Contratos_historico_items, "@c", RELATED( Contratos_historico_contratos[cnpj_cpf] ), "@i", Contratos_historico_items[item_catalogo_id], "@v", Contratos_historico_items[vr_total] ), [@c], [@i], "@m", MAXX( CURRENTGROUP(), [@v] ) ), [@m] ), Contratos_historico_contratos[periodo] = d, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( base, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 2, 3, 4, 6 } ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 1ca42397-85f5-58ce-849b-b31b3d98e48f
+
+	column periodo
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: c650e511-5a34-4c50-b0a0-3da9757ffa34
+		summarizeBy: none
+		sourceColumn: periodo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 1d9df5c3-a768-4fd8-8ddc-192c012fbb03
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column empresa_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 17bc6673-3208-41c6-a9ff-15dfaff93a09
+		summarizeBy: sum
+		sourceColumn: empresa_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column juridico
+		dataType: int64
+		formatString: 0
+		lineageTag: 7ae40d9f-4b48-47fd-87e6-5d9c57d7a4d2
+		summarizeBy: sum
+		sourceColumn: juridico
+
+		annotation SummarizationSetBy = Automatic
+
+	column razao_social
+		dataType: string
+		lineageTag: c77eddd0-5b73-4906-a856-1caa7f2a4c83
+		summarizeBy: none
+		sourceColumn: razao_social
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome_fantasia
+		dataType: string
+		lineageTag: 3d4ac066-cc86-4057-8a93-c255c0d1a52a
+		summarizeBy: none
+		sourceColumn: nome_fantasia
+
+		annotation SummarizationSetBy = Automatic
+
+	column cnpj_cpf
+		dataType: string
+		lineageTag: 975eadec-9cfc-4c4a-b2b4-13509693121f
+		summarizeBy: none
+		sourceColumn: cnpj_cpf
+
+		annotation SummarizationSetBy = Automatic
+
+	column ie
+		dataType: string
+		lineageTag: 15837c55-f376-4877-9744-f970aefbff46
+		summarizeBy: none
+		sourceColumn: ie
+
+		annotation SummarizationSetBy = Automatic
+
+	column im
+		dataType: string
+		lineageTag: 43428daa-3bc4-49a8-b388-8d86c1a1b665
+		summarizeBy: none
+		sourceColumn: im
+
+		annotation SummarizationSetBy = Automatic
+
+	column logradouro
+		dataType: string
+		lineageTag: f8a945be-9215-496a-9674-7f254982d183
+		summarizeBy: none
+		sourceColumn: logradouro
+
+		annotation SummarizationSetBy = Automatic
+
+	column numero
+		dataType: string
+		lineageTag: 660d11aa-97f8-448d-95c4-6fe314b44e3a
+		summarizeBy: none
+		sourceColumn: numero
+
+		annotation SummarizationSetBy = Automatic
+
+	column complemento
+		dataType: string
+		lineageTag: 9b2d9029-5e71-489a-8b94-8200a4181bcd
+		summarizeBy: none
+		sourceColumn: complemento
+
+		annotation SummarizationSetBy = Automatic
+
+	column bairro
+		dataType: string
+		lineageTag: 65da8571-4cda-4db1-8da0-343cdeb677f7
+		summarizeBy: none
+		sourceColumn: bairro
+
+		annotation SummarizationSetBy = Automatic
+
+	column cidade
+		dataType: string
+		lineageTag: f4fe11e9-39f6-471b-a673-970e378d5697
+		summarizeBy: none
+		sourceColumn: cidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column uf
+		dataType: string
+		lineageTag: 4a3ec774-d703-48e5-96f3-58e5351680a6
+		summarizeBy: none
+		sourceColumn: uf
+
+		annotation SummarizationSetBy = Automatic
+
+	column cep
+		dataType: string
+		lineageTag: 5afb71d1-d569-466b-9c45-b0eef43e32d9
+		summarizeBy: none
+		sourceColumn: cep
+
+		annotation SummarizationSetBy = Automatic
+
+	column gerente_conta_id
+		dataType: int64
+		formatString: 0
+		lineageTag: d828527e-d406-49cf-b34c-ed116dcb1c9e
+		summarizeBy: sum
+		sourceColumn: gerente_conta_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column mercado_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 051eaca5-a3fc-4240-a83a-9051c230b80c
+		summarizeBy: sum
+		sourceColumn: mercado_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column plano_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 0396e4e8-f6c6-49cb-a5e4-36b17bb06623
+		summarizeBy: sum
+		sourceColumn: plano_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column periodicidade_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 2942dea0-5774-46a9-8f30-c497837a7050
+		summarizeBy: sum
+		sourceColumn: periodicidade_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column indice_reajuste_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 95bae50b-9579-4230-a872-ee89d389e256
+		summarizeBy: sum
+		sourceColumn: indice_reajuste_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column inicio_data
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: dc6743b7-0791-4dd0-a572-e37269c4e5bd
+		summarizeBy: none
+		sourceColumn: inicio_data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column reajuste_mes
+		dataType: int64
+		formatString: 0
+		lineageTag: 3d14cc0e-aa61-489c-97dd-3df30b63a773
+		summarizeBy: sum
+		sourceColumn: reajuste_mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column reajuste_pct_adicional
+		dataType: double
+		lineageTag: 52648af7-91a6-4392-a22f-915d1c007301
+		summarizeBy: sum
+		sourceColumn: reajuste_pct_adicional
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column cancto_data
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 0cf1f1d5-312f-44c2-8de4-a50dbe15d1a4
+		summarizeBy: none
+		sourceColumn: cancto_data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column cancto_motivo
+		dataType: string
+		lineageTag: 0035048c-3e4f-4dc4-a84f-6e3a64659ed3
+		summarizeBy: none
+		sourceColumn: cancto_motivo
+
+		annotation SummarizationSetBy = Automatic
+
+	column parcela_dt_primeira
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: ee877187-04b4-4694-a88b-93c30140df70
+		summarizeBy: none
+		sourceColumn: parcela_dt_primeira
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column parcela_dt_proxima
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: c9f0ea75-742b-4201-8f40-349d11d30bd5
+		summarizeBy: none
+		sourceColumn: parcela_dt_proxima
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column observacao
+		dataType: string
+		lineageTag: a5ffb7a8-b8ad-4346-b086-c8153a85619f
+		summarizeBy: none
+		sourceColumn: observacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column status_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 1b813ac2-decd-43a6-8703-59bab7904d63
+		summarizeBy: sum
+		sourceColumn: status_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column destacar_imp_federais_nf
+		dataType: int64
+		formatString: 0
+		lineageTag: 1202167d-20e7-452f-9359-9675a07b6cd6
+		summarizeBy: sum
+		sourceColumn: destacar_imp_federais_nf
+
+		annotation SummarizationSetBy = Automatic
+
+	column forma_pagamento_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 90957abe-391d-402e-9351-499cfa7b305b
+		summarizeBy: sum
+		sourceColumn: forma_pagamento_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column financeiro_resp_id
+		dataType: int64
+		formatString: 0
+		lineageTag: ef406051-4662-4df9-8762-c63ef616db8b
+		summarizeBy: sum
+		sourceColumn: financeiro_resp_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 4d74219f-3113-472b-9c39-c253f3a702b2
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: e0138cf2-5d13-49c4-b38d-89713296ad68
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendedor_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 101bc2b0-8d59-4fe7-babb-9d85cfbe7532
+		summarizeBy: sum
+		sourceColumn: vendedor_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column gera_nfe
+		dataType: int64
+		formatString: 0
+		lineageTag: 99a7e956-252c-4c7f-801c-50a883c2028f
+		summarizeBy: sum
+		sourceColumn: gera_nfe
+
+		annotation SummarizationSetBy = Automatic
+
+	column simples_nacional
+		dataType: int64
+		formatString: 0
+		lineageTag: 81723013-479e-45a5-8e10-21f3dbb086c5
+		summarizeBy: sum
+		sourceColumn: simples_nacional
+
+		annotation SummarizationSetBy = Automatic
+
+	column pais
+		dataType: string
+		lineageTag: 750d9a15-915a-436a-b401-8c67b2b223d9
+		summarizeBy: none
+		sourceColumn: pais
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_cancto_contrato_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 8388905b-aa70-495f-9c4b-621d09c27c1b
+		summarizeBy: sum
+		sourceColumn: tipo_cancto_contrato_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column publicacao_cliente_id
+		dataType: int64
+		formatString: 0
+		lineageTag: ca525576-a2d5-4f4d-b393-2557b8909e75
+		summarizeBy: sum
+		sourceColumn: publicacao_cliente_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column publicacao_fornecedor
+		dataType: string
+		lineageTag: 3e7ed8bf-b42e-4abe-9764-b689055de8ae
+		summarizeBy: none
+		sourceColumn: publicacao_fornecedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column empresa_publica
+		dataType: int64
+		formatString: 0
+		lineageTag: d5672f16-32fa-4b92-9f80-7e9ae2f6025f
+		summarizeBy: sum
+		sourceColumn: empresa_publica
+
+		annotation SummarizationSetBy = Automatic
+
+	column gera_nfe_pos_baixa
+		dataType: int64
+		formatString: 0
+		lineageTag: d6269238-e429-44b4-b64f-5e71c577cfff
+		summarizeBy: sum
+		sourceColumn: gera_nfe_pos_baixa
+
+		annotation SummarizationSetBy = Automatic
+
+	column subtipo_cancto_contrato_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 5bd47d39-13aa-4e6e-b966-b68a4679d053
+		summarizeBy: sum
+		sourceColumn: subtipo_cancto_contrato_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column cancto_data_agenda
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: fe322fa8-47a9-4ebe-b551-15571d7f09ea
+		summarizeBy: none
+		sourceColumn: cancto_data_agenda
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column segmento_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 33083c79-6df5-455f-ae91-af59b19d753a
+		summarizeBy: sum
+		sourceColumn: segmento_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column risco_churn
+		dataType: string
+		lineageTag: ce7e00bb-8262-4242-a792-697bc3e43a8d
+		summarizeBy: none
+		sourceColumn: risco_churn
+
+		annotation SummarizationSetBy = Automatic
+
+	column porte_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 3c8da1dc-aa76-41f3-aa0e-c58504db00f9
+		summarizeBy: sum
+		sourceColumn: porte_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column servico_retencao_aliquota
+		dataType: double
+		lineageTag: 6c4c6658-2ec6-45ce-b0da-7981654a3099
+		summarizeBy: sum
+		sourceColumn: servico_retencao_aliquota
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column descricao_adicional_nf
+		dataType: string
+		lineageTag: 7fc51dee-6d95-4c1a-a0c1-fe4e26aaf1d5
+		summarizeBy: none
+		sourceColumn: descricao_adicional_nf
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_contrato
+		dataType: string
+		lineageTag: e2257e31-28f3-45a4-8d96-bb7da118f4f7
+		summarizeBy: none
+		sourceColumn: tipo_contrato
+
+		annotation SummarizationSetBy = Automatic
+
+	column nat_juridica_codigo
+		dataType: string
+		lineageTag: 57e08e8d-d32f-4e5d-ba60-15be385838d7
+		summarizeBy: none
+		sourceColumn: nat_juridica_codigo
+
+		annotation SummarizationSetBy = Automatic
+
+	column nat_juridica_descricao
+		dataType: string
+		lineageTag: 61ca30f4-586f-499b-a867-9987b825e9f8
+		summarizeBy: none
+		sourceColumn: nat_juridica_descricao
+
+		annotation SummarizationSetBy = Automatic
+
+	column cnae_principal_codigo
+		dataType: string
+		lineageTag: 8990186c-6665-48a6-9d60-a7a9e498db69
+		summarizeBy: none
+		sourceColumn: cnae_principal_codigo
+
+		annotation SummarizationSetBy = Automatic
+
+	column cnae_principal_descricao
+		dataType: string
+		lineageTag: 4dac0d99-7507-4668-b644-b981ccefeec8
+		summarizeBy: none
+		sourceColumn: cnae_principal_descricao
+
+		annotation SummarizationSetBy = Automatic
+
+	column simples_opcao_data
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 49e1010a-494f-446c-aba9-97c1ce9c5f73
+		summarizeBy: none
+		sourceColumn: simples_opcao_data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column simples_exclusao_data
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 6e6d9e13-4ad6-458f-8df0-9b5de19aa7bc
+		summarizeBy: none
+		sourceColumn: simples_exclusao_data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column mei_opcao_data
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 2aa7d19c-7d9c-46b4-aa74-fe3262f75a89
+		summarizeBy: none
+		sourceColumn: mei_opcao_data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column mei_exclusao_data
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: cc762bed-6e03-48dd-bf48-5006b658a033
+		summarizeBy: none
+		sourceColumn: mei_exclusao_data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column fatura_recorrente
+		dataType: int64
+		formatString: 0
+		lineageTag: 725f39e9-8bc3-4d49-ab12-a6de70464cfa
+		summarizeBy: sum
+		sourceColumn: fatura_recorrente
+
+		annotation SummarizationSetBy = Automatic
+
+	column fatura_dt_proxima
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 4b8eb419-9b75-4098-a854-331351904e36
+		summarizeBy: none
+		sourceColumn: fatura_dt_proxima
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column referencia_mxm
+		dataType: string
+		lineageTag: 0b002a55-cefa-46a8-bcc0-f63bfc0fa52d
+		summarizeBy: none
+		sourceColumn: referencia_mxm
+
+		annotation SummarizationSetBy = Automatic
+
+	column vr_total_com_desconto
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 437d11c3-3ae7-4b50-8fc0-db7387771c24
+		summarizeBy: sum
+		sourceColumn: vr_total_com_desconto
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column items_total
+		dataType: double
+		lineageTag: d1cc2523-6512-44b7-905a-f8b0b1ac495a
+		summarizeBy: sum
+		sourceColumn: items_total
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column items_ativos_mensalidade
+		dataType: double
+		lineageTag: 1ec35ad1-b21b-4ae1-a24e-90bec5736bab
+		summarizeBy: sum
+		sourceColumn: items_ativos_mensalidade
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Chave
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4f714589-a376-5ddb-ba85-04581cb789ee
+		summarizeBy: none
+		sourceColumn: Chave
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Contratos_historico_contratos = m
+		mode: import
+		queryGroup: Contratos
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Contratos_historico_contratos",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"periodo", type datetime}, {"id", Int64.Type}, {"empresa_id", Int64.Type}, {"juridico", Int64.Type}, {"razao_social", type text}, {"nome_fantasia", type text}, {"cnpj_cpf", type text}, {"ie", type text}, {"im", type text}, {"logradouro", type text}, {"numero", type text}, {"complemento", type text}, {"bairro", type text}, {"cidade", type text}, {"uf", type text}, {"cep", type text}, {"gerente_conta_id", Int64.Type}, {"mercado_id", Int64.Type}, {"plano_id", Int64.Type}, {"periodicidade_id", Int64.Type}, {"indice_reajuste_id", Int64.Type}, {"inicio_data", type datetime}, {"reajuste_mes", Int64.Type}, {"reajuste_pct_adicional", type number}, {"cancto_data", type datetime}, {"cancto_motivo", type text}, {"parcela_dt_primeira", type datetime}, {"parcela_dt_proxima", type datetime}, {"observacao", type text}, {"status_id", Int64.Type}, {"destacar_imp_federais_nf", Int64.Type}, {"forma_pagamento_id", Int64.Type}, {"financeiro_resp_id", Int64.Type}, {"created_at", type datetime}, {"updated_at", type datetime}, {"vendedor_id", Int64.Type}, {"gera_nfe", Int64.Type}, {"simples_nacional", Int64.Type}, {"pais", type text}, {"tipo_cancto_contrato_id", Int64.Type}, {"publicacao_cliente_id", Int64.Type}, {"publicacao_fornecedor", type text}, {"empresa_publica", Int64.Type}, {"gera_nfe_pos_baixa", Int64.Type}, {"subtipo_cancto_contrato_id", Int64.Type}, {"cancto_data_agenda", type datetime}, {"segmento_id", Int64.Type}, {"risco_churn", type text}, {"porte_id", Int64.Type}, {"servico_retencao_aliquota", type number}, {"descricao_adicional_nf", type text}, {"tipo_contrato", type text}, {"nat_juridica_codigo", type text}, {"nat_juridica_descricao", type text}, {"cnae_principal_codigo", type text}, {"cnae_principal_descricao", type text}, {"simples_opcao_data", type datetime}, {"simples_exclusao_data", type datetime}, {"mei_opcao_data", type datetime}, {"mei_exclusao_data", type datetime}, {"fatura_recorrente", Int64.Type}, {"fatura_dt_proxima", type datetime}, {"referencia_mxm", type text}, {"vr_total_com_desconto", type number}, {"items_total", type number}, {"items_ativos_mensalidade", type number}, {"Chave", Int64.Type}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

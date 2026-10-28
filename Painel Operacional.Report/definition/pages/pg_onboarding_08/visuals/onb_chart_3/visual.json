@@ -1,0 +1,400 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "onb_chart_3",
+  "position": {
+    "x": 292,
+    "y": 692,
+    "z": 32000,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 32000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "CS"
+                }
+              },
+              "queryRef": "dCarteira.CS",
+              "nativeQueryRef": "CS",
+              "displayName": "Responsável"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Equipe do CS"
+                }
+              },
+              "queryRef": "dCarteira.Equipe do CS",
+              "nativeQueryRef": "Equipe do CS",
+              "displayName": "Equipe"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Clientes na Carteira"
+                }
+              },
+              "queryRef": "dCarteira.Clientes na Carteira",
+              "nativeQueryRef": "Clientes na Carteira",
+              "displayName": "Clientes"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "% Clientes com Contato em Dia"
+                }
+              },
+              "queryRef": "dCarteira.% Clientes com Contato em Dia",
+              "nativeQueryRef": "% Clientes com Contato em Dia",
+              "displayName": "% em dia"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Dias sem Contato (média)"
+                }
+              },
+              "queryRef": "dCarteira.Dias sem Contato (média)",
+              "nativeQueryRef": "Dias sem Contato (média)",
+              "displayName": "Dias s/ contato"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Dias desde o Registro (média)"
+                }
+              },
+              "queryRef": "dCarteira.Dias desde o Registro (média)",
+              "nativeQueryRef": "Dias desde o Registro (média)",
+              "displayName": "Idade (dias)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dCarteira"
+                  }
+                },
+                "Property": "Clientes na Carteira"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "252.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.CS"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "252.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Equipe do CS"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "71.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Clientes na Carteira"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.% Clientes com Contato em Dia"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Dias sem Contato (média)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Dias desde o Registro (média)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Carteira por responsável'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Retrato mais recente do CRM (não muda com o período) · ativos e bloqueados'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

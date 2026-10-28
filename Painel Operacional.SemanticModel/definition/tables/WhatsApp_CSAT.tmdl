@@ -1,0 +1,150 @@
+table WhatsApp_CSAT
+	lineageTag: 2ee94702-7935-5201-b97e-1aab8651e417
+
+	/// Segue Tipo, Status e Assunto do atendimento (filtros da tela) pelo ticket do WhatsApp.
+	measure 'Respostas CSAT' = VAR t = CALCULATETABLE( VALUES( WhatsApp_Atendimentos[ticket_whatsapp_id] ), REMOVEFILTERS( Calendario ), REMOVEFILTERS( dColaboradorMes ), WhatsApp_Atendimentos[ticket_whatsapp_id] <> "" ) RETURN IF( ISFILTERED( WhatsApp_Atendimentos[Tipo] ) || ISFILTERED( WhatsApp_Atendimentos[Status] ) || ISFILTERED( WhatsApp_Atendimentos[Assunto] ), CALCULATE( COUNTROWS( WhatsApp_CSAT ), KEEPFILTERS( TREATAS( t, WhatsApp_CSAT[ticket_whatsapp_id] ) ) ), COUNTROWS( WhatsApp_CSAT ) )
+		formatString: #,0
+		displayFolder: WhatsApp
+		lineageTag: bec76bd4-6e7c-5859-b004-a002bb54ef70
+
+	/// Segue Tipo, Status e Assunto do atendimento (filtros da tela) pelo ticket do WhatsApp.
+	measure 'CSAT Médio' = VAR t = CALCULATETABLE( VALUES( WhatsApp_Atendimentos[ticket_whatsapp_id] ), REMOVEFILTERS( Calendario ), REMOVEFILTERS( dColaboradorMes ), WhatsApp_Atendimentos[ticket_whatsapp_id] <> "" ) RETURN IF( ISFILTERED( WhatsApp_Atendimentos[Tipo] ) || ISFILTERED( WhatsApp_Atendimentos[Status] ) || ISFILTERED( WhatsApp_Atendimentos[Assunto] ), CALCULATE( AVERAGEX( WhatsApp_CSAT, MAX( WhatsApp_CSAT[Nota], 1 ) ), KEEPFILTERS( TREATAS( t, WhatsApp_CSAT[ticket_whatsapp_id] ) ) ), AVERAGEX( WhatsApp_CSAT, MAX( WhatsApp_CSAT[Nota], 1 ) ) )
+		formatString: 0.00
+		displayFolder: WhatsApp
+		lineageTag: 48804e70-cefa-57ee-b3bc-3ac6fba7ee67
+
+	measure '% Notas 9 e 10' = DIVIDE( CALCULATE( [Respostas CSAT], WhatsApp_CSAT[Nota] >= 9 ), [Respostas CSAT] )
+		formatString: 0.00%
+		displayFolder: WhatsApp
+		lineageTag: 49166906-b42b-5e08-bd25-13fa1306ee37
+
+	column id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 94170a5a-a659-5328-ab49-1628c2d1a9a4
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column ticket_whatsapp_id
+		dataType: string
+		isHidden
+		lineageTag: f76f2f8f-2396-5450-a992-63c69efc96a2
+		summarizeBy: none
+		sourceColumn: ticket_whatsapp_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column contato_identity
+		dataType: string
+		isHidden
+		lineageTag: a331c899-49b2-5ea7-8ec6-cc2d535e7278
+		summarizeBy: none
+		sourceColumn: contato_identity
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tipo
+		dataType: string
+		lineageTag: 001cd153-0ecd-5c1c-a0b9-f1d30e2b31c6
+		summarizeBy: none
+		sourceColumn: Tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Respondido em'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: b65a188c-9113-57d4-92f7-1e38079bf3e4
+		summarizeBy: none
+		sourceColumn: Respondido em
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 7a44d39f-6670-557d-a458-fdb1337c84bd
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+	column agente_email
+		dataType: string
+		isHidden
+		lineageTag: e9990277-4e9a-5e6c-9b6d-fd7ed98456b4
+		summarizeBy: none
+		sourceColumn: agente_email
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nota
+		dataType: int64
+		formatString: 0
+		lineageTag: 3249f402-6ca1-5482-adc7-7781830c04cb
+		summarizeBy: none
+		sourceColumn: Nota
+
+		annotation SummarizationSetBy = Automatic
+
+	column Vínculo
+		dataType: string
+		lineageTag: 1ebee771-6393-59b8-8292-6ed57fc1484a
+		summarizeBy: none
+		sourceColumn: Vínculo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor = RELATED( dColaboradorMes[Setor] )
+		dataType: string
+		lineageTag: 97d5895f-0847-58bc-9406-6886951e525a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Extracao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: d43b4da6-9d97-5073-b3b5-7f87c53cf42b
+		summarizeBy: none
+		sourceColumn: Extracao
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês da Composição' = ( VAR _d = WhatsApp_CSAT[Data] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Pessoa
+		lineageTag: 388f69da-348a-5a14-98f0-9f3392370822
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Chave Pessoa Mês' = IF( TRIM( WhatsApp_CSAT[agente_email] ) <> "", LOWER( TRIM( WhatsApp_CSAT[agente_email] ) ) & "|" & WhatsApp_CSAT[Mês da Composição] )
+		dataType: string
+		isHidden
+		displayFolder: Pessoa
+		lineageTag: 638b3511-a525-5f89-bab5-23967770d8a8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition WhatsApp_CSAT = m
+		mode: import
+		queryGroup: WhatsApp
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="WhatsApp_CSAT",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"id", Int64.Type}, {"ticket_whatsapp_id", type text}, {"contato_identity", type text}, {"Tipo", type text}, {"Respondido em", type datetime}, {"Data", type datetime}, {"agente_email", type text}, {"Nota", Int64.Type}, {"Vínculo", type text}, {"Extracao", type datetime}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

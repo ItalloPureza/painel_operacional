@@ -1,0 +1,661 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
+  "name": "rprod_chart_1",
+  "position": {
+    "x": 292,
+    "y": 656,
+    "z": 60180,
+    "width": 1596,
+    "height": 396,
+    "tabOrder": 60180
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaboradorMes"
+                    }
+                  },
+                  "Property": "Setor"
+                }
+              },
+              "queryRef": "dColaboradorMes.Setor",
+              "nativeQueryRef": "Setor",
+              "displayName": "Time"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Clientes AF no Início do Mês (resumo produtos)"
+                }
+              },
+              "queryRef": "dColaborador.Clientes AF no Início do Mês (resumo produtos)",
+              "nativeQueryRef": "Clientes AF no Início do Mês (resumo produtos)",
+              "displayName": "AF início do mês"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Clientes AF Atuais (resumo produtos)"
+                }
+              },
+              "queryRef": "dColaborador.Clientes AF Atuais (resumo produtos)",
+              "nativeQueryRef": "Clientes AF Atuais (resumo produtos)",
+              "displayName": "AF atuais"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "% Uso eContínuo (resumo produtos)"
+                }
+              },
+              "queryRef": "dColaborador.% Uso eContínuo (resumo produtos)",
+              "nativeQueryRef": "% Uso eContínuo (resumo produtos)",
+              "displayName": "% eContínuo"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Solicitações de Cancelamento AF (resumo produtos)"
+                }
+              },
+              "queryRef": "dColaborador.Solicitações de Cancelamento AF (resumo produtos)",
+              "nativeQueryRef": "Solicitações de Cancelamento AF (resumo produtos)",
+              "displayName": "AF solicitações"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Clientes AF Cancelados (resumo produtos)"
+                }
+              },
+              "queryRef": "dColaborador.Clientes AF Cancelados (resumo produtos)",
+              "nativeQueryRef": "Clientes AF Cancelados (resumo produtos)",
+              "displayName": "AF cancelados"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "% Churn AF (resumo produtos)"
+                }
+              },
+              "queryRef": "dColaborador.% Churn AF (resumo produtos)",
+              "nativeQueryRef": "% Churn AF (resumo produtos)",
+              "displayName": "AF % churn"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Receita Perdida AF (resumo produtos)"
+                }
+              },
+              "queryRef": "dColaborador.Receita Perdida AF (resumo produtos)",
+              "nativeQueryRef": "Receita Perdida AF (resumo produtos)",
+              "displayName": "AF receita perdida"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Clientes KP no Início do Mês (resumo produtos)"
+                }
+              },
+              "queryRef": "dColaborador.Clientes KP no Início do Mês (resumo produtos)",
+              "nativeQueryRef": "Clientes KP no Início do Mês (resumo produtos)",
+              "displayName": "KP início do mês"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Clientes KP Atuais (resumo produtos)"
+                }
+              },
+              "queryRef": "dColaborador.Clientes KP Atuais (resumo produtos)",
+              "nativeQueryRef": "Clientes KP Atuais (resumo produtos)",
+              "displayName": "KP atuais"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Treinamentos KP (resumo produtos)"
+                }
+              },
+              "queryRef": "dColaborador.Treinamentos KP (resumo produtos)",
+              "nativeQueryRef": "Treinamentos KP (resumo produtos)",
+              "displayName": "KP treinamentos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Solicitações de Cancelamento KP (resumo produtos)"
+                }
+              },
+              "queryRef": "dColaborador.Solicitações de Cancelamento KP (resumo produtos)",
+              "nativeQueryRef": "Solicitações de Cancelamento KP (resumo produtos)",
+              "displayName": "KP solicitações"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Clientes KP Cancelados (resumo produtos)"
+                }
+              },
+              "queryRef": "dColaborador.Clientes KP Cancelados (resumo produtos)",
+              "nativeQueryRef": "Clientes KP Cancelados (resumo produtos)",
+              "displayName": "KP cancelados"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dColaboradorMes"
+                  }
+                },
+                "Property": "Setor"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "602.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaboradorMes.Setor"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Clientes AF no Início do Mês (resumo produtos)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Clientes AF Atuais (resumo produtos)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "78.8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.% Uso eContínuo (resumo produtos)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "100.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Solicitações de Cancelamento AF (resumo produtos)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "86.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Clientes AF Cancelados (resumo produtos)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.% Churn AF (resumo produtos)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "120.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Receita Perdida AF (resumo produtos)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Clientes KP no Início do Mês (resumo produtos)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Clientes KP Atuais (resumo produtos)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "100.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Treinamentos KP (resumo produtos)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "100.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Solicitações de Cancelamento KP (resumo produtos)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "86.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Clientes KP Cancelados (resumo produtos)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Por time'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Mês mais recente do período · carteira pelo CS do cliente e pedidos pelo treinador/atendente, pelo time da pessoa na composição do mês (a soma dos times não fecha com a empresa: há clientes e pedidos sem pessoa)'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "competenciaCartao",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Competência"
+              }
+            },
+            "Property": "Competência"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "c",
+              "Entity": "Competência",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "c"
+                          }
+                        },
+                        "Property": "Competência"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Mês mais recente'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "isHiddenInViewMode": true
+      }
+    ]
+  }
+}

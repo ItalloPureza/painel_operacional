@@ -1,0 +1,875 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 568,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 6766,
+            "y": 360.31961239053749
+          },
+          "nodeIndex": "CRM_Atividades",
+          "nodeLineageTag": "dcd77fa4-c95e-4bda-a38d-fa7860f72ccc",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 7050,
+            "y": 360.31961239053749
+          },
+          "nodeIndex": "CRM_Backup_Diario",
+          "nodeLineageTag": "a8b5f9d0-c2c1-4cb2-8763-a42eb4cae202",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 568,
+            "y": 471.31961239053749
+          },
+          "nodeIndex": "Atualizacao",
+          "nodeLineageTag": "ab29ba99-4ba6-48af-89d5-c7928da828ff",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 852,
+            "y": 375.31961239053749
+          },
+          "nodeIndex": "Gestao_Contratos_AF_Prod",
+          "nodeLineageTag": "546ba0e6-236a-41fd-acdc-0cb973723b37",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1136,
+            "y": 373.31961239053749
+          },
+          "nodeIndex": "Gestao_Contratos_Tipos_Contrato",
+          "nodeLineageTag": "15de8099-c0c6-44d0-a32c-4a9500a9a888",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1420,
+            "y": 375.31961239053749
+          },
+          "nodeIndex": "Gestao_Contratos_Gama_Prod",
+          "nodeLineageTag": "b27eff47-2367-4294-8c93-8d4df3613fb1",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1704,
+            "y": 373.31961239053749
+          },
+          "nodeIndex": "Ligacoes_API",
+          "nodeLineageTag": "9acfe0eb-0335-4062-92af-88266eb09c20",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1988,
+            "y": 373.31961239053749
+          },
+          "nodeIndex": "Helpdesk_Cancelamentos",
+          "nodeLineageTag": "cfd80fcd-f661-4f49-a695-1de34c84df97",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2272,
+            "y": 423.31961239053749
+          },
+          "nodeIndex": "Helpdesk_Chat",
+          "nodeLineageTag": "5b620661-6621-4db1-8fa4-ad9b191c4311",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2556,
+            "y": 435.31961239053749
+          },
+          "nodeIndex": "Helpdesk_Clientes",
+          "nodeLineageTag": "ad5d589c-a797-4993-ae21-25fa301d8b10",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 334,
+            "y": 349.31961239053749
+          },
+          "nodeIndex": "Helpdesk_Clientes_Empresas",
+          "nodeLineageTag": "39d9cd0d-93de-497e-a009-63f97cb4615b",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 385.31961239053749
+          },
+          "nodeIndex": "Helpdesk_Empresas",
+          "nodeLineageTag": "07e14140-146e-460f-90f5-feed7e58b45c",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2840,
+            "y": 399.31961239053749
+          },
+          "nodeIndex": "Helpdesk_Survey",
+          "nodeLineageTag": "6460de4a-de06-43b5-8dd5-fd90c7cc2b26",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3124,
+            "y": 373.31961239053749
+          },
+          "nodeIndex": "Helpdesk_Tickets",
+          "nodeLineageTag": "b5a6e783-9a57-4315-be5b-257f1016e013",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3408,
+            "y": 373.31961239053749
+          },
+          "nodeIndex": "Contratos_historico_contratos",
+          "nodeLineageTag": "2575e64f-4576-4aa6-86df-99b523fdf1a5",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3692,
+            "y": 399.31961239053749
+          },
+          "nodeIndex": "Contratos_historico_emails",
+          "nodeLineageTag": "39a11cf6-a120-4cd7-90f3-72fc995aa350",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3976,
+            "y": 399.31961239053749
+          },
+          "nodeIndex": "Contratos_historico_fones",
+          "nodeLineageTag": "94073b88-7599-4725-b2c0-a21ab3afc74d",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4260,
+            "y": 373.31961239053749
+          },
+          "nodeIndex": "Contratos_historico_gerente_conta",
+          "nodeLineageTag": "df8aa143-9273-4f97-8b90-5de09b57dad7",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4544,
+            "y": 399.31961239053749
+          },
+          "nodeIndex": "Contratos_historico_indice_reajuste",
+          "nodeLineageTag": "efe623d3-7cbe-4e20-bad4-b27df17704e6",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4828,
+            "y": 373.31961239053749
+          },
+          "nodeIndex": "Contratos_historico_item_catalogo",
+          "nodeLineageTag": "bdaf1956-ff6f-4213-bca4-23871b0fb0d6",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5112,
+            "y": 373.31961239053749
+          },
+          "nodeIndex": "Contratos_historico_items",
+          "nodeLineageTag": "7247f345-fa92-4a6a-96c0-ab96baad18cf",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5396,
+            "y": 387.31961239053749
+          },
+          "nodeIndex": "Contratos_historico_mercado",
+          "nodeLineageTag": "c3898aaa-eb7c-4ccc-90ac-c24b763f11ed",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5680,
+            "y": 375.31961239053749
+          },
+          "nodeIndex": "Contratos_historico_periodicidade",
+          "nodeLineageTag": "8be6be5e-7214-4b7c-9202-12e89f51beef",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5964,
+            "y": 375.31961239053749
+          },
+          "nodeIndex": "Contratos_historico_plano",
+          "nodeLineageTag": "8a38000a-836c-4462-aa5d-65b252bf5d91",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 6248,
+            "y": 411.31961239053749
+          },
+          "nodeIndex": "Contratos_historico_status",
+          "nodeLineageTag": "52e00453-4d04-4bf8-a13e-6d9d51a0e330",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 6532,
+            "y": 373.31961239053749
+          },
+          "nodeIndex": "Contratos_historico_Vendedor",
+          "nodeLineageTag": "029aa13d-2353-43cc-b5be-ced99da0e0ad",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 7568,
+            "y": 409.81961239053749
+          },
+          "nodeIndex": "Calendario",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 7334,
+            "y": 386.31961239053749
+          },
+          "nodeIndex": "Time_Usuarios",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 7802,
+            "y": 385.06961239053749
+          },
+          "nodeIndex": "Time_Equipes",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 8036,
+            "y": 407.94461239053749
+          },
+          "nodeIndex": "dMapaSetor",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 8270,
+            "y": 406.25711239053749
+          },
+          "nodeIndex": "dSetorPagina",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 9137.5294941395878,
+            "y": 303.78515333643145
+          },
+          "nodeIndex": "WhatsApp_Atendimentos",
+          "nodeLineageTag": "1fcbb2e2-217f-5a04-808e-d18ea2d693dd",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 8909.1097465470557,
+            "y": -50
+          },
+          "nodeIndex": "WhatsApp_Contatos",
+          "nodeLineageTag": "2c69e326-6409-5585-8984-1e400246ba72",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 8554,
+            "y": 303.66932596752162
+          },
+          "nodeIndex": "WhatsApp_CSAT",
+          "nodeLineageTag": "2ee94702-7935-5201-b97e-1aab8651e417",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 8784.2855409477525,
+            "y": 657.451724781075
+          },
+          "nodeIndex": "WhatsApp_Envios",
+          "nodeLineageTag": "697104a2-31a8-57f0-a610-aac69e4c06a3",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 9371.5294941395878,
+            "y": 439.72586239053749
+          },
+          "nodeIndex": "dAcessoSetor",
+          "nodeLineageTag": "c6d45385-bf22-5e02-93cb-a98deb246068",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 9655.5294941395878,
+            "y": 353.72586239053749
+          },
+          "nodeIndex": "dCarteira",
+          "nodeLineageTag": "3fd4bfb7-b42a-5e18-9a4d-ca52633c6d3d",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 8850.747549602198,
+            "y": 303.73024127352306
+          },
+          "nodeIndex": "dColaborador",
+          "nodeLineageTag": "2ab0e70a-982b-5af4-ac27-5b5ed0e64a1e",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 9939.5294941395878,
+            "y": 439.72586239053749
+          },
+          "nodeIndex": "dDeParaOwnerTeam",
+          "nodeLineageTag": "53545d6e-6299-4071-a440-8b6b02ca15d1",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 10223.529494139588,
+            "y": 439.72586239053749
+          },
+          "nodeIndex": "dPaginaTabelas",
+          "nodeLineageTag": "2e5501a1-4fcd-5df3-bb49-a17fab0885ef",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 10507.529494139588,
+            "y": 427.72586239053749
+          },
+          "nodeIndex": "dPessoaSetor",
+          "nodeLineageTag": "16b9f25e-bbf3-4e6d-8e0b-d2023441ae66",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 10791.529494139588,
+            "y": 353.72586239053749
+          },
+          "nodeIndex": "dSaudeTabelas",
+          "nodeLineageTag": "94db0f79-b769-588a-9807-94be307ee156",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 11075.529494139588,
+            "y": 353.72586239053749
+          },
+          "nodeIndex": "dTTFV",
+          "nodeLineageTag": "07b575de-b8b5-5575-8fee-94e83fbf6811",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 11359.529494139588,
+            "y": 391.72586239053749
+          },
+          "nodeIndex": "Time_EquipeSetor",
+          "nodeLineageTag": "b1f8e0e0-39d9-502b-a324-3a57e05ae0f6",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 11593.529494139588,
+            "y": 353.72586239053749
+          },
+          "nodeIndex": "fGlobalCancelamentos",
+          "nodeLineageTag": "249d5a3b-caba-54db-ab3c-02bf1271ff0e",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 11877.529494139588,
+            "y": 353.72586239053749
+          },
+          "nodeIndex": "fGlobalReceita",
+          "nodeLineageTag": "11170ad4-ab78-57d5-8d4a-a03f7d45f114",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 12922.08185855044,
+            "y": 86
+          },
+          "nodeIndex": "dMesDeVida",
+          "nodeLineageTag": "4bf107e4-9761-5d5a-a8e4-99bcef91c439",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 12111.529494139588,
+            "y": 0
+          },
+          "nodeIndex": "fCohort",
+          "nodeLineageTag": "11bb3cb2-9697-5c37-a129-c515e4dc5327",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 12516.805676345015,
+            "y": 0
+          },
+          "nodeIndex": "fInativacoes",
+          "nodeLineageTag": "9b518772-c6ba-5979-9e00-67d5a17827c4",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 13156.08185855044,
+            "y": 353.72586239053749
+          },
+          "nodeIndex": "fPeriodos",
+          "nodeLineageTag": "46222d1e-f88d-5b1d-ac15-27fa49a5f794",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 13760.520577534142,
+            "y": 12
+          },
+          "nodeIndex": "dBuscaCliente",
+          "nodeLineageTag": "e06dfe74-7428-50d7-af69-4f3912526886",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 13390.08185855044,
+            "y": 0
+          },
+          "nodeIndex": "dReferenciaDados",
+          "nodeLineageTag": "668746bd-b098-58ed-8132-126efcfef4ab",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 14751.635819685062,
+            "y": 36
+          },
+          "nodeIndex": "Competência",
+          "nodeLineageTag": "6f0d3c1e-2b8a-4c55-9a51-7c2f0b8d4e10",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 14373.078198609603,
+            "y": 12
+          },
+          "nodeIndex": "dPaineis",
+          "nodeLineageTag": "7c2c739d-8f81-5424-a8cf-83b73f579c32",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 13994.520577534142,
+            "y": 0
+          },
+          "nodeIndex": "dSetor",
+          "nodeLineageTag": "a3f0cc3d-6c58-5943-84c1-29cc1f6b44dc",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 15040.925809722286,
+            "y": 0
+          },
+          "nodeIndex": "Meta_Def",
+          "nodeLineageTag": "8d012e2c-ff25-4469-b351-452c631960af",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 14985.635819685062,
+            "y": 456.81792503225381
+          },
+          "nodeIndex": "Meta_Valor",
+          "nodeLineageTag": "c43fe1d5-9a40-4f9d-8474-d659e9855d3a",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 15442.412884565865,
+            "y": 278.40896251612691
+          },
+          "nodeIndex": "Meta_Vinculo",
+          "nodeLineageTag": "6c79b871-2b7c-4524-9558-089531e4f26d",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 15843.899959409444,
+            "y": 290.40896251612691
+          },
+          "nodeIndex": "CRM_Clientes_Atual",
+          "nodeLineageTag": "1cbc0667-9653-4415-a7d9-3dcfcb975151",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 16077.899959409444,
+            "y": 0
+          },
+          "nodeIndex": "dColaboradorMes",
+          "nodeLineageTag": "777246f8-486b-507a-948d-a94a2a007324",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 16502.134025759296,
+            "y": 0
+          },
+          "nodeIndex": "RH_ComposicaoMensal",
+          "nodeLineageTag": "b78ba9b8-5e6d-536e-8f5d-d4de6834b0b2",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 16736.134025759296,
+            "y": 0
+          },
+          "nodeIndex": "Legado_Clientes",
+          "nodeLineageTag": "08f3fe44-5af7-5029-933e-aecb2ae87c83",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 16970.134025759296,
+            "y": 0
+          },
+          "nodeIndex": "fMigracoesClientes",
+          "nodeLineageTag": "1f785488-088c-5cdf-ae2b-48cc0bc35e27",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 17204.134025759296,
+            "y": 0
+          },
+          "nodeIndex": "fConcessoes",
+          "nodeLineageTag": "9f457f88-1db4-5530-b947-53dfa6ad7874",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 17438.134025759296,
+            "y": 0
+          },
+          "nodeIndex": "dSetorKC",
+          "nodeLineageTag": "575050bc-5716-5c40-a5c1-804751191770",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 17672.134025759296,
+            "y": 0
+          },
+          "nodeIndex": "dAnalistaRelacionamento",
+          "nodeLineageTag": "9a8550b2-9271-5c94-824a-08a2d7569420",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

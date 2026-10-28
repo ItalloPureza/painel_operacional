@@ -1,0 +1,114 @@
+table Gestao_Contratos_Tipos_Contrato
+	lineageTag: 15de8099-c0c6-44d0-a32c-4a9500a9a888
+
+	column 'Chave Primária Template'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7889a58f-66c3-4dce-8417-749f674d9ca8
+		summarizeBy: sum
+		sourceColumn: Chave Primária Template
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo Contrato'
+		dataType: string
+		lineageTag: 4e90b427-0b78-4761-86e2-7ccc9c0a8ebc
+		summarizeBy: none
+		sourceColumn: Tipo Contrato
+
+		annotation SummarizationSetBy = Automatic
+
+	column fk_crmcomercial_config_4
+		dataType: int64
+		formatString: 0
+		lineageTag: 5930a52f-ae5d-4f51-aea0-2d940a39aa83
+		summarizeBy: sum
+		sourceColumn: fk_crmcomercial_config_4
+
+		annotation SummarizationSetBy = Automatic
+
+	column annual_payment_4
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4dd26de6-c10f-4ce4-ad39-4a88eb7fda33
+		summarizeBy: none
+		sourceColumn: annual_payment_4
+
+		annotation SummarizationSetBy = Automatic
+
+	column require_implantation_charge_4
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 951492f1-54f3-444c-925e-382164cb9cd5
+		summarizeBy: none
+		sourceColumn: require_implantation_charge_4
+
+		annotation SummarizationSetBy = Automatic
+
+	column active_4
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: a29a31cf-a679-4cf1-8958-bbc0dbd4a6e1
+		summarizeBy: none
+		sourceColumn: active_4
+
+		annotation SummarizationSetBy = Automatic
+
+	column require_payment_confirmation_4
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 46b3d232-3c3c-4582-af7f-ad5e63be0375
+		summarizeBy: none
+		sourceColumn: require_payment_confirmation_4
+
+		annotation SummarizationSetBy = Automatic
+
+	column questions_group_4
+		dataType: string
+		lineageTag: d1e28de7-ab3e-420c-a741-6f8da449f740
+		summarizeBy: none
+		sourceColumn: questions_group_4
+
+		annotation SummarizationSetBy = Automatic
+
+	column charge_monthly_fee_for_activation_4
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 19125320-76f2-4c4f-868b-93a29194b6dd
+		summarizeBy: none
+		sourceColumn: charge_monthly_fee_for_activation_4
+
+		annotation SummarizationSetBy = Automatic
+
+	column agrouped_template_4
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 74b0ee31-3dec-4d66-94bf-66563ffa5e0d
+		summarizeBy: none
+		sourceColumn: agrouped_template_4
+
+		annotation SummarizationSetBy = Automatic
+
+	column integration_code_4
+		dataType: string
+		lineageTag: 5fb14fee-f887-480b-9458-a515cf7d1851
+		summarizeBy: none
+		sourceColumn: integration_code_4
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Gestao_Contratos_Tipos_Contrato = m
+		mode: import
+		queryGroup: 'Gestão de Contratos'
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Gestao_Contratos_Tipos_Contrato",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"Chave Primária Template", Int64.Type}, {"Tipo Contrato", type text}, {"fk_crmcomercial_config_4", Int64.Type}, {"annual_payment_4", type logical}, {"require_implantation_charge_4", type logical}, {"active_4", type logical}, {"require_payment_confirmation_4", type logical}, {"questions_group_4", type text}, {"charge_monthly_fee_for_activation_4", type logical}, {"agrouped_template_4", type logical}, {"integration_code_4", type text}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,282 @@
+table dTTFV
+	lineageTag: 07b575de-b8b5-5575-8fee-94e83fbf6811
+
+	/// Atingidos ÷ clientes registrados desde o 1º retrato (FOTO: não muda com o período) — 'TTFV Percentual' do OKR 2026. Na tela de Migrações segue Equipe e Responsável (equipe e e-mail do CS); com Categoria escolhida fica vazia (o TTFV não tem categoria).
+	measure '% TTFV Atingido' = VAR fe = ISFILTERED( CRM_Atividades[Equipe do Responsável pelo Cliente] ) VAR eqs = FILTERS( CRM_Atividades[Equipe do Responsável pelo Cliente] ) VAR fr = ISFILTERED( CRM_Atividades[Responsavel_Pelo_Cliente] ) VAR ems = CALCULATETABLE( VALUES( CRM_Atividades[Email do Responsável pelo Cliente] ), REMOVEFILTERS( Calendario ) ) RETURN IF( NOT ISFILTERED( CRM_Atividades[Categoria] ), CALCULATE( DIVIDE( CALCULATE( COUNTROWS( dTTFV ), dTTFV[TTFV] = "Atingido", REMOVEFILTERS( Calendario ) ), CALCULATE( COUNTROWS( dTTFV ), REMOVEFILTERS( Calendario ) ) ), KEEPFILTERS( FILTER( ALL( dTTFV[Equipe do CS] ), NOT fe || dTTFV[Equipe do CS] IN eqs ) ), KEEPFILTERS( FILTER( ALL( dTTFV[Email do CS] ), NOT fr || dTTFV[Email do CS] IN ems ) ) ) )
+		formatString: 0.00%
+		displayFolder: TTFV
+		lineageTag: 8e7cd9ab-98f3-56e9-84a8-9d0380156033
+
+	/// Média de dias entre o registro e o TTFV, dos que atingiram no período. Na tela de Migrações segue Equipe e Responsável (equipe e e-mail do CS); com Categoria escolhida fica vazia (o TTFV não tem categoria).
+	measure 'Dias até o TTFV (média)' = VAR fe = ISFILTERED( CRM_Atividades[Equipe do Responsável pelo Cliente] ) VAR eqs = FILTERS( CRM_Atividades[Equipe do Responsável pelo Cliente] ) VAR fr = ISFILTERED( CRM_Atividades[Responsavel_Pelo_Cliente] ) VAR ems = CALCULATETABLE( VALUES( CRM_Atividades[Email do Responsável pelo Cliente] ), REMOVEFILTERS( Calendario ) ) RETURN IF( NOT ISFILTERED( CRM_Atividades[Categoria] ), CALCULATE( AVERAGE( dTTFV[Dias até o TTFV] ), KEEPFILTERS( FILTER( ALL( dTTFV[Equipe do CS] ), NOT fe || dTTFV[Equipe do CS] IN eqs ) ), KEEPFILTERS( FILTER( ALL( dTTFV[Email do CS] ), NOT fr || dTTFV[Email do CS] IN ems ) ) ) )
+		formatString: 0.00
+		displayFolder: TTFV
+		lineageTag: 50e3a956-d8a0-5ab1-9635-4d8ad44153ee
+
+	/// Clientes que atingiram o TTFV no período (data em que atingiram). Na tela de Migrações segue Equipe e Responsável (equipe e e-mail do CS); com Categoria escolhida fica vazia (o TTFV não tem categoria).
+	measure 'Clientes que Atingiram o TTFV' = VAR fe = ISFILTERED( CRM_Atividades[Equipe do Responsável pelo Cliente] ) VAR eqs = FILTERS( CRM_Atividades[Equipe do Responsável pelo Cliente] ) VAR fr = ISFILTERED( CRM_Atividades[Responsavel_Pelo_Cliente] ) VAR ems = CALCULATETABLE( VALUES( CRM_Atividades[Email do Responsável pelo Cliente] ), REMOVEFILTERS( Calendario ) ) RETURN IF( NOT ISFILTERED( CRM_Atividades[Categoria] ), CALCULATE( CALCULATE( COUNTROWS( dTTFV ), NOT ISBLANK( dTTFV[Data do TTFV] ) ), KEEPFILTERS( FILTER( ALL( dTTFV[Equipe do CS] ), NOT fe || dTTFV[Equipe do CS] IN eqs ) ), KEEPFILTERS( FILTER( ALL( dTTFV[Email do CS] ), NOT fr || dTTFV[Email do CS] IN ems ) ) ) )
+		formatString: #,0
+		displayFolder: TTFV
+		lineageTag: 29ee501c-d2a7-529f-a8fc-e067a156ffb2
+
+	/// Clientes registrados desde 14/07/2026 (1º retrato diário do CRM): a base do TTFV (foto de hoje). Na tela de Migrações segue Equipe e Responsável (equipe e e-mail do CS); com Categoria escolhida fica vazia (o TTFV não tem categoria).
+	measure 'Clientes na Base do TTFV' = VAR fe = ISFILTERED( CRM_Atividades[Equipe do Responsável pelo Cliente] ) VAR eqs = FILTERS( CRM_Atividades[Equipe do Responsável pelo Cliente] ) VAR fr = ISFILTERED( CRM_Atividades[Responsavel_Pelo_Cliente] ) VAR ems = CALCULATETABLE( VALUES( CRM_Atividades[Email do Responsável pelo Cliente] ), REMOVEFILTERS( Calendario ) ) RETURN IF( NOT ISFILTERED( CRM_Atividades[Categoria] ), CALCULATE( CALCULATE( COUNTROWS( dTTFV ), REMOVEFILTERS( Calendario ) ), KEEPFILTERS( FILTER( ALL( dTTFV[Equipe do CS] ), NOT fe || dTTFV[Equipe do CS] IN eqs ) ), KEEPFILTERS( FILTER( ALL( dTTFV[Email do CS] ), NOT fr || dTTFV[Email do CS] IN ems ) ) ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 816a2968-0da4-5ac5-9fa9-de49a09aff01
+
+	/// Clientes registrados desde 14/07/2026 que ainda não atingiram o TTFV (foto de hoje; não segue o Período). Na tela de Migrações segue Equipe e Responsável (equipe e e-mail do CS); com Categoria escolhida fica vazia (o TTFV não tem categoria).
+	measure 'Clientes sem TTFV (hoje)' = VAR fe = ISFILTERED( CRM_Atividades[Equipe do Responsável pelo Cliente] ) VAR eqs = FILTERS( CRM_Atividades[Equipe do Responsável pelo Cliente] ) VAR fr = ISFILTERED( CRM_Atividades[Responsavel_Pelo_Cliente] ) VAR ems = CALCULATETABLE( VALUES( CRM_Atividades[Email do Responsável pelo Cliente] ), REMOVEFILTERS( Calendario ) ) RETURN IF( NOT ISFILTERED( CRM_Atividades[Categoria] ), CALCULATE( CALCULATE( COUNTROWS( dTTFV ), dTTFV[TTFV] = "Não atingido", REMOVEFILTERS( Calendario ) ), KEEPFILTERS( FILTER( ALL( dTTFV[Equipe do CS] ), NOT fe || dTTFV[Equipe do CS] IN eqs ) ), KEEPFILTERS( FILTER( ALL( dTTFV[Email do CS] ), NOT fr || dTTFV[Email do CS] IN ems ) ) ) )
+		formatString: #,0
+		displayFolder: Global
+		lineageTag: 56f9c4bf-f05a-5b5f-a103-7f296a5147d4
+
+	column 'ID CRM'
+		formatString: 0
+		lineageTag: 6e25c50b-d983-5810-8a48-cc19c26f90b8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ID CRM]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Registro'
+		formatString: dd/mm/yy
+		lineageTag: a2ce19fb-a023-5990-be22-33b8cd936761
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Data de Registro]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Último Retrato'
+		formatString: dd/mm/yy
+		lineageTag: eda3a64c-5901-5395-be2d-aa462712c63d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Último Retrato]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data do TTFV'
+		formatString: dd/mm/yy
+		lineageTag: f42b301b-78a9-5c1f-8de2-04040e5c872b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Data do TTFV]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Retrato do CS'
+		formatString: dd/mm/yy
+		lineageTag: 24bede58-fe9f-51f8-a1ab-dca2d2bc8f32
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Retrato do CS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cliente
+		lineageTag: 5dbb438e-618b-5300-9aef-483ba59a244b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cliente]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID Legado'
+		lineageTag: b09dd55f-4c47-56d2-ab46-acca358dda19
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ID Legado]
+
+		annotation SummarizationSetBy = Automatic
+
+	column CS
+		lineageTag: 2e8943b1-efc0-5a50-996d-7f6a20a8223b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email do CS'
+		lineageTag: 60be6792-ba0a-54fb-838e-fa032dd9693c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Email do CS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe do CS'
+		lineageTag: 0ad15d1f-d67d-5dc6-aec9-9d5253cad7ac
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Equipe do CS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Setor do CS'
+		lineageTag: 79c0bc7a-56c0-55c3-8915-9eeebf981150
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Setor do CS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column TTFV
+		lineageTag: 83779608-ca36-5ec1-bd0a-124b8418b72a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [TTFV]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias até o TTFV'
+		formatString: 0
+		lineageTag: 38842596-019b-51b5-8929-b2bc54d3e7f8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Dias até o TTFV]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ordem do Mês de Registro' = YEAR( dTTFV[Data de Registro] ) * 100 + MONTH( dTTFV[Data de Registro] )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Global
+		lineageTag: 02b6fe2a-d22b-581f-bd6b-57ec3b256b07
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês de Registro' = FORMAT( dTTFV[Data de Registro], "mmm/yy" )
+		dataType: string
+		displayFolder: Global
+		lineageTag: 31427574-35e8-5f8b-a066-a7e0251b1649
+		summarizeBy: none
+		sortByColumn: 'Ordem do Mês de Registro'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID do Cliente (busca)' = VAR i = TRIM( "" & dTTFV[ID Legado] ) RETURN IF( i = "" || i = "0", BLANK(), i )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 3f16adbd-460f-53df-9a17-8f744023c7c8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ do Cliente (busca)' = VAR c = LOOKUPVALUE( dBuscaCliente[CNPJ], dBuscaCliente[ID], TRIM( "" & dTTFV[ID Legado] ), BLANK() ) RETURN IF( c = "", BLANK(), c )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 2675390f-63d0-5db2-b0a1-b4180a1b527f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Entrada
+		formatString: 0
+		lineageTag: f3d3d74a-8698-5695-9c9e-8dc4fda7d17c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Entrada]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Entrada'
+		lineageTag: 9d188b96-12cf-512d-b80c-64dd86aeceb3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tipo de Entrada]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dTTFV = calculated
+		mode: import
+		source =
+				
+				-- TTFV por ENTRADA do cliente (regra do OKR 2026 + M15 de 20/10/2026): 1º retrato diário, a partir da Data Registro
+				-- da entrada, em que empresas usadas e entregas feitas >= 30% das empresas do contrato. Só entradas registradas desde o 1º retrato (14/07/2026).
+				-- Entrada nova = 1ª data do cliente ou data nova depois de Inativo/Teste desde a data anterior (reativação / teste convertido); senão é correção de cadastro.
+				-- CS/setor = do retrato do dia do TTFV (ou o mais recente da entrada, se ainda não atingiu). Gerado por gerar_onboarding.py.
+				VAR ini = MIN( CRM_Backup_Diario[Periodo] )
+				VAR cand = CALCULATETABLE( VALUES( CRM_Backup_Diario[Id_CRM] ), CRM_Backup_Diario[Dt_Cadastro] >= ini, CRM_Backup_Diario[Só Kappa] = "Não" )
+				VAR pares = CALCULATETABLE( SUMMARIZE( CRM_Backup_Diario, CRM_Backup_Diario[Id_CRM], CRM_Backup_Diario[Dt_Cadastro] ), TREATAS( cand, CRM_Backup_Diario[Id_CRM] ), NOT ISBLANK( CRM_Backup_Diario[Dt_Cadastro] ) )
+				VAR p1 =
+				    ADDCOLUMNS(
+				        pares,
+				        "@desde", VAR i = CRM_Backup_Diario[Id_CRM] VAR r = CRM_Backup_Diario[Dt_Cadastro]
+				            RETURN CALCULATE( MIN( CRM_Backup_Diario[Periodo] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Dt_Cadastro] = r )
+				    )
+				VAR p2 =
+				    ADDCOLUMNS(
+				        p1,
+				        "@anterior", VAR i = CRM_Backup_Diario[Id_CRM] VAR d = [@desde]
+				            RETURN MAXX( FILTER( p1, CRM_Backup_Diario[Id_CRM] = i && [@desde] < d ), [@desde] )
+				    )
+				VAR p3 =
+				    ADDCOLUMNS(
+				        p2,
+				        "@saiu", VAR i = CRM_Backup_Diario[Id_CRM] VAR d = [@desde] VAR a = [@anterior]
+				            RETURN IF( ISBLANK( a ), BLANK(), CALCULATE( MAX( CRM_Backup_Diario[Periodo] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Periodo] >= a, CRM_Backup_Diario[Periodo] < d, CRM_Backup_Diario[Status_Office] IN { "Inativo", "Teste" } ) )
+				    )
+				VAR p4 =
+				    ADDCOLUMNS(
+				        p3,
+				        "@statusAntes", VAR i = CRM_Backup_Diario[Id_CRM] VAR u = [@saiu]
+				            RETURN IF( ISBLANK( u ), BLANK(), CALCULATE( MAX( CRM_Backup_Diario[Status_Office] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Periodo] = u, CRM_Backup_Diario[Status_Office] IN { "Inativo", "Teste" } ) )
+				    )
+				VAR entradas = FILTER( p4, ISBLANK( [@anterior] ) || NOT ISBLANK( [@saiu] ) )
+				VAR e1 =
+				    ADDCOLUMNS(
+				        entradas,
+				        "@prox", VAR i = CRM_Backup_Diario[Id_CRM] VAR d = [@desde]
+				            RETURN MINX( FILTER( entradas, CRM_Backup_Diario[Id_CRM] = i && [@desde] > d ), [@desde] ),
+				        "@n", VAR i = CRM_Backup_Diario[Id_CRM] VAR d = [@desde]
+				            RETURN COUNTROWS( FILTER( entradas, CRM_Backup_Diario[Id_CRM] = i && [@desde] <= d ) )
+				    )
+				VAR base = FILTER( e1, CRM_Backup_Diario[Dt_Cadastro] >= ini )
+				VAR t =
+				    ADDCOLUMNS(
+				        base,
+				        "@registro", CRM_Backup_Diario[Dt_Cadastro],
+				        "@ultimo", VAR i = CRM_Backup_Diario[Id_CRM] VAR d = [@desde] VAR f = COALESCE( [@prox], DATE( 9999, 12, 31 ) )
+				            RETURN CALCULATE( MAX( CRM_Backup_Diario[Periodo] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Periodo] >= d, CRM_Backup_Diario[Periodo] < f )
+				    )
+				VAR t2 =
+				    ADDCOLUMNS(
+				        t,
+				        "@ttfv", VAR i = CRM_Backup_Diario[Id_CRM] VAR r = [@registro] VAR f = COALESCE( [@prox], DATE( 9999, 12, 31 ) )
+				            RETURN CALCULATE( MIN( CRM_Backup_Diario[Periodo] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Atingiu Critério do TTFV] = TRUE(), CRM_Backup_Diario[Periodo] >= r, CRM_Backup_Diario[Periodo] < f )
+				    )
+				VAR t3 = ADDCOLUMNS( t2, "@retrato", COALESCE( [@ttfv], [@ultimo] ) )
+				VAR t4 =
+				    ADDCOLUMNS(
+				        t3,
+				        "@cliente", VAR i = CRM_Backup_Diario[Id_CRM] VAR d = [@retrato] RETURN CALCULATE( MAX( CRM_Backup_Diario[Nome_Fantasia] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Periodo] = d ),
+				        "@legado", VAR i = CRM_Backup_Diario[Id_CRM] VAR d = [@retrato] RETURN CALCULATE( MAX( CRM_Backup_Diario[ID_Legado] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Periodo] = d ),
+				        "@cs", VAR i = CRM_Backup_Diario[Id_CRM] VAR d = [@retrato] RETURN CALCULATE( MAX( CRM_Backup_Diario[Responsavel] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Periodo] = d ),
+				        "@email", VAR i = CRM_Backup_Diario[Id_CRM] VAR d = [@retrato] RETURN CALCULATE( MAX( CRM_Backup_Diario[Responsavel_Email] ), REMOVEFILTERS( CRM_Backup_Diario ), CRM_Backup_Diario[Id_CRM] = i, CRM_Backup_Diario[Periodo] = d )
+				    )
+				RETURN
+				    SELECTCOLUMNS(
+				        t4,
+				        "ID CRM", CRM_Backup_Diario[Id_CRM],
+				        "Data de Registro", [@registro],
+				        "Último Retrato", [@ultimo],
+				        "Data do TTFV", [@ttfv],
+				        "Retrato do CS", [@retrato],
+				        "Cliente", [@cliente],
+				        "ID Legado", [@legado],
+				        "CS", [@cs],
+				        "Email do CS", [@email],
+				        "Equipe do CS", IF( ISBLANK( [@email] ), IF( TRIM( [@cs] ) <> "", "(sem cadastro)" ), COALESCE( LOOKUPVALUE( dColaboradorMes[Equipe], dColaboradorMes[email], [@email], dColaboradorMes[AnoMes], ( VAR _d = [@retrato] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) ), BLANK() ), "(sem equipe)" ) ),
+				        "Setor do CS", LOOKUPVALUE( dColaboradorMes[Setor], dColaboradorMes[email], [@email], dColaboradorMes[AnoMes], ( VAR _d = [@retrato] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) ), BLANK() ),
+				        "TTFV", IF( ISBLANK( [@ttfv] ), "Não atingido", "Atingido" ),
+				        "Dias até o TTFV", IF( ISBLANK( [@ttfv] ), BLANK(), INT( [@ttfv] - [@registro] ) ),
+				        "Entrada", [@n],
+				        "Tipo de Entrada", SWITCH( TRUE(), ISBLANK( [@anterior] ), "Primeira", [@statusAntes] = "Teste", "Teste convertido", "Reativação" )
+				    )
+

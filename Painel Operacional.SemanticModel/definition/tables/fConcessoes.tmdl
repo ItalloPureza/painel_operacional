@@ -1,0 +1,196 @@
+table fConcessoes
+	lineageTag: 9f457f88-1db4-5530-b947-53dfa6ad7874
+
+	/// Soma da mensalidade dos pedidos revertidos, com a regra de [Reversões Atendidas] (tipo 2, serviço Cancelamento, sem ajuste de carteira, sem cancelar no mesmo mês), pela data de FECHAMENTO.
+	measure 'MRR Revertido' = CALCULATE( SUM( Helpdesk_Cancelamentos[mensalidade] ), Helpdesk_Cancelamentos[type] = 2, Helpdesk_Cancelamentos[Serviço] = "Cancelamento", Helpdesk_Cancelamentos[ajusteCarteira] <> "Sim", NOT ISBLANK( Helpdesk_Cancelamentos[Data de Fechamento] ), Helpdesk_Cancelamentos[category] = "Cancelamento Revertido", Helpdesk_Cancelamentos[Cancelou no Mesmo Mês] = "Não" )
+		formatString: \R$ #,0.00
+		displayFolder: Reversão × Concessões
+		lineageTag: 5df00350-4673-59cb-8c66-c9c2698a3b34
+
+	/// Descontos + reduções de mensalidade: 1ª camada, o que sai do MRR revertido para dar o saldo.
+	measure 'Descontos e Reduções Concedidos' = [Descontos Concedidos] + [Reduções Concedidas]
+		formatString: \R$ #,0.00
+		displayFolder: Reversão × Concessões
+		lineageTag: 67aedaa1-5ac6-5109-9167-851c64758f9c
+
+	/// Isenção de mensalidade + isenção de aviso prévio — 2ª camada: sai do saldo para dar o total final (22/10/2026).
+	measure 'Isenções Concedidas' = [Isenções de Mensalidade Concedidas] + [Isenções de Aviso Prévio Concedidas]
+		formatString: \R$ #,0.00
+		displayFolder: Reversão × Concessões
+		lineageTag: ea8767bb-d038-5062-a045-83ae7fa48080
+
+	/// Soma da isenção de aviso prévio. Tickets de Negociação (categoria) com valor, pelo campo Responsável (resp_reversao, desde 20/07/2026), pela data de FECHAMENTO. Desde 01/08/2026 o POP manda lançar o valor TOTAL da concessão.
+	measure 'Isenções de Aviso Prévio Concedidas' = SUM( fConcessoes[Isenção de Aviso Prévio] )
+		formatString: \R$ #,0.00
+		displayFolder: Reversão × Concessões
+		lineageTag: 921cdda8-0fd0-594c-9028-789d06a5708f
+
+	/// Soma da isenção de mensalidade. Tickets de Negociação (categoria) com valor, pelo campo Responsável (resp_reversao, desde 20/07/2026), pela data de FECHAMENTO. Desde 01/08/2026 o POP manda lançar o valor TOTAL da concessão.
+	measure 'Isenções de Mensalidade Concedidas' = SUM( fConcessoes[Isenção de Mensalidade] )
+		formatString: \R$ #,0.00
+		displayFolder: Reversão × Concessões
+		lineageTag: 52120b18-4753-5ef2-829c-e1f285a6ca2d
+
+	/// Soma da redução de mensalidade (recorrente: quanto a mensalidade caiu). Tickets de Negociação (categoria) com valor, pelo campo Responsável (resp_reversao, desde 20/07/2026), pela data de FECHAMENTO. Desde 01/08/2026 o POP manda lançar o valor TOTAL da concessão.
+	measure 'Reduções Concedidas' = SUM( fConcessoes[Redução] )
+		formatString: \R$ #,0.00
+		displayFolder: Reversão × Concessões
+		lineageTag: 992fe7d8-2f93-5489-9949-0ba71466c157
+
+	/// Soma do desconto de mensalidade. Tickets de Negociação (categoria) com valor, pelo campo Responsável (resp_reversao, desde 20/07/2026), pela data de FECHAMENTO. Desde 01/08/2026 o POP manda lançar o valor TOTAL da concessão.
+	measure 'Descontos Concedidos' = SUM( fConcessoes[Desconto] )
+		formatString: \R$ #,0.00
+		displayFolder: Reversão × Concessões
+		lineageTag: 797be1a6-2a68-5810-b866-ef44c635db9c
+
+	column Ticket
+		dataType: int64
+		formatString: 0
+		lineageTag: ed7b1c0a-7deb-5590-940c-20f817fc64ab
+		summarizeBy: none
+		sourceColumn: Ticket
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 255f7520-cd13-5d36-a211-fbfa02836116
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+	column Área
+		dataType: string
+		lineageTag: 8d9c9381-3361-5925-9996-2dd2eaf0d099
+		summarizeBy: none
+		sourceColumn: Área
+
+		annotation SummarizationSetBy = Automatic
+
+	column Responsável
+		dataType: string
+		lineageTag: e539e145-d9dd-5f05-bdc1-c4b3ab11ec69
+		summarizeBy: none
+		sourceColumn: Responsável
+
+		annotation SummarizationSetBy = Automatic
+
+	column Desconto
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: a8e7b62d-18da-5d10-a93c-83392750f27b
+		summarizeBy: none
+		sourceColumn: Desconto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Redução
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 3d45eae3-096e-5432-adec-ca95d867742e
+		summarizeBy: none
+		sourceColumn: Redução
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Isenção de Mensalidade'
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 691479bc-442d-5e4e-88c0-c7cd259d5195
+		summarizeBy: none
+		sourceColumn: Isenção de Mensalidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Isenção de Aviso Prévio'
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 74a7cdc1-621d-5537-b842-68ffeb29f49f
+		summarizeBy: none
+		sourceColumn: Isenção de Aviso Prévio
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cliente = LOOKUPVALUE( Helpdesk_Tickets[Empresa], Helpdesk_Tickets[id], fConcessoes[Ticket], BLANK() )
+		dataType: string
+		displayFolder: Reversão × Concessões
+		lineageTag: 35b3ae48-75d3-502c-879b-9a0e207bf03a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID do Cliente' = LOOKUPVALUE( Helpdesk_Tickets[ID Legado do Cliente], Helpdesk_Tickets[id], fConcessoes[Ticket], BLANK() )
+		dataType: string
+		displayFolder: Reversão × Concessões
+		lineageTag: c28d00c6-98f3-54dd-986f-8c42c36ac18c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email do Responsável' = VAR n = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( LOWER( TRIM( fConcessoes[Responsável] ) ), "á", "a" ), "à", "a" ), "â", "a" ), "ã", "a" ), "ä", "a" ), "é", "e" ), "è", "e" ), "ê", "e" ), "ë", "e" ), "í", "i" ), "ì", "i" ), "î", "i" ), "ï", "i" ), "ó", "o" ), "ò", "o" ), "ô", "o" ), "õ", "o" ), "ö", "o" ), "ú", "u" ), "ù", "u" ), "û", "u" ), "ü", "u" ), "ç", "c" ), "ñ", "n" ), "  ", " " ) VAR p = SUBSTITUTE( n, " ", "|" ) VAR curto = IF( PATHLENGTH( p ) > 1, PATHITEM( p, 1 ) & " " & PATHITEMREVERSE( p, 1 ), n ) VAR e1 = IF( n = "", BLANK(), LOOKUPVALUE( dColaborador[email], dColaborador[Nome Normalizado], n, BLANK() ) ) RETURN IF( ISBLANK( e1 ) && n <> "", LOOKUPVALUE( dColaborador[email], dColaborador[Nome Curto Normalizado], curto, BLANK() ), e1 )
+		dataType: string
+		isHidden
+		displayFolder: Reversão × Concessões
+		lineageTag: 6afae855-7d52-529e-b1bd-7c5429020d0c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês da Composição' = ( VAR _d = fConcessoes[Data] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Reversão × Concessões
+		lineageTag: bd5172dc-45b9-5fc7-9c77-e250840e55d9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe do Responsável' = LOOKUPVALUE( dColaboradorMes[Equipe], dColaboradorMes[email], fConcessoes[Email do Responsável], dColaboradorMes[AnoMes], fConcessoes[Mês da Composição], BLANK() )
+		dataType: string
+		displayFolder: Reversão × Concessões
+		lineageTag: a16d5273-115d-565d-a169-c446b304fb46
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor = LOOKUPVALUE( dColaboradorMes[Setor], dColaboradorMes[email], fConcessoes[Email do Responsável], dColaboradorMes[AnoMes], fConcessoes[Mês da Composição], BLANK() )
+		dataType: string
+		displayFolder: Reversão × Concessões
+		lineageTag: b32015bf-3cf0-5f4e-90fe-e94dff142816
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID do Cliente (busca)' = VAR i = TRIM( "" & fConcessoes[ID do Cliente] ) RETURN IF( i = "" || i = "0", BLANK(), i )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 028e0cb6-f5ea-5d33-8b07-67061dcd0899
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ do Cliente (busca)' = VAR c = LOOKUPVALUE( dBuscaCliente[CNPJ], dBuscaCliente[ID], TRIM( "" & fConcessoes[ID do Cliente] ), BLANK() ) RETURN IF( c = "", BLANK(), c )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 45593865-902c-51d5-9baa-a8aecafeebf9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fConcessoes = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="fConcessoes",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"Ticket", Int64.Type}, {"Data", type datetime}, {"Área", type text}, {"Responsável", type text}, {"Desconto", type number}, {"Redução", type number}, {"Isenção de Mensalidade", type number}, {"Isenção de Aviso Prévio", type number}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

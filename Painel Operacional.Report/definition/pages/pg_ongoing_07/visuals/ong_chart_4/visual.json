@@ -1,0 +1,545 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "ong_chart_4",
+  "position": {
+    "x": 1106,
+    "y": 692,
+    "z": 34000,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 34000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Atividades"
+                    }
+                  },
+                  "Property": "Cliente_Nome_Fantasia"
+                }
+              },
+              "queryRef": "CRM_Atividades.Cliente_Nome_Fantasia",
+              "nativeQueryRef": "Cliente_Nome_Fantasia",
+              "displayName": "Cliente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Atividades"
+                    }
+                  },
+                  "Property": "ID_Alfa"
+                }
+              },
+              "queryRef": "CRM_Atividades.ID_Alfa",
+              "nativeQueryRef": "ID_Alfa",
+              "displayName": "ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Atividades"
+                    }
+                  },
+                  "Property": "Categoria"
+                }
+              },
+              "queryRef": "CRM_Atividades.Categoria",
+              "nativeQueryRef": "Categoria",
+              "displayName": "Migração"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Atividades"
+                    }
+                  },
+                  "Property": "Data_Resolucao"
+                }
+              },
+              "queryRef": "CRM_Atividades.Data_Resolucao",
+              "nativeQueryRef": "Data_Resolucao",
+              "displayName": "Concluída em"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Atividades"
+                    }
+                  },
+                  "Property": "Responsavel_Pelo_Cliente"
+                }
+              },
+              "queryRef": "CRM_Atividades.Responsavel_Pelo_Cliente",
+              "nativeQueryRef": "Responsavel_Pelo_Cliente",
+              "displayName": "Onboarding"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Atividades"
+                    }
+                  },
+                  "Property": "Atividades_Responsavel"
+                }
+              },
+              "queryRef": "CRM_Atividades.Atividades_Responsavel",
+              "nativeQueryRef": "Atividades_Responsavel",
+              "displayName": "Responsável pela análise"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Atividades"
+                    }
+                  },
+                  "Property": "CS"
+                }
+              },
+              "queryRef": "CRM_Atividades.CS",
+              "nativeQueryRef": "CS",
+              "displayName": "CS"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Atividades"
+                    }
+                  },
+                  "Property": "Situação após a Migração"
+                }
+              },
+              "queryRef": "CRM_Atividades.Situação após a Migração",
+              "nativeQueryRef": "Situação após a Migração",
+              "displayName": "Situação"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Atividades"
+                    }
+                  },
+                  "Property": "Ticket do Cancelamento do Cliente"
+                }
+              },
+              "queryRef": "CRM_Atividades.Ticket do Cancelamento do Cliente",
+              "nativeQueryRef": "Ticket do Cancelamento do Cliente",
+              "displayName": "Ticket"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Atividades"
+                    }
+                  },
+                  "Property": "Cancelamento do Cliente"
+                }
+              },
+              "queryRef": "CRM_Atividades.Cancelamento do Cliente",
+              "nativeQueryRef": "Cancelamento do Cliente",
+              "displayName": "Cancelado em"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Atividades"
+                    }
+                  },
+                  "Property": "Dias no Ongoing até Cancelar"
+                }
+              },
+              "queryRef": "CRM_Atividades.Dias no Ongoing até Cancelar",
+              "nativeQueryRef": "Dias no Ongoing até Cancelar",
+              "displayName": "Dias no Ongoing"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "CRM_Atividades"
+                  }
+                },
+                "Property": "Data_Resolucao"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "99.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Atividades.Cliente_Nome_Fantasia"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "52.2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Atividades.ID_Alfa"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "74.2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Atividades.Categoria"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "70.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Atividades.Data_Resolucao"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "99.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Atividades.Responsavel_Pelo_Cliente"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "49.5D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Atividades.Atividades_Responsavel"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "49.5D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Atividades.CS"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "81.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Atividades.Situação após a Migração"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "55.8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Atividades.Ticket do Cancelamento do Cliente"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "70.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Atividades.Cancelamento do Cliente"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "58.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Atividades.Dias no Ongoing até Cancelar"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Clientes migrados'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Por data de conclusão da atividade · CS = campo CS da atividade (como na planilha)'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

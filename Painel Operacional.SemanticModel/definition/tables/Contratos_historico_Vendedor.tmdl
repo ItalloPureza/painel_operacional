@@ -1,0 +1,195 @@
+table Contratos_historico_Vendedor
+	lineageTag: 029aa13d-2353-43cc-b5be-ced99da0e0ad
+
+	column periodo
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 0ea31697-7f96-448f-ae87-bc135e7e60ad
+		summarizeBy: none
+		sourceColumn: periodo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 7aacadc9-8347-4edd-a077-cd09d654b0c7
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: 2a3515d2-1212-4314-a1b4-ac34c46d1712
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column username
+		dataType: string
+		lineageTag: 3d2f190f-f970-4bca-bf27-1047c4d1766f
+		summarizeBy: none
+		sourceColumn: username
+
+		annotation SummarizationSetBy = Automatic
+
+	column email
+		dataType: string
+		lineageTag: dbc732c8-9a57-4067-b1f7-6803b746bb28
+		summarizeBy: none
+		sourceColumn: email
+
+		annotation SummarizationSetBy = Automatic
+
+	column email_verified_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 8fa6870a-77ba-4d48-b74a-c868d163e7e7
+		summarizeBy: none
+		sourceColumn: email_verified_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column empresa_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 8d16d40d-414e-48be-9aa0-b5f41eff59a2
+		summarizeBy: sum
+		sourceColumn: empresa_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo
+		dataType: string
+		lineageTag: a3576a7d-ab6b-4081-ae0b-effa38ac1c51
+		summarizeBy: none
+		sourceColumn: tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column ativo
+		dataType: int64
+		formatString: 0
+		lineageTag: eac8a271-194b-4005-b557-f21e5933edca
+		summarizeBy: sum
+		sourceColumn: ativo
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: af1b024a-7165-4b9a-8f20-16093d00f238
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: ada40a50-b3fe-4e37-b0a3-e50dd525fdec
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column deal_priority
+		dataType: int64
+		formatString: 0
+		lineageTag: 70a66f81-333c-4aa5-a352-0ebb164919ad
+		summarizeBy: sum
+		sourceColumn: deal_priority
+
+		annotation SummarizationSetBy = Automatic
+
+	column crmvendas_id
+		dataType: string
+		lineageTag: 002a0bcb-59c9-4d13-a6b1-661fc7528d60
+		summarizeBy: none
+		sourceColumn: crmvendas_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column perm_lancto_retro
+		dataType: int64
+		formatString: 0
+		lineageTag: 208a387b-f0cb-45e1-a213-6efb58e5e60d
+		summarizeBy: sum
+		sourceColumn: perm_lancto_retro
+
+		annotation SummarizationSetBy = Automatic
+
+	column gerente_conta_integracao
+		dataType: int64
+		formatString: 0
+		lineageTag: 1f82f323-ae03-4643-a19d-8eadae8401d2
+		summarizeBy: sum
+		sourceColumn: gerente_conta_integracao
+
+		annotation SummarizationSetBy = Automatic
+
+	column user_group_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 008d0204-0487-4822-acfb-b68e23b566ad
+		summarizeBy: sum
+		sourceColumn: user_group_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column gerente_conta_ongoing
+		dataType: int64
+		formatString: 0
+		lineageTag: 49eab9b2-2950-4a38-8ff5-43e021082065
+		summarizeBy: sum
+		sourceColumn: gerente_conta_ongoing
+
+		annotation SummarizationSetBy = Automatic
+
+	column prioridade_sorteio_cs
+		dataType: int64
+		formatString: 0
+		lineageTag: f4cecd03-d67b-489b-8a7e-51f9123b72a6
+		summarizeBy: sum
+		sourceColumn: prioridade_sorteio_cs
+
+		annotation SummarizationSetBy = Automatic
+
+	column prioridade_sorteio_ongoing
+		dataType: int64
+		formatString: 0
+		lineageTag: a4329f8d-cdbe-40bd-9fef-09d16d281ab3
+		summarizeBy: sum
+		sourceColumn: prioridade_sorteio_ongoing
+
+		annotation SummarizationSetBy = Automatic
+
+	column empresa_default_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 49ba88d5-51fd-4d52-9d6d-fc4f18010079
+		summarizeBy: sum
+		sourceColumn: empresa_default_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Contratos_historico_Vendedor = m
+		mode: import
+		queryGroup: Contratos
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Contratos_historico_Vendedor",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"periodo", type datetime}, {"id", Int64.Type}, {"name", type text}, {"username", type text}, {"email", type text}, {"email_verified_at", type datetime}, {"empresa_id", Int64.Type}, {"tipo", type text}, {"ativo", Int64.Type}, {"created_at", type datetime}, {"updated_at", type datetime}, {"deal_priority", Int64.Type}, {"crmvendas_id", type text}, {"perm_lancto_retro", Int64.Type}, {"gerente_conta_integracao", Int64.Type}, {"user_group_id", Int64.Type}, {"gerente_conta_ongoing", Int64.Type}, {"prioridade_sorteio_cs", Int64.Type}, {"prioridade_sorteio_ongoing", Int64.Type}, {"empresa_default_id", Int64.Type}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

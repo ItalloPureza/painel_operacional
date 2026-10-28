@@ -1,0 +1,458 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "rel_chart_3",
+  "position": {
+    "x": 292,
+    "y": 692,
+    "z": 32000,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 32000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaboradorMes"
+                    }
+                  },
+                  "Property": "Colaborador"
+                }
+              },
+              "queryRef": "dColaboradorMes.Colaborador",
+              "nativeQueryRef": "Colaborador",
+              "displayName": "Atendente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaboradorMes"
+                    }
+                  },
+                  "Property": "Equipe"
+                }
+              },
+              "queryRef": "dColaboradorMes.Equipe",
+              "nativeQueryRef": "Equipe",
+              "displayName": "Equipe"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Pedidos Atendidos (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Pedidos Atendidos (por pessoa)",
+              "nativeQueryRef": "Pedidos Atendidos (por pessoa)",
+              "displayName": "Pedidos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Pedidos Outros Atendidos (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Pedidos Outros Atendidos (por pessoa)",
+              "nativeQueryRef": "Pedidos Outros Atendidos (por pessoa)",
+              "displayName": "Outros"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Reversões Atendidas (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Reversões Atendidas (por pessoa)",
+              "nativeQueryRef": "Reversões Atendidas (por pessoa)",
+              "displayName": "Reversões"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "% Reversão Atendida (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.% Reversão Atendida (por pessoa)",
+              "nativeQueryRef": "% Reversão Atendida (por pessoa)",
+              "displayName": "% reversão"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Pedidos em Aberto (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Pedidos em Aberto (por pessoa)",
+              "nativeQueryRef": "Pedidos em Aberto (por pessoa)",
+              "displayName": "Em aberto"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Pedidos em Aberto há 5+ Dias (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Pedidos em Aberto há 5+ Dias (por pessoa)",
+              "nativeQueryRef": "Pedidos em Aberto há 5+ Dias (por pessoa)",
+              "displayName": "5+ dias"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dColaborador"
+                  }
+                },
+                "Property": "Pedidos Atendidos (por pessoa)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "182.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaboradorMes.Colaborador"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "182.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaboradorMes.Equipe"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Pedidos Atendidos (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Pedidos Outros Atendidos (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "78.8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Reversões Atendidas (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "71.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.% Reversão Atendida (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Pedidos em Aberto (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Pedidos em Aberto há 5+ Dias (por pessoa)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Por atendente'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Por data de fechamento do pedido · em aberto = agora'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,90 @@
+table Calendario
+	lineageTag: 540772d4-da68-4cae-b20a-8e64a1490bfe
+
+	column Date
+		formatString: dd/mm/yy
+		lineageTag: 0c2cfc86-caf7-4c33-86fc-ae2e25421c4f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mês = FORMAT( Calendario[Date], "mmm/yy" )
+		dataType: string
+		lineageTag: 7f14fcd8-89fb-56fb-a516-a06157ff5d0b
+		summarizeBy: none
+		sortByColumn: AnoMes
+
+		annotation SummarizationSetBy = Automatic
+
+	column AnoMes = YEAR( Calendario[Date] ) * 100 + MONTH( Calendario[Date] )
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f0f3a8ee-ffa6-5f21-8593-a7a0ff5abddd
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Carteira no Dia' = VAR d = Calendario[Date] VAR n = COUNTROWS( RELATEDTABLE( Contratos_historico_contratos ) ) RETURN IF( n > 0 && NOT ISEMPTY( RELATEDTABLE( CRM_Backup_Diario ) ), VAR semana = FILTER( Contratos_historico_contratos, Contratos_historico_contratos[periodo] >= d - 7 && Contratos_historico_contratos[periodo] < d ) VAR media = DIVIDE( COUNTROWS( semana ), COUNTROWS( DISTINCT( SELECTCOLUMNS( semana, "@d", Contratos_historico_contratos[periodo] ) ) ) ) RETURN IF( ISBLANK( media ) || n >= media / 2, 1, 0 ), 0 )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Global
+		lineageTag: a62db4df-4924-5ec9-9f9d-7feebba55fc6
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dia = FORMAT( Calendario[Date], "dd/mm/yy" )
+		dataType: string
+		displayFolder: Global
+		lineageTag: d9583103-077c-5975-a9c7-f11db4e5c0c9
+		summarizeBy: none
+		sortByColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ano = YEAR( Calendario[Date] )
+		dataType: int64
+		formatString: 0
+		lineageTag: 3f6a1c2e-8b4d-4e7a-9c15-a2d0e6b47f01
+		summarizeBy: none
+
+		annotation SummarizationSetBy = User
+
+	column 'Nº do Mês' = MONTH( Calendario[Date] )
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7c2e9d41-5a3b-4f86-b0e2-1d8c4a6f9e02
+		summarizeBy: none
+
+		annotation SummarizationSetBy = User
+
+	column 'Mês do Ano' = FORMAT( Calendario[Date], "MMMM" )
+		dataType: string
+		lineageTag: b84f0e17-2c6d-4a95-8e3f-6d1a7b2c5e03
+		summarizeBy: none
+		sortByColumn: 'Nº do Mês'
+
+		annotation SummarizationSetBy = User
+
+	hierarchy 'Ano e Mês'
+		lineageTag: e19a5c73-4d2b-4b08-a6f1-9c3e8d7b0a04
+
+		level Ano
+			lineageTag: 2d7b6e94-1f3c-4c5a-8e09-b4a2f1c6d805
+			column: Ano
+
+		level Mês
+			lineageTag: 5a3c8f26-9e1d-4b7f-a2c4-e0d6b9a1f306
+			column: 'Mês do Ano'
+
+	partition Calendario = calculated
+		mode: import
+		source = CALENDAR(DATE(2020, 1, 1), DATE(2030, 12, 31))
+
+	annotation PBI_Id = f0af539719cc4797868f185560096700
+

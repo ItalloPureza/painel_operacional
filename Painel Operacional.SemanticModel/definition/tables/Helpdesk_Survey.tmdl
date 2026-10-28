@@ -1,0 +1,312 @@
+table Helpdesk_Survey
+	lineageTag: 6460de4a-de06-43b5-8dd5-fd90c7cc2b26
+
+	/// Respostas do CSAT (Helpdesk) por data da AVALIAÇÃO.
+	measure 'Avaliações CSAT' = COUNTROWS( Helpdesk_Survey )
+		formatString: #,0
+		displayFolder: Base de datas
+		lineageTag: c8f1aa05-6eb6-524e-bb68-a75d5688960d
+
+	/// Parte das avaliações com nota de 0 a 6.
+	measure '% Notas 0 a 6 (Lives)' = DIVIDE( CALCULATE( [Avaliações (Lives)], Helpdesk_Survey[value] <= 6 ), [Avaliações (Lives)] )
+		formatString: 0.00%
+		displayFolder: Lives
+		lineageTag: f24b308e-b7da-50f6-bd82-0db167e67393
+
+	/// Parte das avaliações com nota 9 ou 10.
+	measure '% Notas 9 e 10 (Lives)' = DIVIDE( CALCULATE( [Avaliações (Lives)], Helpdesk_Survey[value] >= 9 ), [Avaliações (Lives)] )
+		formatString: 0.00%
+		displayFolder: Lives
+		lineageTag: 2901e156-01d7-52b4-9947-fa09ce99f311
+
+	/// Nota média de 0 a 10. Por data da avaliação.
+	measure 'Nota Média (Lives)' = CALCULATE( AVERAGE( Helpdesk_Survey[value] ), Helpdesk_Survey[Serviço do Ticket] = "Live" )
+		formatString: 0.00
+		displayFolder: Lives
+		lineageTag: 4cc752e7-685d-5dc3-806c-29ba9546a594
+
+	/// Nota média ÷ 10 (mesma conta do CSAT do OKR 2026). Nota 0 vale 1 (metodologia da empresa: a escala do CSAT é de 1 a 10). Por data da avaliação.
+	measure 'CSAT (Lives)' = CALCULATE( DIVIDE( AVERAGEX( Helpdesk_Survey, MAX( Helpdesk_Survey[value], 1 ) ), 10 ), Helpdesk_Survey[Serviço do Ticket] = "Live" )
+		formatString: 0.00%
+		displayFolder: Lives
+		lineageTag: 7c7fa12b-2c6e-5e98-8f90-201a0d561d11
+
+	/// Respostas do CSAT de tickets do serviço Live. Por data da AVALIAÇÃO.
+	measure 'Avaliações (Lives)' = CALCULATE( COUNTROWS( Helpdesk_Survey ), Helpdesk_Survey[Serviço do Ticket] = "Live" )
+		formatString: #,0
+		displayFolder: Lives
+		lineageTag: a56c37ec-3c68-5fd6-8431-e6e41758051e
+
+	/// Avaliações com nota 9 ou 10.
+	measure 'Notas Promotoras' = CALCULATE( COUNTROWS( Helpdesk_Survey ), Helpdesk_Survey[value] >= 9 )
+		formatString: #,0
+		displayFolder: CSAT
+		lineageTag: 2d800cc1-c4c3-5113-8729-6b4d63f426c1
+
+	/// Avaliações com nota 6 a 8.
+	measure 'Notas Neutras' = CALCULATE( COUNTROWS( Helpdesk_Survey ), Helpdesk_Survey[value] >= 6, Helpdesk_Survey[value] <= 8 )
+		formatString: #,0
+		displayFolder: CSAT
+		lineageTag: dfc75a49-2203-5e2d-b2ea-78d30c8f070c
+
+	/// Avaliações com nota 0 a 5 (faixa do OKR 2026).
+	measure 'Notas Detratoras' = CALCULATE( COUNTROWS( Helpdesk_Survey ), Helpdesk_Survey[value] <= 5 )
+		formatString: #,0
+		displayFolder: CSAT
+		lineageTag: e8e6cd9e-289b-58f8-8f36-c468bbbe6edc
+
+	/// Nota média de 0 a 10.
+	measure 'Nota Média Helpdesk' = AVERAGE( Helpdesk_Survey[value] )
+		formatString: 0.00
+		displayFolder: CSAT
+		lineageTag: a2ae3be8-88dc-51bd-87f8-b76cd402e135
+
+	/// Nota média ÷ 10 (mesma conta do CSAT do OKR 2026). Nota 0 vale 1 (metodologia da empresa: a escala do CSAT é de 1 a 10). Por data da AVALIAÇÃO.
+	measure 'CSAT Helpdesk' = DIVIDE( AVERAGEX( Helpdesk_Survey, MAX( Helpdesk_Survey[value], 1 ) ), 10 )
+		formatString: 0.00%
+		displayFolder: CSAT
+		lineageTag: 098c6522-8a1c-570e-8ca9-310a5920654e
+
+	/// Avaliações com nota até 6 (regra da Carteira Geral do OKR 2026), por data da avaliação.
+	measure 'Notas Detratoras (0 a 6)' = CALCULATE( COUNTROWS( Helpdesk_Survey ), Helpdesk_Survey[value] <= 6 )
+		formatString: #,0
+		displayFolder: Contatos (Ongoing)
+		lineageTag: 670a3410-a93f-5a08-a784-ab5c56709a9b
+
+	/// SEM DEFINIÇÃO na intranet (ver docs/metas-intranet.md): fica vazia. Meta de CSAT do Relacionamento.
+	measure 'Meta CSAT Ouvidoria' = BLANK()
+		formatString: 0.00%
+		displayFolder: Ouvidoria
+		lineageTag: 79a711b2-90c7-5a42-9d4c-6893635ed19a
+
+	/// Nota média ÷ 10 — mesma conta do 'CSAT' do OKR 2026. Nota 0 vale 1 (metodologia da empresa: a escala do CSAT é de 1 a 10). Por data da avaliação. Segue Área, Equipe, Origem e Categoria do ticket (filtros da tela) pelos tickets avaliados.
+	measure 'CSAT Ouvidoria' = VAR ids = CALCULATETABLE( VALUES( Helpdesk_Tickets[id] ), REMOVEFILTERS( Calendario ) ) RETURN IF( ISFILTERED( Helpdesk_Tickets[OuvAreaResponsavel] ) || ISFILTERED( Helpdesk_Tickets[OuvEquipeDemanda] ) || ISFILTERED( Helpdesk_Tickets[OuvOrigemTicket] ) || ISFILTERED( Helpdesk_Tickets[category] ), CALCULATE( DIVIDE( CALCULATE( AVERAGEX( Helpdesk_Survey, MAX( Helpdesk_Survey[value], 1 ) ), Helpdesk_Survey[Serviço do Ticket] = "Ouvidoria", Helpdesk_Survey[Fila do Ticket] = "Relacionamento com Cliente", Helpdesk_Survey[Categoria do Ticket] <> "Intenção de Cancelamento" ), 10 ), KEEPFILTERS( TREATAS( ids, Helpdesk_Survey[ticketId] ) ) ), DIVIDE( CALCULATE( AVERAGEX( Helpdesk_Survey, MAX( Helpdesk_Survey[value], 1 ) ), Helpdesk_Survey[Serviço do Ticket] = "Ouvidoria", Helpdesk_Survey[Fila do Ticket] = "Relacionamento com Cliente", Helpdesk_Survey[Categoria do Ticket] <> "Intenção de Cancelamento" ), 10 ) )
+		formatString: 0.00%
+		displayFolder: Ouvidoria
+		lineageTag: 7939f3b6-1e7d-58c7-9232-4ece998d2ea9
+
+	/// Avaliações de tickets do serviço Ouvidoria da fila Relacionamento com Cliente (sem 'Intenção de Cancelamento'). Segue Área, Equipe, Origem e Categoria do ticket (filtros da tela) pelos tickets avaliados.
+	measure 'Avaliações Ouvidoria' = VAR ids = CALCULATETABLE( VALUES( Helpdesk_Tickets[id] ), REMOVEFILTERS( Calendario ) ) RETURN IF( ISFILTERED( Helpdesk_Tickets[OuvAreaResponsavel] ) || ISFILTERED( Helpdesk_Tickets[OuvEquipeDemanda] ) || ISFILTERED( Helpdesk_Tickets[OuvOrigemTicket] ) || ISFILTERED( Helpdesk_Tickets[category] ), CALCULATE( CALCULATE( COUNTROWS( Helpdesk_Survey ), Helpdesk_Survey[Serviço do Ticket] = "Ouvidoria", Helpdesk_Survey[Fila do Ticket] = "Relacionamento com Cliente", Helpdesk_Survey[Categoria do Ticket] <> "Intenção de Cancelamento" ), KEEPFILTERS( TREATAS( ids, Helpdesk_Survey[ticketId] ) ) ), CALCULATE( COUNTROWS( Helpdesk_Survey ), Helpdesk_Survey[Serviço do Ticket] = "Ouvidoria", Helpdesk_Survey[Fila do Ticket] = "Relacionamento com Cliente", Helpdesk_Survey[Categoria do Ticket] <> "Intenção de Cancelamento" ) )
+		formatString: #,0
+		displayFolder: Ouvidoria
+		lineageTag: 7145b0cf-d928-530c-8df1-d442fe9c4867
+
+	/// Meta de CSAT da Homologação de GUIAS (intranet: CSAT Homologação de Guias, 95). O App não tem meta: a medida fica vazia quando o serviço escolhido é App. Sem serviço escolhido (visão geral) mostra a meta de Guias, que deve ser lida só contra a série de Guias. Meta ÷ 100.
+	measure 'Meta CSAT Homologação' = VAR srv = SELECTEDVALUE( Helpdesk_Survey[Serviço Homologação] ) VAR v = FILTER( Meta_Vinculo, Meta_Vinculo[Medida] = "Meta CSAT Homologação" ) VAR d = MAXX( v, Meta_Vinculo[def_id] ) VAR s = MAXX( v, Meta_Vinculo[setor_id] ) RETURN IF( d > 0 && ( ISBLANK( srv ) || srv IN { "Homologação Guias", "Ajuste Guias" } ), DIVIDE( CALCULATE( [Meta Alvo (período)], Meta_Def[id] = d, Meta_Valor[setor_id] = s ), 100 ) )
+		formatString: 0.00%
+		displayFolder: Homologação
+		lineageTag: a094813a-413f-5a18-afdd-dd3a7f762b8b
+
+	/// CSAT só das avaliações feitas até 30 dias depois da resolução do ticket (regra do OKR 2026). Nota média ÷ 10, por data da avaliação.
+	measure 'CSAT até 30 Dias da Resolução' = CALCULATE( [CSAT Helpdesk], Helpdesk_Survey[Dias da Resolução à Avaliação] <= 30, NOT ISBLANK( Helpdesk_Survey[Dias da Resolução à Avaliação] ) )
+		formatString: 0.00%
+		displayFolder: Homologação
+		lineageTag: f6f551c7-d5f7-5833-93c4-625a6335503d
+
+	/// CSAT dos serviços de Guias (homologação + ajuste), média de todas as notas. Nota média ÷ 10, por data da avaliação.
+	measure 'CSAT Guias' = CALCULATE( [CSAT Helpdesk], KEEPFILTERS( Helpdesk_Survey[Serviço Homologação] IN { "Homologação Guias", "Ajuste Guias" } ) )
+		formatString: 0.00%
+		displayFolder: Homologação
+		lineageTag: af6d961f-bff1-5391-bc6b-a0f5675bf9ca
+
+	/// CSAT dos serviços do App (homologação + ajuste), média de todas as notas. Nota média ÷ 10, por data da avaliação.
+	measure 'CSAT App' = CALCULATE( [CSAT Helpdesk], KEEPFILTERS( Helpdesk_Survey[Serviço Homologação] IN { "Homologação App", "Ajuste App" } ) )
+		formatString: 0.00%
+		displayFolder: Homologação
+		lineageTag: 5a092d04-0185-5d77-8d08-827cfbe59d9d
+
+	column id
+		dataType: string
+		lineageTag: 918bb586-59e7-44e8-bccd-e42db3982205
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column questionId
+		dataType: string
+		lineageTag: 7b4129ab-e26d-4d77-9491-2aa177d66628
+		summarizeBy: none
+		sourceColumn: questionId
+
+		annotation SummarizationSetBy = Automatic
+
+	column type
+		dataType: int64
+		formatString: 0
+		lineageTag: d68a65dc-a7a1-4067-b651-2c23b47fe57e
+		summarizeBy: sum
+		sourceColumn: type
+
+		annotation SummarizationSetBy = Automatic
+
+	column clientId
+		dataType: string
+		lineageTag: 1e19ef09-9658-47c8-b835-e6193ab16371
+		summarizeBy: none
+		sourceColumn: clientId
+
+		annotation SummarizationSetBy = Automatic
+
+	column ticketId
+		dataType: int64
+		formatString: 0
+		lineageTag: 28da9c12-c2a9-4235-b098-4d3a16d29ea6
+		summarizeBy: count
+		sourceColumn: ticketId
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data Avaliacao'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 08054ded-c635-45a4-9c59-84a672fa3504
+		summarizeBy: none
+		sourceColumn: Data Avaliacao
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column value
+		dataType: int64
+		formatString: 0
+		lineageTag: 190ef009-fdb2-4998-b935-95571d9ccae4
+		summarizeBy: sum
+		sourceColumn: value
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor = LOOKUPVALUE(Helpdesk_Tickets[Setor], Helpdesk_Tickets[id], Helpdesk_Survey[ticketId])
+		dataType: string
+		lineageTag: 46987ac8-afd5-4fcf-94ab-fbb38529f2bf
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_extracao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: c189593a-7b16-4da9-9fff-fad479d5543a
+		summarizeBy: none
+		sourceColumn: data_extracao
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Serviço do Ticket' = LOOKUPVALUE( Helpdesk_Tickets[service], Helpdesk_Tickets[id], Helpdesk_Survey[ticketId] )
+		dataType: string
+		displayFolder: Ticket
+		lineageTag: 9f376fc3-d67c-53ff-8b45-b9f990e6fc5b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Analista do Ticket' = LOOKUPVALUE( Helpdesk_Tickets[owner], Helpdesk_Tickets[id], Helpdesk_Survey[ticketId] )
+		dataType: string
+		displayFolder: Ticket
+		lineageTag: 97b44534-07c7-5d72-9661-dd08de5eb12a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Categoria do Ticket' = LOOKUPVALUE( Helpdesk_Tickets[category], Helpdesk_Tickets[id], Helpdesk_Survey[ticketId] )
+		dataType: string
+		displayFolder: Ticket
+		lineageTag: fa753a8e-4832-54ce-8339-a08fe58a6c69
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cliente do Ticket' = LOOKUPVALUE( Helpdesk_Tickets[organization], Helpdesk_Tickets[id], Helpdesk_Survey[ticketId] )
+		dataType: string
+		displayFolder: Ticket
+		lineageTag: 0e72cc8c-3cf9-5d3d-8b9a-099d8e0f2bd4
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Criação do Ticket' = LOOKUPVALUE( Helpdesk_Tickets[Data_Criacao_Ticket], Helpdesk_Tickets[id], Helpdesk_Survey[ticketId] )
+		dataType: dateTime
+		formatString: dd/mm/yy
+		displayFolder: Ticket
+		lineageTag: 18edd4e6-2816-5ba4-9b74-bbc604526477
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email do Analista do Ticket' = LOOKUPVALUE( Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[id], Helpdesk_Survey[ticketId], BLANK() )
+		dataType: string
+		isHidden
+		displayFolder: Ticket
+		lineageTag: 9f87394f-a593-51e3-9c14-2e5c8d485525
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fila do Ticket' = LOOKUPVALUE( Helpdesk_Tickets[owner_team], Helpdesk_Tickets[id], Helpdesk_Survey[ticketId], BLANK() )
+		dataType: string
+		displayFolder: Ticket
+		lineageTag: b1e60e41-dde4-5b38-abf9-2078ca710407
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Serviço Homologação' = LOOKUPVALUE( Helpdesk_Tickets[Serviço Homologação], Helpdesk_Tickets[id], Helpdesk_Survey[ticketId] )
+		dataType: string
+		displayFolder: Homologação
+		lineageTag: ed65098d-1cf1-50b3-bea1-9d52de26f8ca
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias da Resolução à Avaliação' = VAR r = LOOKUPVALUE( Helpdesk_Tickets[Data_Resolucao_Ticket], Helpdesk_Tickets[id], Helpdesk_Survey[ticketId] ) VAR a = Helpdesk_Survey[Data Avaliacao] RETURN IF( ISBLANK( r ) || ISBLANK( a ), BLANK(), IF( r <= a, DATEDIFF( r, a, DAY ), - DATEDIFF( a, r, DAY ) ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Homologação
+		lineageTag: d7a635ca-aa4c-5602-8e2e-d3af26047130
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID do Cliente (busca)' = LOOKUPVALUE( Helpdesk_Tickets[ID do Cliente (busca)], Helpdesk_Tickets[id], Helpdesk_Survey[ticketId], BLANK() )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 50fae87b-2134-530d-91e9-666113623b22
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ do Cliente (busca)' = LOOKUPVALUE( Helpdesk_Tickets[CNPJ do Cliente (busca)], Helpdesk_Tickets[id], Helpdesk_Survey[ticketId], BLANK() )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: e31f9cfb-fc4a-5a28-9f87-b34ba247e2e3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês da Composição' = ( VAR _d = Helpdesk_Survey[Data Avaliacao] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Pessoa
+		lineageTag: 93f4d694-ab0a-5069-8703-c451f647d818
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Helpdesk_Survey = m
+		mode: import
+		queryGroup: Helpdesk
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Helpdesk_Survey",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"id", type text}, {"questionId", type text}, {"type", Int64.Type}, {"clientId", type text}, {"ticketId", Int64.Type}, {"Data Avaliacao", type datetime}, {"value", Int64.Type}, {"data_extracao", type datetime}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

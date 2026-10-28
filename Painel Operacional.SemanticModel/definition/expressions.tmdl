@@ -1,0 +1,5 @@
+expression CaminhoPlanilha = "C:\Painel Operacional\dados\dados_exemplo.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: e5121482-3929-2d22-e255-accb1a466884
+
+	annotation PBI_ResultType = Text
+

@@ -1,0 +1,100 @@
+table Contratos_historico_periodicidade
+	lineageTag: 8be6be5e-7214-4b7c-9202-12e89f51beef
+
+	column periodo
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: e9e00751-e6f3-494e-9947-4576d89ffbc3
+		summarizeBy: none
+		sourceColumn: periodo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b986e3c-88cd-4d57-8b55-2a350db382c4
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column empresa_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 863e39be-fe34-4f5b-8157-f73863922519
+		summarizeBy: sum
+		sourceColumn: empresa_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome
+		dataType: string
+		lineageTag: 74ea4a23-212b-451b-abae-24fe33d7dd82
+		summarizeBy: none
+		sourceColumn: nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtde_meses
+		dataType: int64
+		formatString: 0
+		lineageTag: f711c136-0428-4f68-8075-dfc6945e8604
+		summarizeBy: sum
+		sourceColumn: qtde_meses
+
+		annotation SummarizationSetBy = Automatic
+
+	column ativo
+		dataType: int64
+		formatString: 0
+		lineageTag: f5dea33b-7b13-4d44-bc90-a4098b978e88
+		summarizeBy: sum
+		sourceColumn: ativo
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 392331cd-5c2b-474e-8359-3335499de3a1
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 00052721-d4a2-42e7-aa5e-dd18ecb569fa
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column parcelada
+		dataType: int64
+		formatString: 0
+		lineageTag: d20d5981-43aa-4f32-a5d6-4d263ee51959
+		summarizeBy: sum
+		sourceColumn: parcelada
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Contratos_historico_periodicidade = m
+		mode: import
+		queryGroup: Contratos
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Contratos_historico_periodicida",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"periodo", type datetime}, {"id", Int64.Type}, {"empresa_id", Int64.Type}, {"nome", type text}, {"qtde_meses", Int64.Type}, {"ativo", Int64.Type}, {"created_at", type datetime}, {"updated_at", type datetime}, {"parcelada", Int64.Type}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

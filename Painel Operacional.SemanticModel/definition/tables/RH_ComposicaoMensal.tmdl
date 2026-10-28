@@ -1,0 +1,129 @@
+table RH_ComposicaoMensal
+	isHidden
+	lineageTag: b78ba9b8-5e6d-536e-8f5d-d4de6834b0b2
+
+	column usuario_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 1e3d2426-f40e-5130-94d1-2bedf7a52f56
+		summarizeBy: none
+		sourceColumn: usuario_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nome
+		dataType: string
+		lineageTag: 39149ce4-c31b-5afd-b4da-49e088fa17f4
+		summarizeBy: none
+		sourceColumn: Nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column email
+		dataType: string
+		lineageTag: b6f3ae5b-dcb4-5bb5-809f-5b36bd5bba42
+		summarizeBy: none
+		sourceColumn: email
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Área RH'
+		dataType: string
+		lineageTag: 04c568e1-6ef2-51f4-820c-ec5e8094aa73
+		summarizeBy: none
+		sourceColumn: Área RH
+
+		annotation SummarizationSetBy = Automatic
+
+	column setor_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 34a532ae-44f5-59ec-b7de-25098f16ee92
+		summarizeBy: none
+		sourceColumn: setor_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Setor RH'
+		dataType: string
+		lineageTag: 69c7dcbd-72dd-5d5f-9aa8-fcd7163c7bd6
+		summarizeBy: none
+		sourceColumn: Setor RH
+
+		annotation SummarizationSetBy = Automatic
+
+	column equipe_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 0b51f238-349d-5196-90f3-62a69ece0d39
+		summarizeBy: none
+		sourceColumn: equipe_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Equipe
+		dataType: string
+		lineageTag: 5190915a-f41e-5e6e-a35b-6d69e6fce8a1
+		summarizeBy: none
+		sourceColumn: Equipe
+
+		annotation SummarizationSetBy = Automatic
+
+	column papel
+		dataType: string
+		lineageTag: a894d01f-3773-5b4c-9af3-4b4d020fd313
+		summarizeBy: none
+		sourceColumn: papel
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		lineageTag: 01de13c6-d678-560f-a215-b6dd800f7824
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Período Fechado'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 5461093a-6357-53fd-b6bc-0288e2a5cb92
+		summarizeBy: none
+		sourceColumn: Período Fechado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mês
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 8cbff00e-e8c3-5518-9d9b-f0a6f54697d3
+		summarizeBy: none
+		sourceColumn: Mês
+
+		annotation SummarizationSetBy = Automatic
+
+	column AnoMes
+		dataType: int64
+		formatString: 0
+		lineageTag: 550c258a-a9a5-55ea-96b5-06c98f1adad1
+		summarizeBy: none
+		sourceColumn: AnoMes
+
+		annotation SummarizationSetBy = Automatic
+
+	partition RH_ComposicaoMensal = m
+		mode: import
+		queryGroup: Estrutura
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="RH_ComposicaoMensal",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"usuario_id", Int64.Type}, {"Nome", type text}, {"email", type text}, {"Área RH", type text}, {"setor_id", Int64.Type}, {"Setor RH", type text}, {"equipe_id", Int64.Type}, {"Equipe", type text}, {"papel", type text}, {"status", type text}, {"Período Fechado", type logical}, {"Mês", type datetime}, {"AnoMes", Int64.Type}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

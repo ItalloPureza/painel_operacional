@@ -1,0 +1,108 @@
+table Atualizacao
+	lineageTag: ab29ba99-4ba6-48af-89d5-c7928da828ff
+
+	measure Atualização = "Atualizado em " & FORMAT( SELECTEDVALUE( 'Atualizacao'[Data e Hora] ), "dd/mm/yy hh:nn" )
+		lineageTag: aa655df9-10b1-4aa2-8d16-5d12d1e1f239
+
+	measure 'Tem Acesso' =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR setorPagina = SELECTEDVALUE( dSetorPagina[Setor] )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN
+			    IF( setorPagina = "Global" || "*" IN meus || setorPagina IN meus, 1, 0 )
+		formatString: 0
+		lineageTag: 1f210b0d-c3c4-4e05-b47e-5d32e4c44f99
+
+	measure 'Mensagem Acesso' =
+			
+			IF( [Tem Acesso] = 0, "🔒 Você não tem acesso a este setor.", "" )
+		lineageTag: cb8f7a31-00e4-4d19-bc21-da853322b1da
+
+	measure 'Transp Cadeado' = IF([Tem Acesso]=1, 100, 0)
+		formatString: 0
+		lineageTag: 0a7b7b2b-9f70-42ab-8720-0fa3ecfca1c4
+
+	measure 'Nav Suporte' =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN IF( "*" IN meus || "Suporte" IN meus, "Suporte - Resultados", "HomePage" )
+		lineageTag: 4a4a2c32-4c2a-4240-8704-38b47dbeafe6
+
+	measure 'Nav Lives' =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN IF( "*" IN meus || "Lives" IN meus, "Lives - Participação", "HomePage" )
+		lineageTag: 2550e185-922d-4972-8a91-7370a5707383
+
+	measure 'Nav Onboarding' =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN IF( "*" IN meus || "Onboarding" IN meus, "Onboarding - Performance", "HomePage" )
+		lineageTag: c1849032-e6d2-41d9-86c3-63d72e47e5c9
+
+	measure 'Nav Ongoing' =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN IF( "*" IN meus || "Ongoing" IN meus, "Ongoing - Performance", "HomePage" )
+		lineageTag: 3802937b-1c38-4b9c-b488-df1d109ac326
+
+	measure 'Nav Relacionamento' =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN IF( "*" IN meus || "Relacionamento" IN meus, "Relacionamento - Cancelamentos", "HomePage" )
+		lineageTag: 0150334c-40db-4633-9a92-4ec0c8551293
+
+	measure 'Nav Homologacao' =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN IF( "*" IN meus || "Homologação" IN meus, "Homologação - App", "HomePage" )
+		lineageTag: a101299b-e792-4a88-8cf9-300bc5efb647
+
+	measure 'Nav Gerencia' =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN IF( "*" IN meus || "Gerência" IN meus, "Gerência - Cohort AF", "HomePage" )
+		lineageTag: fb9c15a4-0386-4063-a971-d5ea5e52f8c7
+
+	/// Texto do botão da busca de painéis da HomePage.
+	measure 'Texto Busca' = VAR u = LOWER( USERPRINCIPALNAME() ) VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) ) VAR p = SELECTEDVALUE( dPaineis[Página] ) VAR s = SELECTEDVALUE( dPaineis[Setor] ) VAR ok = s IN { "Global", "Saúde dos dados" } || "*" IN meus || s IN meus RETURN IF( ISBLANK( p ), "Escolha um painel", IF( ok, "Abrir painel ›", "Sem acesso a este setor" ) )
+		displayFolder: Navegação
+		lineageTag: 583da092-718d-5242-9659-b409464f1d28
+
+	/// Destino do botão da busca de painéis da HomePage (displayName); vazio = botão desligado; sem acesso = fica.
+	measure 'Nav Busca' = VAR u = LOWER( USERPRINCIPALNAME() ) VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) ) VAR p = SELECTEDVALUE( dPaineis[Página] ) VAR s = SELECTEDVALUE( dPaineis[Setor] ) VAR ok = s IN { "Global", "Saúde dos dados" } || "*" IN meus || s IN meus RETURN IF( ISBLANK( p ), BLANK(), IF( ok, p, "HomePage" ) )
+		displayFolder: Navegação
+		lineageTag: 46cd3afe-acf9-585f-8110-1faf2fb845eb
+
+	column 'Data e Hora'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 75c2a020-a545-4e56-ae2d-e9806548222f
+		summarizeBy: none
+		sourceColumn: Data e Hora
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Atualizacao = m
+		mode: import
+		source =
+				let
+				    Fonte = DateTimeZone.SwitchZone(DateTimeZone.LocalNow(),-3),
+				    #"Convertido para Tabela" = #table(1, {{Fonte}}),
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"Convertido para Tabela",{{"Column1", "Data e Hora"}}),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Colunas Renomeadas",{{"Data e Hora", type datetimezone}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

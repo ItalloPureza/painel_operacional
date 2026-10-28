@@ -1,0 +1,155 @@
+table Contratos_historico_items
+	lineageTag: 7247f345-fa92-4a6a-96c0-ab96baad18cf
+
+	column periodo
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 997ec493-d2ed-4a44-b655-9f0d139839ff
+		summarizeBy: none
+		sourceColumn: periodo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column contrato_id
+		dataType: int64
+		formatString: 0
+		lineageTag: a4214f45-b71c-4ea5-9826-75a8525c270e
+		summarizeBy: sum
+		sourceColumn: contrato_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 398ce2f1-eee2-4b0e-a2ae-e092f383875f
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column item_catalogo_id
+		dataType: int64
+		formatString: 0
+		lineageTag: dfddb00a-b0df-485b-8106-9d5fd62b76ec
+		summarizeBy: sum
+		sourceColumn: item_catalogo_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtde
+		dataType: double
+		lineageTag: 8f1d1e08-0830-4cae-815c-db370a30ceb4
+		summarizeBy: sum
+		sourceColumn: qtde
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column vr_total
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 6226fa8f-36e3-40ca-8dc9-fb6fe71ee8c8
+		summarizeBy: sum
+		sourceColumn: vr_total
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Ativo no Contrato?'
+		dataType: int64
+		formatString: 0
+		lineageTag: 25e94708-49b8-4cfa-a137-b8355d1805dc
+		summarizeBy: sum
+		sourceColumn: Ativo no Contrato?
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 02d9589b-7142-49e2-95d4-d74efa7969f2
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column updated_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: f8d979ed-a9fc-4152-b9ae-f1a17871d773
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column indice_conversao
+		dataType: double
+		lineageTag: f849a05d-b108-4eef-bd90-f95b96fd73c8
+		summarizeBy: sum
+		sourceColumn: indice_conversao
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column custom_sistema_versao
+		dataType: string
+		lineageTag: 2e9323cf-9772-43d6-b493-96bac04e68c1
+		summarizeBy: none
+		sourceColumn: custom_sistema_versao
+
+		annotation SummarizationSetBy = Automatic
+
+	column vr_total_mesalizado
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 9f048b69-42ab-4647-9b47-092084d8bca7
+		summarizeBy: sum
+		sourceColumn: vr_total_mesalizado
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Chave Contrato'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3ba8091a-89e1-5160-b81a-9771580672a7
+		summarizeBy: none
+		sourceColumn: Chave Contrato
+
+		annotation SummarizationSetBy = Automatic
+
+	column Produto = SWITCH( Contratos_historico_items[item_catalogo_id], 2, "AF", 3, "GB Extra", 4, "AF Docs", 5, "KP", 6, "Pacote de GB", "Outros" )
+		dataType: string
+		displayFolder: Global
+		lineageTag: 8caaa969-25f0-51a3-bde3-14c44ee44b56
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Contratos_historico_items = m
+		mode: import
+		queryGroup: Contratos
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Contratos_historico_items",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"periodo", type datetime}, {"contrato_id", Int64.Type}, {"id", Int64.Type}, {"item_catalogo_id", Int64.Type}, {"qtde", type number}, {"vr_total", type number}, {"Ativo no Contrato?", Int64.Type}, {"created_at", type datetime}, {"updated_at", type datetime}, {"indice_conversao", type number}, {"custom_sistema_versao", type text}, {"vr_total_mesalizado", type number}, {"Chave Contrato", Int64.Type}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

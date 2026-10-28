@@ -1,0 +1,806 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "ong_chart_1",
+  "position": {
+    "x": 292,
+    "y": 296,
+    "z": 29000,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 29000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaboradorMes"
+                    }
+                  },
+                  "Property": "Colaborador"
+                }
+              },
+              "queryRef": "dColaboradorMes.Colaborador",
+              "nativeQueryRef": "Colaborador",
+              "displayName": "Analista"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaboradorMes"
+                    }
+                  },
+                  "Property": "Equipe"
+                }
+              },
+              "queryRef": "dColaboradorMes.Equipe",
+              "nativeQueryRef": "Equipe",
+              "displayName": "Equipe"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Tratativas Feitas (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Tratativas Feitas (por pessoa)",
+              "nativeQueryRef": "Tratativas Feitas (por pessoa)",
+              "displayName": "Tratativas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Checkouts Feitos (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Checkouts Feitos (por pessoa)",
+              "nativeQueryRef": "Checkouts Feitos (por pessoa)",
+              "displayName": "Checkouts"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Tentativas de Contato Ongoing (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Tentativas de Contato Ongoing (por pessoa)",
+              "nativeQueryRef": "Tentativas de Contato Ongoing (por pessoa)",
+              "displayName": "Tentativas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Ongoing sem Contato (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Ongoing sem Contato (por pessoa)",
+              "nativeQueryRef": "Ongoing sem Contato (por pessoa)",
+              "displayName": "Sem contato"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Tira-Dúvidas por Ticket (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Tira-Dúvidas por Ticket (por pessoa)",
+              "nativeQueryRef": "Tira-Dúvidas por Ticket (por pessoa)",
+              "displayName": "TD ticket"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Tira-Dúvidas por WhatsApp (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Tira-Dúvidas por WhatsApp (por pessoa)",
+              "nativeQueryRef": "Tira-Dúvidas por WhatsApp (por pessoa)",
+              "displayName": "TD WhatsApp"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Tira-Dúvidas Internos (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Tira-Dúvidas Internos (por pessoa)",
+              "nativeQueryRef": "Tira-Dúvidas Internos (por pessoa)",
+              "displayName": "TD interna"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Tratativas de Desenvolvimento (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Tratativas de Desenvolvimento (por pessoa)",
+              "nativeQueryRef": "Tratativas de Desenvolvimento (por pessoa)",
+              "displayName": "Desenv."
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Tratativas de Negociação (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Tratativas de Negociação (por pessoa)",
+              "nativeQueryRef": "Tratativas de Negociação (por pessoa)",
+              "displayName": "Negoc."
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Notas Detratoras (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Notas Detratoras (por pessoa)",
+              "nativeQueryRef": "Notas Detratoras (por pessoa)",
+              "displayName": "Detratoras"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Ligações Atendidas (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Ligações Atendidas (por pessoa)",
+              "nativeQueryRef": "Ligações Atendidas (por pessoa)",
+              "displayName": "Ligações"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Tempo Falado (h) (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Tempo Falado (h) (por pessoa)",
+              "nativeQueryRef": "Tempo Falado (h) (por pessoa)",
+              "displayName": "Tempo falado"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Atividades Concluídas (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Atividades Concluídas (por pessoa)",
+              "nativeQueryRef": "Atividades Concluídas (por pessoa)",
+              "displayName": "Atividades"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "% Prazo das Atividades (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.% Prazo das Atividades (por pessoa)",
+              "nativeQueryRef": "% Prazo das Atividades (por pessoa)",
+              "displayName": "% no prazo"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Clientes na Carteira (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Clientes na Carteira (por pessoa)",
+              "nativeQueryRef": "Clientes na Carteira (por pessoa)",
+              "displayName": "Carteira"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Uso Geral da Carteira (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Uso Geral da Carteira (por pessoa)",
+              "nativeQueryRef": "Uso Geral da Carteira (por pessoa)",
+              "displayName": "Uso geral"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "% eContinuo da Carteira (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.% eContinuo da Carteira (por pessoa)",
+              "nativeQueryRef": "% eContinuo da Carteira (por pessoa)",
+              "displayName": "% eContinuo"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Interações em Processos (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Interações em Processos (por pessoa)",
+              "nativeQueryRef": "Interações em Processos (por pessoa)",
+              "displayName": "Processos"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dColaborador"
+                  }
+                },
+                "Property": "Tratativas Feitas (por pessoa)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "72.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaboradorMes.Colaborador"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "72.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaboradorMes.Equipe"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "77.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Tratativas Feitas (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "70.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Checkouts Feitos (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "77.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Tentativas de Contato Ongoing (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "58.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Ongoing sem Contato (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Tira-Dúvidas por Ticket (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Tira-Dúvidas por WhatsApp (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "58.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Tira-Dúvidas Internos (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "58.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Tratativas de Desenvolvimento (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Tratativas de Negociação (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "77.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Notas Detratoras (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Ligações Atendidas (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "66.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Tempo Falado (h) (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "77.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Atividades Concluídas (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.% Prazo das Atividades (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Clientes na Carteira (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Uso Geral da Carteira (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "70.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.% eContinuo da Carteira (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "70.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Interações em Processos (por pessoa)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Por analista'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Tickets por fechamento · ligações por início · atividades por conclusão · carteira e uso = hoje'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

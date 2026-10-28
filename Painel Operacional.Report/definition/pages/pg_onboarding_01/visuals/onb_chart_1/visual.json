@@ -1,0 +1,544 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "onb_chart_1",
+  "position": {
+    "x": 292,
+    "y": 296,
+    "z": 29000,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 29000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaboradorMes"
+                    }
+                  },
+                  "Property": "Colaborador"
+                }
+              },
+              "queryRef": "dColaboradorMes.Colaborador",
+              "nativeQueryRef": "Colaborador",
+              "displayName": "Analista"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaboradorMes"
+                    }
+                  },
+                  "Property": "Equipe"
+                }
+              },
+              "queryRef": "dColaboradorMes.Equipe",
+              "nativeQueryRef": "Equipe",
+              "displayName": "Equipe"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Contatos Efetivos (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Contatos Efetivos (por pessoa)",
+              "nativeQueryRef": "Contatos Efetivos (por pessoa)",
+              "displayName": "Contatos efetivos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Tentativas de Contato (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Tentativas de Contato (por pessoa)",
+              "nativeQueryRef": "Tentativas de Contato (por pessoa)",
+              "displayName": "Tentativas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Cancelamentos AF (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Cancelamentos AF (por pessoa)",
+              "nativeQueryRef": "Cancelamentos AF (por pessoa)",
+              "displayName": "Canc. AF"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "R$ Cancelado AF (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.R$ Cancelado AF (por pessoa)",
+              "nativeQueryRef": "R$ Cancelado AF (por pessoa)",
+              "displayName": "R$ canc. AF"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Migrações Ativadas (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Migrações Ativadas (por pessoa)",
+              "nativeQueryRef": "Migrações Ativadas (por pessoa)",
+              "displayName": "Migr. ativas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Migrações Não Ativadas (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Migrações Não Ativadas (por pessoa)",
+              "nativeQueryRef": "Migrações Não Ativadas (por pessoa)",
+              "displayName": "Migr. não ativas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "% Migração Ativa (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.% Migração Ativa (por pessoa)",
+              "nativeQueryRef": "% Migração Ativa (por pessoa)",
+              "displayName": "% migr. ativa"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "% Prazo das Atividades (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.% Prazo das Atividades (por pessoa)",
+              "nativeQueryRef": "% Prazo das Atividades (por pessoa)",
+              "displayName": "% no prazo"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Clientes na Carteira (por pessoa)"
+                }
+              },
+              "queryRef": "dColaborador.Clientes na Carteira (por pessoa)",
+              "nativeQueryRef": "Clientes na Carteira (por pessoa)",
+              "displayName": "Carteira"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dColaborador"
+                  }
+                },
+                "Property": "Clientes na Carteira (por pessoa)"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "87.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaboradorMes.Colaborador"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "87.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaboradorMes.Equipe"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Contatos Efetivos (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "77.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Tentativas de Contato (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Cancelamentos AF (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "108.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.R$ Cancelado AF (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Migrações Ativadas (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Migrações Não Ativadas (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.% Migração Ativa (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.% Prazo das Atividades (por pessoa)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Clientes na Carteira (por pessoa)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Por analista'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Contatos e cancelamentos por fechamento · atividades por conclusão · carteira = hoje'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

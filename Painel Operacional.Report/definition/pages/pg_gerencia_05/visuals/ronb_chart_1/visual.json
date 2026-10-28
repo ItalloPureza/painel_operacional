@@ -1,0 +1,719 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "ronb_chart_1",
+  "position": {
+    "x": 292,
+    "y": 714,
+    "z": 60190,
+    "height": 338,
+    "width": 1596,
+    "tabOrder": 60190
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaboradorMes"
+                    }
+                  },
+                  "Property": "Colaborador"
+                }
+              },
+              "queryRef": "dColaboradorMes.Colaborador",
+              "nativeQueryRef": "Colaborador",
+              "displayName": "Consultor"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Equipe no Mês (resumo)"
+                }
+              },
+              "queryRef": "dColaborador.Equipe no Mês (resumo)",
+              "nativeQueryRef": "Equipe no Mês (resumo)",
+              "displayName": "Equipe"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Clientes Atuais (resumo)"
+                }
+              },
+              "queryRef": "dColaborador.Clientes Atuais (resumo)",
+              "nativeQueryRef": "Clientes Atuais (resumo)",
+              "displayName": "Atuais"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Clientes sem Contato (resumo Onboarding)"
+                }
+              },
+              "queryRef": "dColaborador.Clientes sem Contato (resumo Onboarding)",
+              "nativeQueryRef": "Clientes sem Contato (resumo Onboarding)",
+              "displayName": "Sem atividade"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Clientes Migrados (resumo Onboarding)"
+                }
+              },
+              "queryRef": "dColaborador.Clientes Migrados (resumo Onboarding)",
+              "nativeQueryRef": "Clientes Migrados (resumo Onboarding)",
+              "displayName": "Migrados"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Clientes Cancelados (resumo)"
+                }
+              },
+              "queryRef": "dColaborador.Clientes Cancelados (resumo)",
+              "nativeQueryRef": "Clientes Cancelados (resumo)",
+              "displayName": "Cancelados"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Atividades Concluídas (resumo Onboarding)"
+                }
+              },
+              "queryRef": "dColaborador.Atividades Concluídas (resumo Onboarding)",
+              "nativeQueryRef": "Atividades Concluídas (resumo Onboarding)",
+              "displayName": "Atividades"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "% SLA CRM (resumo)"
+                }
+              },
+              "queryRef": "dColaborador.% SLA CRM (resumo)",
+              "nativeQueryRef": "% SLA CRM (resumo)",
+              "displayName": "SLA ativ."
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Atividades Atrasadas (resumo Onboarding)"
+                }
+              },
+              "queryRef": "dColaborador.Atividades Atrasadas (resumo Onboarding)",
+              "nativeQueryRef": "Atividades Atrasadas (resumo Onboarding)",
+              "displayName": "Atrasadas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "% SLA dos Tickets (resumo Onboarding)"
+                }
+              },
+              "queryRef": "dColaborador.% SLA dos Tickets (resumo Onboarding)",
+              "nativeQueryRef": "% SLA dos Tickets (resumo Onboarding)",
+              "displayName": "SLA tickets"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Alinhamentos de Expectativa (resumo Onboarding)"
+                }
+              },
+              "queryRef": "dColaborador.Alinhamentos de Expectativa (resumo Onboarding)",
+              "nativeQueryRef": "Alinhamentos de Expectativa (resumo Onboarding)",
+              "displayName": "Alinhamentos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Consultorias Realizadas (resumo Onboarding)"
+                }
+              },
+              "queryRef": "dColaborador.Consultorias Realizadas (resumo Onboarding)",
+              "nativeQueryRef": "Consultorias Realizadas (resumo Onboarding)",
+              "displayName": "Consultorias"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Faltas em Consultoria (resumo Onboarding)"
+                }
+              },
+              "queryRef": "dColaborador.Faltas em Consultoria (resumo Onboarding)",
+              "nativeQueryRef": "Faltas em Consultoria (resumo Onboarding)",
+              "displayName": "Faltas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Tentativas de Contato (resumo Onboarding)"
+                }
+              },
+              "queryRef": "dColaborador.Tentativas de Contato (resumo Onboarding)",
+              "nativeQueryRef": "Tentativas de Contato (resumo Onboarding)",
+              "displayName": "Tentativas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dColaborador"
+                    }
+                  },
+                  "Property": "Contatos Efetivos (resumo Onboarding)"
+                }
+              },
+              "queryRef": "dColaborador.Contatos Efetivos (resumo Onboarding)",
+              "nativeQueryRef": "Contatos Efetivos (resumo Onboarding)",
+              "displayName": "Contatos efetivos"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dColaboradorMes"
+                  }
+                },
+                "Property": "Colaborador"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "285.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaboradorMes.Colaborador"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "285.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Equipe no Mês (resumo)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Clientes Atuais (resumo)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "78.8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Clientes sem Contato (resumo Onboarding)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "71.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Clientes Migrados (resumo Onboarding)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "86.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Clientes Cancelados (resumo)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "86.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Atividades Concluídas (resumo Onboarding)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.% SLA CRM (resumo)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "78.8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Atividades Atrasadas (resumo Onboarding)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.% SLA dos Tickets (resumo Onboarding)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "100.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Alinhamentos de Expectativa (resumo Onboarding)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "100.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Consultorias Realizadas (resumo Onboarding)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Faltas em Consultoria (resumo Onboarding)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "86.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Tentativas de Contato (resumo Onboarding)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "71.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dColaborador.Contatos Efetivos (resumo Onboarding)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Por consultor'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Mês mais recente do período · uma linha por pessoa da equipe no mês'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "competenciaCartao",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Competência"
+              }
+            },
+            "Property": "Competência"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "c",
+              "Entity": "Competência",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "c"
+                          }
+                        },
+                        "Property": "Competência"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Mês mais recente'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "isHiddenInViewMode": true
+      }
+    ]
+  }
+}

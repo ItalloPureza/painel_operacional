@@ -1,0 +1,186 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY26SU04",
+      "reportVersionAtImport": {
+        "visual": "2.8.0",
+        "report": "3.2.0",
+        "page": "2.3.1"
+      },
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "Alfa___Opera__o0811143689387378.json",
+      "reportVersionAtImport": {
+        "visual": "2.8.0",
+        "report": "3.2.0",
+        "page": "2.3.1"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "periodoGlobal",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Calendario"
+              }
+            },
+            "Property": "Date"
+          }
+        },
+        "type": "Advanced",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "c",
+              "Entity": "Calendario",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Comparison": {
+                  "ComparisonKind": 2,
+                  "Left": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Source": "c"
+                        }
+                      },
+                      "Property": "Date"
+                    }
+                  },
+                  "Right": {
+                    "Literal": {
+                      "Value": "datetime'2026-08-01T00:00:00'"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "isLockedInViewMode": true
+      }
+    ]
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY26SU04",
+          "path": "BaseThemes/CY26SU04.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "Alfa___Opera__o0811143689387378.json",
+          "path": "Alfa___Opera__o0811143689387378.json",
+          "type": "CustomTheme"
+        },
+        {
+          "name": "icon_agendamento.png",
+          "path": "icon_agendamento.png",
+          "type": "Image"
+        },
+        {
+          "name": "icon_cadeado_v2.png",
+          "path": "icon_cadeado_v2.png",
+          "type": "Image"
+        },
+        {
+          "name": "icon_gerencia.png",
+          "path": "icon_gerencia.png",
+          "type": "Image"
+        },
+        {
+          "name": "icon_global.png",
+          "path": "icon_global.png",
+          "type": "Image"
+        },
+        {
+          "name": "icon_homologacao.png",
+          "path": "icon_homologacao.png",
+          "type": "Image"
+        },
+        {
+          "name": "icon_onboarding.png",
+          "path": "icon_onboarding.png",
+          "type": "Image"
+        },
+        {
+          "name": "icon_ongoing_v2.png",
+          "path": "icon_ongoing_v2.png",
+          "type": "Image"
+        },
+        {
+          "name": "icon_relacionamento.png",
+          "path": "icon_relacionamento.png",
+          "type": "Image"
+        },
+        {
+          "name": "icon_suporte.png",
+          "path": "icon_suporte.png",
+          "type": "Image"
+        },
+        {
+          "name": "Logo_Marca.png",
+          "path": "Logo_Marca.png",
+          "type": "Image"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true
+  }
+}

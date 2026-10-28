@@ -1,0 +1,636 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
+  "name": "fly_chart_1",
+  "position": {
+    "x": 292,
+    "y": 158,
+    "z": 63066,
+    "width": 1596,
+    "height": 894,
+    "tabOrder": 63066
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "ID"
+                }
+              },
+              "queryRef": "Legado_Clientes.ID",
+              "nativeQueryRef": "ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "CNPJ"
+                }
+              },
+              "queryRef": "Legado_Clientes.CNPJ",
+              "nativeQueryRef": "CNPJ"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "Nome Fantasia"
+                }
+              },
+              "queryRef": "Legado_Clientes.Nome Fantasia",
+              "nativeQueryRef": "Nome Fantasia"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "Status"
+                }
+              },
+              "queryRef": "Legado_Clientes.Status",
+              "nativeQueryRef": "Status"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "Status de Saúde"
+                }
+              },
+              "queryRef": "Legado_Clientes.Status de Saúde",
+              "nativeQueryRef": "Status de Saúde"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "Status KP"
+                }
+              },
+              "queryRef": "Legado_Clientes.Status KP",
+              "nativeQueryRef": "Status KP"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "Utilização"
+                }
+              },
+              "queryRef": "Legado_Clientes.Utilização",
+              "nativeQueryRef": "Utilização"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "Responsável"
+                }
+              },
+              "queryRef": "Legado_Clientes.Responsável",
+              "nativeQueryRef": "Responsável"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "Categoria"
+                }
+              },
+              "queryRef": "Legado_Clientes.Categoria",
+              "nativeQueryRef": "Categoria"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "Cidade/UF"
+                }
+              },
+              "queryRef": "Legado_Clientes.Cidade/UF",
+              "nativeQueryRef": "Cidade/UF"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "Avaliação"
+                }
+              },
+              "queryRef": "Legado_Clientes.Avaliação",
+              "nativeQueryRef": "Avaliação"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "Empresas no Contrato"
+                }
+              },
+              "queryRef": "Legado_Clientes.Empresas no Contrato",
+              "nativeQueryRef": "Empresas no Contrato"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "Empresas com D"
+                }
+              },
+              "queryRef": "Legado_Clientes.Empresas com D",
+              "nativeQueryRef": "Empresas com D"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "Receita AF"
+                }
+              },
+              "queryRef": "Legado_Clientes.Receita AF",
+              "nativeQueryRef": "Receita AF"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "Receita KP"
+                }
+              },
+              "queryRef": "Legado_Clientes.Receita KP",
+              "nativeQueryRef": "Receita KP"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Legado_Clientes"
+                    }
+                  },
+                  "Property": "Mensalidade"
+                }
+              },
+              "queryRef": "Legado_Clientes.Mensalidade",
+              "nativeQueryRef": "Mensalidade"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Legado_Clientes"
+                  }
+                },
+                "Property": "ID"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "58.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.ID"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "112.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.CNPJ"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "169.5D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.Nome Fantasia"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "90.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.Status"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "90.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.Status de Saúde"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "90.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.Status KP"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "86.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.Utilização"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "84.7D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.Responsável"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "127.1D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.Categoria"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "84.7D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.Cidade/UF"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "78.8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.Avaliação"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "71.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.Empresas no Contrato"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "71.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.Empresas com D"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "120.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.Receita AF"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "120.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.Receita KP"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "120.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Legado_Clientes.Mensalidade"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Clientes na API do sistema legado'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

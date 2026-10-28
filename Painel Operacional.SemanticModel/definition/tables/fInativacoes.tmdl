@@ -1,0 +1,264 @@
+table fInativacoes
+	lineageTag: 9b518772-c6ba-5979-9e00-67d5a17827c4
+
+	/// Saídas cujo único ticket efetivado é de antes de o cliente voltar: o cancelamento novo não tem ticket.
+	measure 'Inativações só com Ticket Anterior' = CALCULATE( COUNTROWS( fInativacoes ), KEEPFILTERS( fInativacoes[Ticket do Período] IN { "Só ticket de período anterior" } ) )
+		formatString: #,0
+		displayFolder: Gerência
+		lineageTag: ea7c0d94-1ce3-5df0-9548-ca235fa8979d
+
+	/// Saídas sem ticket efetivado no período do cliente (sem ticket nenhum ou só ticket de antes de uma volta).
+	measure 'Inativações sem Ticket no Período' = CALCULATE( COUNTROWS( fInativacoes ), KEEPFILTERS( fInativacoes[Ticket do Período] IN { "Sem ticket", "Só ticket de período anterior" } ) )
+		formatString: #,0
+		displayFolder: Gerência
+		lineageTag: 571d36a0-95c8-5a60-a59c-f6d7c59ff890
+
+	/// Saídas com ticket 'Cancelamento Efetivado' fechado no mesmo período do cliente.
+	measure 'Inativações com Ticket Efetivado' = CALCULATE( COUNTROWS( fInativacoes ), KEEPFILTERS( fInativacoes[Ticket do Período] IN { "Efetivado", "Efetivado com estorno total", "Efetivado só tipo 1" } ) )
+		formatString: #,0
+		displayFolder: Gerência
+		lineageTag: 6c6e19ac-4432-5b39-90bd-08563d325a8b
+
+	/// Saídas desde ago/2026 no retrato do CRM (ativo -> inativo por mais de 7 dias ou até hoje). Quem saiu duas vezes conta duas.
+	measure Inativações = COUNTROWS( fInativacoes )
+		formatString: #,0
+		displayFolder: Gerência
+		lineageTag: 9a7207a4-686a-5b4b-aa73-be8895a9135c
+
+	/// Saídas com ticket efetivado no período ÷ saídas.
+	measure '% Inativações com Ticket' = DIVIDE( [Inativações com Ticket Efetivado], [Inativações] )
+		formatString: 0.00%
+		displayFolder: Gerência
+		lineageTag: f7cb5171-83ef-5a9d-b41f-5f5f1d76f46c
+
+	column 'ID CRM'
+		formatString: 0
+		lineageTag: 728f4f73-e469-5514-a1a8-113d7294b1f8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ID CRM]
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID
+		lineageTag: ee021c3d-9b45-53d0-8d57-fa50628e2a81
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cliente
+		lineageTag: 58525e7f-9f0d-5d94-a753-8ffb6a97624c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cliente]
+
+		annotation SummarizationSetBy = Automatic
+
+	column CNPJ
+		lineageTag: 047034d1-f743-551d-bbcc-e94520f4be65
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CNPJ]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Produto
+		lineageTag: e867c6a8-f073-5472-b4a4-e87241195b61
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Produto]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CS (último dia ativo)'
+		lineageTag: 47888671-3aab-5887-8da8-f78db80f5e9b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CS (último dia ativo)]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe do CS'
+		lineageTag: e0e6629e-c1ef-5e5a-82eb-1fdee2cf6244
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Equipe do CS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Último Dia Ativo'
+		formatString: dd/mm/yy
+		lineageTag: 31f0de73-4531-5b30-b59d-4c6c7d090fc0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Último Dia Ativo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data da Inativação'
+		formatString: dd/mm/yy
+		lineageTag: 719bd68f-e436-5825-9486-b30db9eaceb7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Data da Inativação]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Início do Período'
+		formatString: dd/mm/yy
+		lineageTag: 7acb546a-617f-5353-8f29-4cace3b86408
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Início do Período]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Confirmação
+		lineageTag: 0379ca01-ade1-55cf-95b4-6da1c2855c6b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Confirmação]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Voltou em'
+		formatString: dd/mm/yy
+		lineageTag: bfe874eb-4292-56b3-b9d6-a2709b2b0fa1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Voltou em]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ticket do Período'
+		lineageTag: 06adda6b-50b4-563f-9350-3fce2f352449
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ticket do Período]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ticket
+		formatString: 0
+		lineageTag: 5b85daa1-75c7-5625-b30f-bb3f26fbc018
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ticket]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Categoria do Ticket'
+		lineageTag: 58306431-2c44-5f3f-8c74-744f65970d53
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Categoria do Ticket]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Status do Ticket'
+		lineageTag: efa9aa0a-e3d0-5e00-a5b8-a7d93f598a1a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Status do Ticket]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fechamento do Ticket'
+		formatString: dd/mm/yy
+		lineageTag: 01bd13bf-afef-5c79-9dbc-df1afe16680d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Fechamento do Ticket]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias do Ticket até a Inativação'
+		formatString: 0
+		lineageTag: f3d1073d-4024-5340-ab38-c3398c3dc0a3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Dias do Ticket até a Inativação]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Alegação
+		lineageTag: 343bf7de-96e4-5b9f-91c9-c5a2b786428c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Alegação]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ticket de Período Anterior'
+		formatString: dd/mm/yy
+		lineageTag: 77091d02-f039-5dd3-8c12-f83aae510b69
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ticket de Período Anterior]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Conferência
+		lineageTag: 916aaecb-4f85-5baa-b4eb-2d76e57fd188
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Conferência]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Entrada'
+		lineageTag: c30dec6e-a66c-5abc-bda8-79b9b3ce3ece
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tipo de Entrada]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID do Cliente (busca)' = VAR i = TRIM( "" & fInativacoes[ID] ) RETURN IF( i = "" || i = "0", BLANK(), i )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 021a07bf-ac63-53b5-b706-04611c9682e6
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ do Cliente (busca)' = VAR c = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( TRIM( fInativacoes[CNPJ] ), ".", "" ), "/", "" ), "-", "" ), " ", "" ) RETURN IF( c = "", BLANK(), c )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 9c202b0d-360c-518d-899c-e6c7b043bc82
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fInativacoes = calculated
+		mode: import
+		source =
+				
+				-- Saídas desde ago/2026 (fPeriodos), AF e KP, com o ticket de cancelamento do MESMO período como evidência.
+				-- Calculada no refresh, fora do RLS. Gerado por gerar_gerencia.py (regras em docs/gerencia.md).
+				SELECTCOLUMNS( FILTER( fPeriodos, NOT ISBLANK( fPeriodos[Saída] ) && fPeriodos[Saída] >= DATE( 2026, 8, 1 ) ),
+				    "Produto", fPeriodos[Produto],
+				    "ID CRM", fPeriodos[ID CRM],
+				    "ID", fPeriodos[ID],
+				    "Cliente", fPeriodos[Cliente],
+				    "CNPJ", fPeriodos[CNPJ],
+				    "CS (último dia ativo)", fPeriodos[CS],
+				    "Equipe do CS", fPeriodos[Equipe do CS],
+				    "Tipo de Entrada", fPeriodos[Tipo de Entrada],
+				    "Início do Período", fPeriodos[Entrada],
+				    "Último Dia Ativo", fPeriodos[Último Dia Ativo],
+				    "Data da Inativação", fPeriodos[Saída],
+				    "Confirmação", fPeriodos[Confirmação da Saída],
+				    "Voltou em", fPeriodos[Voltou em],
+				    "Ticket do Período", fPeriodos[Ticket do Período],
+				    "Ticket", fPeriodos[Ticket],
+				    "Categoria do Ticket", fPeriodos[Categoria do Ticket],
+				    "Status do Ticket", fPeriodos[Status do Ticket],
+				    "Fechamento do Ticket", fPeriodos[Fechamento do Ticket],
+				    "Dias do Ticket até a Inativação", fPeriodos[Dias do Ticket até a Saída],
+				    "Alegação", fPeriodos[Alegação],
+				    "Ticket de Período Anterior", fPeriodos[Ticket de Período Anterior],
+				    "Conferência", fPeriodos[Conferência] )
+

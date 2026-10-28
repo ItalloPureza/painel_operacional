@@ -1,0 +1,516 @@
+table CRM_Atividades
+	lineageTag: dcd77fa4-c95e-4bda-a38d-fa7860f72ccc
+
+	/// Atividades do CRM por data de CRIAÇÃO; sem as apagadas e sem o tipo Onboarding (como o antigo).
+	measure 'Atividades Criadas' = CALCULATE( COUNTROWS( CRM_Atividades ), CRM_Atividades[Apagada_status] <> TRUE(), KEEPFILTERS( CRM_Atividades[Tipo de Atividade] <> "Onboarding" ), USERELATIONSHIP( CRM_Atividades[Data_Criacao], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: Base de datas
+		lineageTag: 5d3ccae2-4bca-5877-8589-0008731016da
+
+	/// Atividades do CRM por data de PRAZO; sem as apagadas e sem o tipo Onboarding (como o antigo).
+	measure 'Atividades com Prazo no Período' = CALCULATE( COUNTROWS( CRM_Atividades ), CRM_Atividades[Apagada_status] <> TRUE(), KEEPFILTERS( CRM_Atividades[Tipo de Atividade] <> "Onboarding" ), USERELATIONSHIP( CRM_Atividades[Data_Prazo], Calendario[Date] ) )
+		formatString: #,0
+		displayFolder: Base de datas
+		lineageTag: fa429e08-e069-51d1-b7fa-981886108f14
+
+	/// Atividades do CRM por data de CONCLUSÃO (padrão); sem as apagadas e sem o tipo Onboarding (como o antigo).
+	measure 'Atividades Concluídas' = CALCULATE( COUNTROWS( CRM_Atividades ), NOT ISBLANK( CRM_Atividades[Data_Resolucao] ), CRM_Atividades[Apagada_status] <> TRUE(), KEEPFILTERS( CRM_Atividades[Tipo de Atividade] <> "Onboarding" ) )
+		formatString: #,0
+		displayFolder: Base de datas
+		lineageTag: e439978e-dffa-585d-9de3-98a38d132577
+
+	/// No prazo ÷ concluídas, TODOS os tipos — o '%SLA CRM' da Carteira Geral do OKR 2026.
+	measure '% Prazo de Todas as Atividades' = DIVIDE( CALCULATE( [Atividades Concluídas], CRM_Atividades[Status do Prazo] = "No prazo" ), [Atividades Concluídas] )
+		formatString: 0.00%
+		displayFolder: SLA de Atividades
+		lineageTag: e9b28767-8016-516a-81b3-6fa269a502a5
+
+	/// Meta de % de migração ativa (intranet: Migração Ativas, setor Onboarding). Meta ÷ 100.
+	measure 'Meta % Migração Ativa' = VAR v = FILTER( Meta_Vinculo, Meta_Vinculo[Medida] = "Meta % Migração Ativa" ) VAR d = MAXX( v, Meta_Vinculo[def_id] ) VAR s = MAXX( v, Meta_Vinculo[setor_id] ) RETURN IF( d > 0, DIVIDE( CALCULATE( [Meta Alvo (período)], Meta_Def[id] = d, Meta_Valor[setor_id] = s ), 100 ) )
+		formatString: 0.00%
+		displayFolder: Migrações
+		lineageTag: 3f605063-e37f-5ed0-99e1-018a5018ce55
+
+	/// Média de dias entre o registro do cliente (Data Registro do CRM) e a conclusão da migração. Segue a busca ID/CNPJ da tela de Migrações (feita na dTTFV).
+	measure 'Dias até a Migração (média)' = VAR fi = ISFILTERED( dTTFV[ID do Cliente (busca)] ) || ISFILTERED( dTTFV[CNPJ do Cliente (busca)] ) VAR ids = CALCULATETABLE( VALUES( dTTFV[ID do Cliente (busca)] ), REMOVEFILTERS( Calendario ) ) RETURN IF( fi, CALCULATE( CALCULATE( AVERAGE( CRM_Atividades[Dias até a Migração] ), CRM_Atividades[Tipo de Atividade] = "Análise de Migração", CRM_Atividades[Apagada_status] <> TRUE(), NOT ISBLANK( CRM_Atividades[Data_Resolucao] ) ), KEEPFILTERS( TREATAS( ids, CRM_Atividades[ID do Cliente (busca)] ) ) ), CALCULATE( AVERAGE( CRM_Atividades[Dias até a Migração] ), CRM_Atividades[Tipo de Atividade] = "Análise de Migração", CRM_Atividades[Apagada_status] <> TRUE(), NOT ISBLANK( CRM_Atividades[Data_Resolucao] ) ) )
+		formatString: 0.00
+		displayFolder: Migração
+		lineageTag: 591aa860-fdca-562e-af44-fb18e7e7c873
+
+	/// Ativadas ÷ (ativadas + não ativadas) do escopo filtrado. Filtrando um tipo sem 'Migração - Ativado' (ex.: só 'Não Ativado'), o escopo é só esse tipo e dá 100%. Recusadas ficam fora.
+	measure '% Migração Ativa' = VAR ativa = NOT ISFILTERED( CRM_Atividades[Categoria] ) || "Migração - Ativado" IN VALUES( CRM_Atividades[Categoria] ) RETURN DIVIDE( IF( ativa, [Migrações Ativadas], [Migrações] ), [Migrações] )
+		formatString: 0.00%
+		displayFolder: Migração
+		lineageTag: cbfe0154-edee-50ea-842d-9131ec9baf81
+
+	/// Análises de migração concluídas como 'Migração - Recusado' (fora do total e do %). Segue a busca ID/CNPJ da tela de Migrações (feita na dTTFV).
+	measure 'Migrações Recusadas' = VAR fi = ISFILTERED( dTTFV[ID do Cliente (busca)] ) || ISFILTERED( dTTFV[CNPJ do Cliente (busca)] ) VAR ids = CALCULATETABLE( VALUES( dTTFV[ID do Cliente (busca)] ), REMOVEFILTERS( Calendario ) ) RETURN IF( fi, CALCULATE( CALCULATE( [Atividades Concluídas], CRM_Atividades[Tipo de Atividade] = "Análise de Migração", KEEPFILTERS( CRM_Atividades[Categoria] = "Migração - Recusado" ) ), KEEPFILTERS( TREATAS( ids, CRM_Atividades[ID do Cliente (busca)] ) ) ), CALCULATE( [Atividades Concluídas], CRM_Atividades[Tipo de Atividade] = "Análise de Migração", KEEPFILTERS( CRM_Atividades[Categoria] = "Migração - Recusado" ) ) )
+		formatString: #,0
+		displayFolder: Migração
+		lineageTag: e9e85a8b-9af7-5d5e-913a-fda0722d359f
+
+	/// Ativadas + não ativadas (as 'Recusado' ficam fora, como no OKR 2026).
+	measure Migrações = [Migrações Ativadas] + [Migrações Não Ativadas]
+		formatString: #,0
+		displayFolder: Migração
+		lineageTag: c6e902c3-c459-5ad3-aa27-9bbf8609f02a
+
+	/// Análises de migração concluídas como 'Migração - Não Ativado'. Segue a busca ID/CNPJ da tela de Migrações (feita na dTTFV).
+	measure 'Migrações Não Ativadas' = VAR fi = ISFILTERED( dTTFV[ID do Cliente (busca)] ) || ISFILTERED( dTTFV[CNPJ do Cliente (busca)] ) VAR ids = CALCULATETABLE( VALUES( dTTFV[ID do Cliente (busca)] ), REMOVEFILTERS( Calendario ) ) RETURN IF( fi, CALCULATE( CALCULATE( [Atividades Concluídas], CRM_Atividades[Tipo de Atividade] = "Análise de Migração", KEEPFILTERS( CRM_Atividades[Categoria] = "Migração - Não Ativado" ) ), KEEPFILTERS( TREATAS( ids, CRM_Atividades[ID do Cliente (busca)] ) ) ), CALCULATE( [Atividades Concluídas], CRM_Atividades[Tipo de Atividade] = "Análise de Migração", KEEPFILTERS( CRM_Atividades[Categoria] = "Migração - Não Ativado" ) ) )
+		formatString: #,0
+		displayFolder: Migração
+		lineageTag: d9a26100-d48b-5b11-b422-6e02e2d4c60e
+
+	/// Análises de migração concluídas como 'Migração - Ativado', por data de CONCLUSÃO. Segue a busca ID/CNPJ da tela de Migrações (feita na dTTFV).
+	measure 'Migrações Ativadas' = VAR fi = ISFILTERED( dTTFV[ID do Cliente (busca)] ) || ISFILTERED( dTTFV[CNPJ do Cliente (busca)] ) VAR ids = CALCULATETABLE( VALUES( dTTFV[ID do Cliente (busca)] ), REMOVEFILTERS( Calendario ) ) RETURN IF( fi, CALCULATE( CALCULATE( [Atividades Concluídas], CRM_Atividades[Tipo de Atividade] = "Análise de Migração", KEEPFILTERS( CRM_Atividades[Categoria] = "Migração - Ativado" ) ), KEEPFILTERS( TREATAS( ids, CRM_Atividades[ID do Cliente (busca)] ) ) ), CALCULATE( [Atividades Concluídas], CRM_Atividades[Tipo de Atividade] = "Análise de Migração", KEEPFILTERS( CRM_Atividades[Categoria] = "Migração - Ativado" ) ) )
+		formatString: #,0
+		displayFolder: Migração
+		lineageTag: e97de6c5-70cc-53ca-a435-69e955fb86bc
+
+	/// Clientes com atividade do SLA concluída no período.
+	measure 'Clientes com Atividade no SLA' = CALCULATE( DISTINCTCOUNTNOBLANK( CRM_Atividades[ID_Alfa] ), NOT ISBLANK( CRM_Atividades[Data_Resolucao] ), CRM_Atividades[Apagada_status] <> TRUE(), CRM_Atividades[Entra no SLA] = "Sim" )
+		formatString: #,0
+		displayFolder: SLA de Atividades
+		lineageTag: 8dbd9e4a-6af3-59fb-ad33-9f876d2a8b45
+
+	/// No prazo ÷ concluídas (tipos do SLA). Por data de CONCLUSÃO.
+	measure '% SLA das Atividades' = DIVIDE( [Atividades no Prazo], [Atividades no SLA] )
+		formatString: 0.00%
+		displayFolder: SLA de Atividades
+		lineageTag: 9a18b24a-ad0c-5a8c-8353-40ebea288019
+
+	/// Atividades do SLA concluídas depois da data prevista (ou sem data prevista).
+	measure 'Atividades Fora do Prazo' = [Atividades no SLA] - [Atividades no Prazo]
+		formatString: #,0
+		displayFolder: SLA de Atividades
+		lineageTag: 1b43c808-5625-5093-89ad-43ee0b5cd218
+
+	/// Atividades do SLA concluídas até a data prevista.
+	measure 'Atividades no Prazo' = CALCULATE( [Atividades no SLA], CRM_Atividades[Status do Prazo] = "No prazo" )
+		formatString: #,0
+		displayFolder: SLA de Atividades
+		lineageTag: 04eb74b2-2609-518e-af9c-49aa96ff8c9c
+
+	/// Atividades concluídas dos tipos do SLA (Alerta, Alinhamento Inicial, Checkout, Checkout Onboarding, Conclusão de Etapa, Contato, Contato Agendamento, Contato Kappa, Tratativa Clientes Bloqueados, Tratativa Onboarding, Tratativa Ongoing), por data de CONCLUSÃO.
+	measure 'Atividades no SLA' = CALCULATE( [Atividades Concluídas], CRM_Atividades[Entra no SLA] = "Sim" )
+		formatString: #,0
+		displayFolder: SLA de Atividades
+		lineageTag: e6ff0cda-5292-5958-a8a4-31c0eb2e4cf9
+
+	/// Média de dias entre a conclusão da migração e o fechamento do cancelamento (só quem cancelou depois).
+	measure 'Dias no Ongoing até Cancelar (média)' = CALCULATE( AVERAGE( CRM_Atividades[Dias no Ongoing até Cancelar] ), CRM_Atividades[Tipo de Atividade] = "Análise de Migração", CRM_Atividades[Apagada_status] <> TRUE(), NOT ISBLANK( CRM_Atividades[Data_Resolucao] ) )
+		formatString: 0.00
+		displayFolder: Migração recebida
+		lineageTag: 50796e63-3aa5-55d6-8db6-f2370b2e0010
+
+	/// Cancelaram depois da migração ÷ migrações.
+	measure '% Migrados que Cancelaram' = DIVIDE( [Migrados que Cancelaram], [Migrações] )
+		formatString: 0.00%
+		displayFolder: Migração recebida
+		lineageTag: a41e3134-b8e6-59ef-b7c0-33227886a75c
+
+	/// Migrações cujo cliente tem cancelamento efetivado no Alfa (antes ou depois) — o 'Status Cliente' do OKR 2026.
+	measure 'Migrados com Ticket de Cancelamento' = CALCULATE( [Migrações], CRM_Atividades[Situação após a Migração] <> "Sem cancelamento" )
+		formatString: #,0
+		displayFolder: Migração recebida
+		lineageTag: 5fc9beca-fa85-5e75-887c-f42e7a3caace
+
+	/// Migrações (ativadas + não ativadas) cujo cliente teve cancelamento efetivado no Alfa DEPOIS da conclusão.
+	measure 'Migrados que Cancelaram' = CALCULATE( [Migrações], CRM_Atividades[Situação após a Migração] = "Cancelou depois da migração" )
+		formatString: #,0
+		displayFolder: Migração recebida
+		lineageTag: bff59b95-2aa5-5060-8ad7-8a8afba3612d
+
+	column Apagada_status
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 1dab7e04-e0a7-4764-9907-3cc107e6a364
+		summarizeBy: none
+		sourceColumn: Apagada_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column Apagada_em
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: d594ede5-d7de-4c1f-bac3-e451fab454c6
+		summarizeBy: none
+		sourceColumn: Apagada_em
+
+		annotation SummarizationSetBy = Automatic
+
+	column Extracao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 875a9635-541c-4237-a73d-85762bbbbdf9
+		summarizeBy: none
+		sourceColumn: Extracao
+
+		annotation SummarizationSetBy = Automatic
+
+	column Criador
+		dataType: string
+		lineageTag: 0282e719-546e-4565-b847-6b3921df1589
+		summarizeBy: none
+		sourceColumn: Criador
+
+		annotation SummarizationSetBy = Automatic
+
+	column Criado_em
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 0c72eec2-7e74-4578-acd4-fcb994c891ef
+		summarizeBy: none
+		sourceColumn: Criado_em
+
+		annotation SummarizationSetBy = Automatic
+
+	column CNPJ
+		dataType: string
+		lineageTag: 8ca409da-833b-418d-ad13-4efdf44ad413
+		summarizeBy: none
+		sourceColumn: CNPJ
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_Alfa
+		dataType: string
+		lineageTag: 31e249b3-f307-4f3a-b7a7-fd6d3dbff706
+		summarizeBy: none
+		sourceColumn: ID_Alfa
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cliente_Nome_Fantasia
+		dataType: string
+		lineageTag: 55881d57-740f-4e42-b494-4bf08082a95e
+		summarizeBy: none
+		sourceColumn: Cliente_Nome_Fantasia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cliente_Razao_Social
+		dataType: string
+		lineageTag: 0f59d660-d896-4916-a646-9f64e3d303b8
+		summarizeBy: none
+		sourceColumn: Cliente_Razao_Social
+
+		annotation SummarizationSetBy = Automatic
+
+	column Atividade
+		dataType: string
+		lineageTag: 0c5ee46e-da98-40ae-87b3-6e9fc65d2cea
+		summarizeBy: none
+		sourceColumn: Atividade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data_Prazo
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 83799d4a-370c-4b6b-ae57-bdb169610abb
+		summarizeBy: none
+		sourceColumn: Data_Prazo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Data_Resolucao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 9bb66e0a-3c09-4395-93fe-f87ad98e1837
+		summarizeBy: none
+		sourceColumn: Data_Resolucao
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Atividade Notas'
+		dataType: string
+		lineageTag: 0df12386-3b72-409d-b90d-e604054484f7
+		summarizeBy: none
+		sourceColumn: Atividade Notas
+
+		annotation SummarizationSetBy = Automatic
+
+	column Atividades_Responsavel
+		dataType: string
+		lineageTag: 3478401d-e15a-45c0-aa15-d1cf3c6cda51
+		summarizeBy: none
+		sourceColumn: Atividades_Responsavel
+
+		annotation SummarizationSetBy = Automatic
+
+	column Regra_descricao
+		dataType: string
+		lineageTag: 5503ce04-0563-4334-a176-c8e1349483d6
+		summarizeBy: none
+		sourceColumn: Regra_descricao
+
+		annotation SummarizationSetBy = Automatic
+
+	column Regra_id
+		dataType: int64
+		formatString: 0
+		lineageTag: a578fd69-8e1b-42a3-b507-319b501ebe98
+		summarizeBy: sum
+		sourceColumn: Regra_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 3298a362-a229-4c55-a965-89e0af5909b3
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 29146887-7999-4714-828f-cf492777dfca
+		summarizeBy: sum
+		sourceColumn: Status_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Categoria
+		dataType: string
+		lineageTag: 8849b644-340d-4c33-906c-ecc77409625a
+		summarizeBy: none
+		sourceColumn: Categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Atividade'
+		dataType: string
+		lineageTag: 0ad9630a-1007-4d63-8e4e-16c63651b22e
+		summarizeBy: none
+		sourceColumn: Tipo de Atividade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Responsavel_Email
+		dataType: string
+		lineageTag: 20488ef3-0c9e-4466-a55f-3cae85e6d93d
+		summarizeBy: none
+		sourceColumn: owner_email
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor = LOOKUPVALUE( dColaboradorMes[Setor], dColaboradorMes[email], LOWER( TRIM( CRM_Atividades[Responsavel_Email] ) ), dColaboradorMes[AnoMes], CRM_Atividades[Mês da Composição], BLANK() )
+		dataType: string
+		lineageTag: 6a46b56d-20ca-4adf-a63e-a77855688809
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column custom_fields_numero_ticket_helpdesk
+		dataType: string
+		lineageTag: d203f31e-61e9-485e-83c6-894a2f88bab5
+		summarizeBy: none
+		sourceColumn: custom_fields_numero_ticket_helpdesk
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data_Inicio
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 888a8f83-8cfb-5581-baf7-8eafd64b8ee5
+		summarizeBy: none
+		sourceColumn: Data_Inicio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Data_Criacao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: d9819cf6-d21f-5c0a-8fd0-abe145224109
+		summarizeBy: none
+		sourceColumn: Data_Criacao
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Entra no SLA' = IF( CRM_Atividades[Tipo de Atividade] IN { "Alerta", "Alinhamento Inicial", "Checkout", "Checkout Onboarding", "Conclusão de Etapa", "Contato", "Contato Agendamento", "Contato Kappa", "Tratativa Clientes Bloqueados", "Tratativa Onboarding", "Tratativa Ongoing" }, "Sim", "Não" )
+		dataType: string
+		displayFolder: SLA de Atividades
+		lineageTag: c1f8ad58-a9da-5496-bbfc-ca27a15587f4
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Status do Prazo' = IF( ISBLANK( CRM_Atividades[Data_Resolucao] ), BLANK(), IF( NOT ISBLANK( CRM_Atividades[Data_Prazo] ) && CRM_Atividades[Data_Resolucao] <= CRM_Atividades[Data_Prazo], "No prazo", "Fora do prazo" ) )
+		dataType: string
+		displayFolder: SLA de Atividades
+		lineageTag: 35f01555-0001-5ecd-87ca-fb0ca7e15ab8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe do Responsável' = IF( ISBLANK( LOWER( TRIM( CRM_Atividades[Responsavel_Email] ) ) ), IF( TRIM( CRM_Atividades[Atividades_Responsavel] ) <> "", "(sem cadastro)" ), COALESCE( LOOKUPVALUE( dColaboradorMes[Equipe], dColaboradorMes[email], LOWER( TRIM( CRM_Atividades[Responsavel_Email] ) ), dColaboradorMes[AnoMes], CRM_Atividades[Mês da Composição], BLANK() ), "(sem equipe)" ) )
+		dataType: string
+		displayFolder: Pessoa
+		lineageTag: 0061c08f-e97d-55bf-9a99-089081bff220
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias até a Migração' = IF( CRM_Atividades[Categoria] IN { "Migração - Ativado", "Migração - Não Ativado" } && NOT ISBLANK( CRM_Atividades[Registro do Cliente] ) && NOT ISBLANK( CRM_Atividades[Data_Resolucao] ), INT( CRM_Atividades[Data_Resolucao] - CRM_Atividades[Registro do Cliente] ) )
+		dataType: int64
+		formatString: 0
+		displayFolder: Migração
+		lineageTag: 544f4c4a-f532-5fe7-98a0-98f607355b75
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Responsavel_Pelo_Cliente
+		dataType: string
+		lineageTag: f22790b0-f012-507b-b85d-e78b597a4e8b
+		summarizeBy: none
+		sourceColumn: Responsavel_Pelo_Cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email do Responsável pelo Cliente' = IF( CRM_Atividades[Tipo de Atividade] = "Análise de Migração", VAR n = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( LOWER( TRIM( CRM_Atividades[Responsavel_Pelo_Cliente] ) ), "á", "a" ), "à", "a" ), "â", "a" ), "ã", "a" ), "ä", "a" ), "é", "e" ), "è", "e" ), "ê", "e" ), "ë", "e" ), "í", "i" ), "ì", "i" ), "î", "i" ), "ï", "i" ), "ó", "o" ), "ò", "o" ), "ô", "o" ), "õ", "o" ), "ö", "o" ), "ú", "u" ), "ù", "u" ), "û", "u" ), "ü", "u" ), "ç", "c" ), "ñ", "n" ), "  ", " " ) VAR p = SUBSTITUTE( n, " ", "|" ) VAR curto = IF( PATHLENGTH( p ) > 1, PATHITEM( p, 1 ) & " " & PATHITEMREVERSE( p, 1 ), n ) VAR e1 = IF( n = "", BLANK(), LOOKUPVALUE( dColaborador[email], dColaborador[Nome Normalizado], n, BLANK() ) ) RETURN IF( ISBLANK( e1 ) && n <> "", LOOKUPVALUE( dColaborador[email], dColaborador[Nome Curto Normalizado], curto, BLANK() ), e1 ) )
+		dataType: string
+		isHidden
+		displayFolder: Migração
+		lineageTag: fdec5781-a799-5860-b248-3d30244ef87a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe do Responsável pelo Cliente' = IF( CRM_Atividades[Tipo de Atividade] = "Análise de Migração", IF( ISBLANK( CRM_Atividades[Email do Responsável pelo Cliente] ), IF( TRIM( CRM_Atividades[Responsavel_Pelo_Cliente] ) <> "", "(sem cadastro)" ), COALESCE( LOOKUPVALUE( dColaboradorMes[Equipe], dColaboradorMes[email], CRM_Atividades[Email do Responsável pelo Cliente], dColaboradorMes[AnoMes], CRM_Atividades[Mês da Composição], BLANK() ), "(sem equipe)" ) ) )
+		dataType: string
+		displayFolder: Migração
+		lineageTag: b1cd844b-bc1c-5ff3-bc15-c519d1a5cc3a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Setor do Responsável pelo Cliente' = LOOKUPVALUE( dColaboradorMes[Setor], dColaboradorMes[email], CRM_Atividades[Email do Responsável pelo Cliente], dColaboradorMes[AnoMes], CRM_Atividades[Mês da Composição], BLANK() )
+		dataType: string
+		displayFolder: Migração
+		lineageTag: 5e0b59a2-dde5-50f8-b463-f63aac8be26d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Registro do Cliente' = VAR vCli = CRM_Atividades[ID_Alfa] RETURN IF( CRM_Atividades[Tipo de Atividade] = "Análise de Migração", CALCULATE( MAX( CRM_Backup_Diario[Dt_Cadastro] ), REMOVEFILTERS( CRM_Atividades ), CRM_Backup_Diario[ID_Legado] = vCli ) )
+		dataType: dateTime
+		formatString: dd/mm/yy
+		displayFolder: Migração
+		lineageTag: c26cd94e-0309-501c-bcff-1af1641e7972
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ticket do Cancelamento do Cliente' = VAR i = IFERROR( VALUE( CRM_Atividades[ID_Alfa] ), -1 ) RETURN IF( CRM_Atividades[Tipo de Atividade] = "Análise de Migração" && CRM_Atividades[Categoria] IN { "Migração - Ativado", "Migração - Não Ativado" }, MAXX( FILTER( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[idLegado] = i && Helpdesk_Cancelamentos[sistema] = "Alfa" && Helpdesk_Cancelamentos[category] = "Cancelamento Efetivado" ), Helpdesk_Cancelamentos[id] ) )
+		dataType: int64
+		formatString: 0
+		displayFolder: Migração recebida
+		lineageTag: 140b80cf-b0f1-5f4b-a110-b57d79fa3123
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cancelamento do Cliente' = VAR i = IFERROR( VALUE( CRM_Atividades[ID_Alfa] ), -1 ) RETURN IF( CRM_Atividades[Tipo de Atividade] = "Análise de Migração" && CRM_Atividades[Categoria] IN { "Migração - Ativado", "Migração - Não Ativado" }, MAXX( FILTER( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[idLegado] = i && Helpdesk_Cancelamentos[sistema] = "Alfa" && Helpdesk_Cancelamentos[category] = "Cancelamento Efetivado" ), Helpdesk_Cancelamentos[Data de Fechamento] ) )
+		dataType: dateTime
+		formatString: dd/mm/yy
+		displayFolder: Migração recebida
+		lineageTag: c03c4db4-fe2d-5b4e-aa52-b6fa6c5f6a19
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Situação após a Migração' = VAR c = CRM_Atividades[Cancelamento do Cliente] VAR m = CRM_Atividades[Data_Resolucao] RETURN IF( CRM_Atividades[Tipo de Atividade] = "Análise de Migração" && CRM_Atividades[Categoria] IN { "Migração - Ativado", "Migração - Não Ativado" }, SWITCH( TRUE(), ISBLANK( c ), "Sem cancelamento", c >= m, "Cancelou depois da migração", "Cancelamento anterior à migração" ) )
+		dataType: string
+		displayFolder: Migração recebida
+		lineageTag: ee5e8cbd-6d2a-5582-bf2a-e5e913e68001
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias no Ongoing até Cancelar' = IF( CRM_Atividades[Situação após a Migração] = "Cancelou depois da migração", INT( CRM_Atividades[Cancelamento do Cliente] - CRM_Atividades[Data_Resolucao] ) )
+		dataType: int64
+		formatString: 0
+		displayFolder: Migração recebida
+		lineageTag: 9e162fa3-5bd9-589d-9c8a-a083336dca5d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column CS
+		dataType: string
+		lineageTag: ca80e5f7-1e4b-56d5-b89b-1919e17fe744
+		summarizeBy: none
+		sourceColumn: CS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email do CS' = IF( TRIM( CRM_Atividades[CS] ) <> "", VAR n = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( LOWER( TRIM( CRM_Atividades[CS] ) ), "á", "a" ), "à", "a" ), "â", "a" ), "ã", "a" ), "ä", "a" ), "é", "e" ), "è", "e" ), "ê", "e" ), "ë", "e" ), "í", "i" ), "ì", "i" ), "î", "i" ), "ï", "i" ), "ó", "o" ), "ò", "o" ), "ô", "o" ), "õ", "o" ), "ö", "o" ), "ú", "u" ), "ù", "u" ), "û", "u" ), "ü", "u" ), "ç", "c" ), "ñ", "n" ), "  ", " " ) VAR p = SUBSTITUTE( n, " ", "|" ) VAR curto = IF( PATHLENGTH( p ) > 1, PATHITEM( p, 1 ) & " " & PATHITEMREVERSE( p, 1 ), n ) VAR e1 = IF( n = "", BLANK(), LOOKUPVALUE( dColaborador[email], dColaborador[Nome Normalizado], n, BLANK() ) ) RETURN IF( ISBLANK( e1 ) && n <> "", LOOKUPVALUE( dColaborador[email], dColaborador[Nome Curto Normalizado], curto, BLANK() ), e1 ) )
+		dataType: string
+		isHidden
+		displayFolder: Pessoa
+		lineageTag: 419b26e4-a426-5866-8f21-f740f6fe54fd
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe do CS' = IF( ISBLANK( CRM_Atividades[Email do CS] ), IF( TRIM( CRM_Atividades[CS] ) <> "", "(sem cadastro)" ), COALESCE( LOOKUPVALUE( dColaboradorMes[Equipe], dColaboradorMes[email], CRM_Atividades[Email do CS], dColaboradorMes[AnoMes], CRM_Atividades[Mês da Composição], BLANK() ), "(sem equipe)" ) )
+		dataType: string
+		displayFolder: Pessoa
+		lineageTag: e6a5a57c-c1b2-58cb-94ea-b42478b613a8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID do Cliente (busca)' = VAR i = TRIM( "" & CRM_Atividades[ID_Alfa] ) RETURN IF( i = "" || i = "0", BLANK(), i )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 2d6896a8-745a-527f-99fa-5d82cd2d2d35
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ do Cliente (busca)' = VAR c = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( TRIM( CRM_Atividades[CNPJ] ), ".", "" ), "/", "" ), "-", "" ), " ", "" ) RETURN IF( c = "", BLANK(), c )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: e6f6c747-a084-5250-b36a-cfd037641ad2
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês da Composição' = ( VAR _d = CRM_Atividades[Data_Resolucao] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Pessoa
+		lineageTag: 9add8a2e-12e3-53d6-87bf-76313fdb4c2f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition CRM_Atividades = m
+		mode: import
+		queryGroup: CRM
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="CRM_Atividades",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"Apagada_status", type logical}, {"Apagada_em", type datetime}, {"Extracao", type datetime}, {"Criador", type text}, {"Criado_em", type datetime}, {"CNPJ", type text}, {"ID_Alfa", type text}, {"Cliente_Nome_Fantasia", type text}, {"Cliente_Razao_Social", type text}, {"Atividade", type text}, {"Data_Prazo", type datetime}, {"Data_Resolucao", type datetime}, {"Atividade Notas", type text}, {"Atividades_Responsavel", type text}, {"Regra_descricao", type text}, {"Regra_id", Int64.Type}, {"Status", type text}, {"Status_id", Int64.Type}, {"Categoria", type text}, {"Tipo de Atividade", type text}, {"owner_email", type text}, {"custom_fields_numero_ticket_helpdesk", type text}, {"Data_Inicio", type datetime}, {"Data_Criacao", type datetime}, {"Responsavel_Pelo_Cliente", type text}, {"CS", type text}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

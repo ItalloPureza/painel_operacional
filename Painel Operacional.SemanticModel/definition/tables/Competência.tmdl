@@ -1,0 +1,76 @@
+table Competência
+	lineageTag: 6f0d3c1e-2b8a-4c55-9a51-7c2f0b8d4e10
+
+	calculationGroup
+		precedence: 10
+
+		/// Cartões de KPI: o valor do mês mais recente do período (o mês do último dia do período, sem passar de hoje).
+		/// Só no nível do cartão: REMOVEFILTERS da Competência para as medidas de dentro não serem transformadas de novo.
+		/// Mês sem valor: 0 (contagem/valor) ou "—" (formato %, média, razão "por Cliente/Empresa", texto) — o cartão mostrava "(Em branco)". Decide pelo FORMATO e pelo nome (17/10/2026: CSAT em % mostrava 0,00%; "Contas Médias" é contagem).
+		calculationItem 'Mês mais recente' =
+				VAR _r =
+				    IF (
+				        ISCROSSFILTERED ( Calendario ),
+				        VAR _fim = MIN ( MAX ( Calendario[Date] ), TODAY () )
+				        VAR _ini = DATE ( YEAR ( _fim ), MONTH ( _fim ), 1 )
+				        RETURN
+				            CALCULATE (
+				                SELECTEDMEASURE (),
+				                KEEPFILTERS ( FILTER ( ALL ( Calendario[Date] ), Calendario[Date] >= _ini && Calendario[Date] <= _fim ) ),
+				                REMOVEFILTERS ( 'Competência' )
+				            ),
+				        CALCULATE ( SELECTEDMEASURE (), REMOVEFILTERS ( 'Competência' ) )
+				    )
+				VAR _nome = SELECTEDMEASURENAME ()
+				RETURN
+				    IF (
+				        NOT ISBLANK ( _r ),
+				        _r,
+				        IF (
+				            CONTAINSSTRING ( SELECTEDMEASUREFORMATSTRING (), "%" ) || SELECTEDMEASUREFORMATSTRING () = ""
+				                || CONTAINSSTRING ( _nome, "%" ) || CONTAINSSTRING ( _nome, "édio" ) || CONTAINSSTRING ( _nome, "Mediana" )
+				                || ( CONTAINSSTRING ( _nome, "édia" ) && NOT CONTAINSSTRING ( _nome, "édias" ) )
+				                || CONTAINSSTRING ( _nome, " por Cliente" ) || CONTAINSSTRING ( _nome, " por Empresa" ),
+				            "—",
+				            0
+				        )
+				    )
+
+		/// Cartões que somam o PERÍODO INTEIRO (CARTAO_PERIODO_TODO): não recorta o mês, só troca o vazio por 0 ou "—" (22/10/2026).
+		calculationItem 'Período inteiro' =
+				VAR _r = CALCULATE ( SELECTEDMEASURE (), REMOVEFILTERS ( 'Competência' ) )
+				VAR _nome = SELECTEDMEASURENAME ()
+				RETURN
+				    IF (
+				        NOT ISBLANK ( _r ),
+				        _r,
+				        IF (
+				            CONTAINSSTRING ( SELECTEDMEASUREFORMATSTRING (), "%" ) || SELECTEDMEASUREFORMATSTRING () = ""
+				                || CONTAINSSTRING ( _nome, "%" ) || CONTAINSSTRING ( _nome, "édio" ) || CONTAINSSTRING ( _nome, "Mediana" )
+				                || ( CONTAINSSTRING ( _nome, "édia" ) && NOT CONTAINSSTRING ( _nome, "édias" ) )
+				                || CONTAINSSTRING ( _nome, " por Cliente" ) || CONTAINSSTRING ( _nome, " por Empresa" ),
+				            "—",
+				            0
+				        )
+				    )
+
+	column Competência
+		dataType: string
+		lineageTag: 0a7e4b52-6d1f-4f0e-8c3b-2e9a5d7c1f21
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordinal
+		dataType: int64
+		formatString: 0
+		lineageTag: 3c9b1d70-5e2a-4b8f-9d46-1a8e7f2c6b32
+		summarizeBy: none
+		sourceColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Competência = calculationGroup
+

@@ -1,0 +1,179 @@
+relationship 57d3e565-b5a1-432e-aaaa-f2e8873dd05f
+	fromColumn: Helpdesk_Clientes_Empresas.idEmpresa
+	toColumn: Helpdesk_Empresas.id
+
+	annotation PBI_IsFromSource = FS
+
+relationship 22054851-875f-5f98-8cee-efe7fd7e70ae
+	fromColumn: WhatsApp_Atendimentos.Data
+	toColumn: Calendario.Date
+
+relationship 4fafd273-471d-5e3e-9a4c-8b0dc23dcd1a
+	fromColumn: WhatsApp_CSAT.Data
+	toColumn: Calendario.Date
+
+relationship dd5a10f3-0198-5137-b459-3962aba8fdb7
+	fromColumn: WhatsApp_Envios.Data
+	toColumn: Calendario.Date
+
+relationship 14dec8ee-e439-5cd9-a973-979905e84290
+	fromColumn: Helpdesk_Tickets.Data_Fechamento_Ticket
+	toColumn: Calendario.Date
+
+relationship f22a08e7-dd7c-577a-9f67-b86b127fbefa
+	isActive: false
+	fromColumn: Helpdesk_Tickets.Data_Criacao_Ticket
+	toColumn: Calendario.Date
+
+relationship 11f23300-f0ae-5a2e-9924-aa2a2b89a6e3
+	isActive: false
+	fromColumn: Helpdesk_Tickets.Data_Resolucao_Ticket
+	toColumn: Calendario.Date
+
+relationship 200d2880-10dd-57fb-9063-fbb7cf1ba066
+	fromColumn: Helpdesk_Cancelamentos.'Data de Fechamento'
+	toColumn: Calendario.Date
+
+relationship 72ec5e5a-dbd6-56b2-88d2-78a0f2f1eff8
+	isActive: false
+	fromColumn: Helpdesk_Cancelamentos.'Data de Criação'
+	toColumn: Calendario.Date
+
+relationship e2ab20af-021c-5210-b0a4-7d9d49f37348
+	fromColumn: Helpdesk_Survey.'Data Avaliacao'
+	toColumn: Calendario.Date
+
+relationship 0f57e6c3-1a30-53a4-a4b2-889b13d43c38
+	fromColumn: Ligacoes_API.Data_Inicio
+	toColumn: Calendario.Date
+
+relationship 468b3c4a-31c8-5dee-9eaf-c2bb8292a5b9
+	fromColumn: CRM_Atividades.Data_Resolucao
+	toColumn: Calendario.Date
+
+relationship 3a8f9558-f3dd-5ea7-9efe-78050bb3cb2a
+	isActive: false
+	fromColumn: CRM_Atividades.Data_Prazo
+	toColumn: Calendario.Date
+
+relationship 4ed0fc21-cd31-5bfe-a9cf-91517c1c5c76
+	isActive: false
+	fromColumn: CRM_Atividades.Data_Criacao
+	toColumn: Calendario.Date
+
+relationship 8f37dac2-03f9-5585-af0b-3c067a9e175a
+	fromColumn: CRM_Backup_Diario.Periodo
+	toColumn: Calendario.Date
+
+relationship 3bb7061c-79d5-5de8-af15-265ee72ffd7c
+	fromColumn: Contratos_historico_Vendedor.periodo
+	toColumn: Calendario.Date
+
+relationship 8e7a23b0-f221-53cd-9c48-ca5766ad5c00
+	fromColumn: Contratos_historico_contratos.periodo
+	toColumn: Calendario.Date
+
+relationship 0115ec70-d153-5f4b-84b2-bc5d2191be51
+	fromColumn: Contratos_historico_emails.periodo
+	toColumn: Calendario.Date
+
+relationship 0fe5dd8d-9c09-595f-94b8-2ec2341ab9e0
+	fromColumn: Contratos_historico_fones.periodo
+	toColumn: Calendario.Date
+
+relationship f6ce5e5d-9e67-5be7-89b5-a4ac5be6f6f7
+	fromColumn: Contratos_historico_gerente_conta.periodo
+	toColumn: Calendario.Date
+
+relationship 9a84d738-f317-5ed5-a958-20afae4abb8f
+	fromColumn: Contratos_historico_indice_reajuste.periodo
+	toColumn: Calendario.Date
+
+relationship 369f1278-80c1-5605-9f1a-be3427bb7e19
+	fromColumn: Contratos_historico_item_catalogo.periodo
+	toColumn: Calendario.Date
+
+relationship ec1c7de8-92f9-5674-b1a5-a5300e46be64
+	fromColumn: Contratos_historico_mercado.periodo
+	toColumn: Calendario.Date
+
+relationship 88627804-458f-5871-9762-608d6dae776a
+	fromColumn: Contratos_historico_periodicidade.periodo
+	toColumn: Calendario.Date
+
+relationship ba0c674d-31fb-547c-aaf1-98efaa97510c
+	fromColumn: Contratos_historico_plano.periodo
+	toColumn: Calendario.Date
+
+relationship 8d505306-d0b9-51de-be05-a870a531c7d2
+	fromColumn: Contratos_historico_status.periodo
+	toColumn: Calendario.Date
+
+relationship 804129c0-e97d-58bd-8115-12dcbb12077e
+	fromColumn: Helpdesk_Chat.'Data Mês'
+	toColumn: Calendario.Date
+
+relationship 194ee89c-01c4-5916-885d-c9851db9271c
+	fromColumn: dTTFV.'Data do TTFV'
+	toColumn: Calendario.Date
+
+relationship b878955d-202f-5f70-b782-641e3457efe6
+	fromColumn: fGlobalCancelamentos.Data
+	toColumn: Calendario.Date
+
+relationship 2267c6b7-ede5-55b1-be50-c4d3068ad76a
+	fromColumn: fGlobalReceita.Data
+	toColumn: Calendario.Date
+
+relationship c20c735a-a9a3-5bc1-8a79-1500b00d73cf
+	fromColumn: Contratos_historico_items.'Chave Contrato'
+	toColumn: Contratos_historico_contratos.Chave
+
+relationship 51d3cd14-575e-5261-a4d0-2d3a721eed92
+	fromColumn: fCohort.Entrada
+	toColumn: Calendario.Date
+
+relationship 60a3fdb0-5931-5207-bf7a-f1a1cec6c5db
+	fromColumn: fInativacoes.'Data da Inativação'
+	toColumn: Calendario.Date
+
+relationship 7d639698-5180-56ad-8f92-45a6d653080b
+	fromColumn: fGlobalCancelamentos.Setor
+	toColumn: dSetor.Setor
+
+relationship fc1c1748-20c9-53aa-8861-0594d3db6abf
+	fromColumn: CRM_Backup_Diario.'Setor do CS'
+	toColumn: dSetor.Setor
+
+relationship 6cfec8c1-93da-40ba-8dda-f3cc20c3b6b2
+	fromColumn: Meta_Valor.def_id
+	toColumn: Meta_Def.id
+
+relationship beb16307-b72a-4348-9613-2bbdac543fd6
+	fromColumn: Meta_Valor.Data
+	toColumn: Calendario.Date
+
+relationship 77056ee4-5193-5db9-adf3-131e61468e78
+	fromColumn: WhatsApp_Atendimentos.'Chave Pessoa Mês'
+	toColumn: dColaboradorMes.Chave
+
+relationship b8453b31-986e-5712-a9df-0bd3df7ccd30
+	fromColumn: WhatsApp_CSAT.'Chave Pessoa Mês'
+	toColumn: dColaboradorMes.Chave
+
+relationship 2739da5b-d0df-57fb-a900-4b90f87bbe56
+	fromColumn: WhatsApp_Envios.'Chave Pessoa Mês'
+	toColumn: dColaboradorMes.Chave
+
+relationship 05b02041-4d4a-5371-b725-84d00813dbfa
+	fromColumn: WhatsApp_Contatos.'Chave Pessoa Mês'
+	toColumn: dColaboradorMes.Chave
+
+relationship 1ce299fb-b41c-5145-b3b9-ef731ca5125a
+	fromColumn: fMigracoesClientes.'Data da Migração'
+	toColumn: Calendario.Date
+
+relationship db109b0e-4a62-5d2c-8dcf-faad1efd742f
+	fromColumn: fConcessoes.Data
+	toColumn: Calendario.Date
+

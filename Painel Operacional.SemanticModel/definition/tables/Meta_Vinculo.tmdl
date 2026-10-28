@@ -1,0 +1,58 @@
+table Meta_Vinculo
+	isHidden
+	lineageTag: 6c79b871-2b7c-4524-9558-089531e4f26d
+
+	column Medida
+		lineageTag: b9ba6cdc-b6eb-42a7-bb68-b7445a6692c6
+		isNameInferred
+		sourceColumn: [Medida]
+
+	column Sistema
+		lineageTag: bca0dc92-fdf2-4db7-bcb7-485dbd365be6
+		isNameInferred
+		sourceColumn: [Sistema]
+
+	column def_id
+		lineageTag: 0e8f768b-ea8b-4b8e-a1c9-7723171a0f63
+		isNameInferred
+		sourceColumn: [def_id]
+
+	column setor_id
+		lineageTag: 353aeead-5de6-4fa1-b582-598bf3dec4f6
+		isNameInferred
+		sourceColumn: [setor_id]
+
+	column Observação
+		lineageTag: 049e27c6-885d-436c-b1eb-7f8a48716ba4
+		isNameInferred
+		sourceColumn: [Observação]
+
+	partition Meta_Vinculo = calculated
+		mode: import
+		source =
+				DATATABLE(
+				    "Medida", STRING, "Sistema", STRING, "def_id", INTEGER, "setor_id", INTEGER, "Observação", STRING,
+				    {
+				        { "Meta % No Show", "", 31, 3, "No Show - Onboarding (setor Onboarding)" },
+				        { "Meta % No Show Ongoing", "", 37, 2, "No Show - Ongoing (setor Ongoing)" },
+				        { "Meta % Migração Ativa", "", 29, 3, "Migração Ativas (setor Onboarding)" },
+				        { "Meta % Cancelamento", "Alfa", 6, 0, "Cancelamentos - Alfa (empresa)" },
+				        { "Meta % Cancelamento", "Kappa", 8, 0, "Cancelamentos - KP (empresa)" },
+				        { "Meta % Churn Financeiro", "Alfa", 7, 0, "Mensalidade Cancelamentos - Alfa (empresa)" },
+				        { "Meta % Churn Financeiro", "Kappa", 9, 0, "Mensalidade Cancelamentos - KP (empresa)" },
+				        { "Meta % Reversão", "Alfa", 38, 6, "Reversão - Alfa (setor Relacionamento)" },
+				        { "Meta % Reversão", "Kappa", 39, 6, "Reversão - Kappa (setor Relacionamento)" },
+				        { "Meta CSAT Homologação", "", 42, 5, "CSAT Homologação de Guias (setor Homologação; o App não tem meta)" },
+				        { "Meta de Cancelamentos (Global)", "Alfa", 6, 0, "DERIVADA: meta % de cancelamento (intranet) x clientes ativos AF no 1º dia do mês" },
+				        { "Meta de Cancelamentos (Global)", "Kappa", 8, 0, "DERIVADA: meta % de cancelamento (intranet) x clientes ativos KP no 1º dia do mês" },
+				        { "Meta de R$ Cancelado (Global)", "Alfa", 7, 0, "DERIVADA: meta % de churn financeiro (intranet) x mensalidade AF no 1º dia do mês" },
+				        { "Meta de R$ Cancelado (Global)", "Kappa", 9, 0, "DERIVADA: meta % de churn financeiro (intranet) x mensalidade KP no 1º dia do mês" },
+				        { "Meta de Cancelamentos (Individual)", "", 0, 0, "SEM DEFINIÇÃO (precisa de headcount por mês)" },
+				        { "Meta de Cancelamentos (Ongoing)", "", 34, 2, "DERIVADA: meta % Clientes cancelados (Ongoing) x carteira inicial do setor/equipe (CRM)" },
+				        { "Meta de Cancelamentos (Onboarding)", "", 30, 3, "DERIVADA: meta % Churn rate - Alfa (Onboarding) x carteira inicial do setor/equipe (CRM)" },
+				        { "Meta de R$ Cancelado (Ongoing)", "", 35, 2, "DERIVADA: meta % Mensalidade cancelamentos (Ongoing) x mensalidade inicial do setor/equipe (CRM)" },
+				        { "Meta de R$ Cancelado (Onboarding)", "", 0, 3, "SEM DEFINIÇÃO na intranet (o Onboarding só tem meta de % de churn de clientes)" },
+				        { "Meta CSAT Ouvidoria", "", 0, 0, "SEM DEFINIÇÃO na intranet" }
+				    }
+				)
+

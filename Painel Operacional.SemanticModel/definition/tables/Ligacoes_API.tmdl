@@ -1,0 +1,286 @@
+table Ligacoes_API
+	lineageTag: 9acfe0eb-0335-4062-92af-88266eb09c20
+
+	/// Ligações por data de INÍCIO.
+	measure Ligações = CALCULATE( COUNTROWS( Ligacoes_API ), NOT ISBLANK( Ligacoes_API[Data_Inicio] ) )
+		formatString: #,0
+		displayFolder: Base de datas
+		lineageTag: 69598b7c-47cb-5828-8740-8c5bcd2ce04d
+
+	/// Tempo de conversa total em hh:mm:ss (para cartão).
+	measure 'Tempo Falado Total' = VAR s = CALCULATE( SUM( Ligacoes_API[Tempo Falado (s)] ), NOT ISBLANK( Ligacoes_API[Data_Inicio] ) ) RETURN IF( ISBLANK( s ), "", FORMAT( INT( s / 3600 ), "00" ) & ":" & FORMAT( INT( MOD( s, 3600 ) / 60 ), "00" ) & ":" & FORMAT( MOD( s, 60 ), "00" ) )
+		displayFolder: Ligações
+		lineageTag: 6bfda2d1-c3d7-534d-bb73-9a741d131ec3
+
+	/// Tempo falado ÷ ligações, em hh:mm:ss (para cartão).
+	measure 'TMA Ligações' = VAR s = ROUND( DIVIDE( CALCULATE( SUM( Ligacoes_API[Tempo Falado (s)] ), NOT ISBLANK( Ligacoes_API[Data_Inicio] ) ), [Ligações] ), 0 ) RETURN IF( ISBLANK( s ), "", FORMAT( INT( s / 3600 ), "00" ) & ":" & FORMAT( INT( MOD( s, 3600 ) / 60 ), "00" ) & ":" & FORMAT( MOD( s, 60 ), "00" ) )
+		displayFolder: Ligações
+		lineageTag: 033cb290-007f-5189-aad6-23e1f20244ae
+
+	/// Tempo falado ÷ ligações, em minutos.
+	measure 'TMA Ligações (min)' = DIVIDE( CALCULATE( SUM( Ligacoes_API[Tempo Falado (s)] ), NOT ISBLANK( Ligacoes_API[Data_Inicio] ) ), [Ligações] * 60 )
+		displayFolder: Ligações
+		lineageTag: ad25b57e-07e9-586d-baaf-ac3465c40767
+
+		formatStringDefinition = VAR _s = ROUND( SELECTEDMEASURE() * 60, 0 ) RETURN """" & FORMAT( INT( _s / 3600 ), "00" ) & ":" & FORMAT( INT( MOD( _s, 3600 ) / 60 ), "00" ) & ":" & FORMAT( MOD( _s, 60 ), "00" ) & """"
+
+	/// Tempo das ligações sem conversa (0 s falados), em hh:mm:ss — mesma conta do OKR 2026.
+	measure 'Tempo Parado' = VAR s = CALCULATE( SUM( Ligacoes_API[Duração (s)] ), Ligacoes_API[Tempo Falado (s)] = 0, NOT ISBLANK( Ligacoes_API[Data_Inicio] ) ) RETURN IF( ISBLANK( s ), "", FORMAT( INT( s / 3600 ), "00" ) & ":" & FORMAT( INT( MOD( s, 3600 ) / 60 ), "00" ) & ":" & FORMAT( MOD( s, 60 ), "00" ) )
+		displayFolder: Ligações
+		lineageTag: 13201b5f-36e6-5f66-9b8d-4b8376bcca4b
+
+	/// Horas de conversa, por data de INÍCIO.
+	measure 'Tempo Falado (h)' = CALCULATE( DIVIDE( SUM( Ligacoes_API[Tempo Falado (s)] ), 3600 ), NOT ISBLANK( Ligacoes_API[Data_Inicio] ) )
+		displayFolder: Ligações
+		lineageTag: 85415f8d-e048-5755-b7cd-1b0267d93b1f
+
+		formatStringDefinition = VAR _s = ROUND( SELECTEDMEASURE() * 3600, 0 ) RETURN """" & FORMAT( INT( _s / 3600 ), "00" ) & ":" & FORMAT( INT( MOD( _s, 3600 ) / 60 ), "00" ) & ":" & FORMAT( MOD( _s, 60 ), "00" ) & """"
+
+	/// Ligações com 3 minutos ou mais de conversa.
+	measure 'Ligações com Mais de 3 min' = CALCULATE( [Ligações], Ligacoes_API[Mais de 3 min] = "Sim" )
+		formatString: #,0
+		displayFolder: Ligações
+		lineageTag: 6b189a97-5699-5393-bf02-ae010790e410
+
+	/// Atendidas ÷ ligações.
+	measure '% Ligações Atendidas' = DIVIDE( [Ligações Atendidas], [Ligações] )
+		formatString: 0.00%
+		displayFolder: Ligações
+		lineageTag: 8efaea7f-a168-5256-919d-c2a7d1813d63
+
+	/// Ligações com situação 'Atendida', por data de INÍCIO.
+	measure 'Ligações Atendidas' = CALCULATE( [Ligações], Ligacoes_API[Situação] = "Atendida" )
+		formatString: #,0
+		displayFolder: Ligações
+		lineageTag: a75c50de-c4f0-55da-9539-58e4ac09a79d
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 3f61fa1d-a998-4513-b771-f288bac6faa3
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Protocolo
+		dataType: int64
+		formatString: 0
+		lineageTag: eca65198-c209-481f-b02e-a0969a211a0d
+		summarizeBy: sum
+		sourceColumn: Protocolo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Situação
+		dataType: string
+		lineageTag: fcf877b7-9052-4816-b9f5-780abb03e2b0
+		summarizeBy: none
+		sourceColumn: Situação
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sentido
+		dataType: string
+		lineageTag: 6f12953b-d088-47ec-9414-71ccf61b57e4
+		summarizeBy: none
+		sourceColumn: Sentido
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tipo
+		dataType: string
+		lineageTag: 82249a94-3fae-42bb-869d-ce37e188c709
+		summarizeBy: none
+		sourceColumn: Tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nome
+		dataType: string
+		lineageTag: f7310259-cc47-47e8-97fb-79ea2b23d282
+		summarizeBy: none
+		sourceColumn: Nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column Origem
+		dataType: string
+		lineageTag: 1dbf9f93-7b3d-44c5-a21d-6288141e0dec
+		summarizeBy: none
+		sourceColumn: Origem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Destino
+		dataType: string
+		lineageTag: d2b1a542-2018-4a82-a090-d48b2c4dc0c2
+		summarizeBy: none
+		sourceColumn: Destino
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ramal
+		dataType: int64
+		formatString: 0
+		lineageTag: 67ab224e-03bc-48ee-a499-8792d89343aa
+		summarizeBy: sum
+		sourceColumn: Ramal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data_hora_inicio
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 4dc89677-4d9f-4dea-9b9d-cd43b56a5e7d
+		summarizeBy: none
+		sourceColumn: Data_hora_inicio
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data_hora_fim
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 1c6c963f-a4ba-4ea7-af55-1686c659286b
+		summarizeBy: none
+		sourceColumn: Data_hora_fim
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tempo Falado'
+		dataType: string
+		lineageTag: f693e8c3-e4c8-4ebf-8cb6-161ac767c27d
+		summarizeBy: none
+		sourceColumn: Tempo Falado
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Motivo Desligamento'
+		dataType: string
+		lineageTag: 012c88f8-3793-458c-bb01-8ae8e8c9511b
+		summarizeBy: none
+		sourceColumn: Motivo Desligamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Lado Desligamento'
+		dataType: string
+		lineageTag: 18f04a31-66b4-46eb-8fe2-efbc24244509
+		summarizeBy: none
+		sourceColumn: Lado Desligamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column UUID
+		dataType: string
+		lineageTag: fcf18099-0f15-4504-a92e-0e189183043a
+		summarizeBy: none
+		sourceColumn: UUID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor = VAR r = TRIM( FORMAT( Ligacoes_API[Ramal], "0" ) ) RETURN IF( r <> "" && r <> "0", LOOKUPVALUE( dColaboradorMes[Setor], dColaboradorMes[Ramal], r, dColaboradorMes[AnoMes], Ligacoes_API[Mês da Composição], BLANK() ) )
+		dataType: string
+		lineageTag: 87269b72-296c-4d76-833e-7e93aa77af1a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_extracao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 2c046622-c79c-4477-8562-6430f4c98169
+		summarizeBy: none
+		sourceColumn: data_extracao
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data_Inicio
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 5d3a4047-4bd2-51d9-99b0-63e70668a790
+		summarizeBy: none
+		sourceColumn: Data_Inicio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Tempo Falado (s)' = IFERROR( ROUND( TIMEVALUE( Ligacoes_API[Tempo Falado] ) * 86400, 0 ), BLANK() )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Ligações
+		lineageTag: f03faf6f-96d7-5a73-a521-0a4cb42744bc
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Duração (s)' = IF( NOT ISBLANK( Ligacoes_API[Data_hora_fim] ), DATEDIFF( Ligacoes_API[Data_hora_inicio], Ligacoes_API[Data_hora_fim], SECOND ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Ligações
+		lineageTag: ba5f70e4-ddb0-518f-aa4c-4037ea4e5630
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mais de 3 min' = IF( Ligacoes_API[Tempo Falado (s)] >= 180, "Sim", "Não" )
+		dataType: string
+		displayFolder: Ligações
+		lineageTag: 5a43b3b4-b66e-54f6-944a-c8e2f8916d04
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email do Ramal' = VAR r = TRIM( FORMAT( Ligacoes_API[Ramal], "0" ) ) RETURN IF( r <> "" && r <> "0", LOOKUPVALUE( dPessoaSetor[email_norm], dPessoaSetor[ramal_norm], r, BLANK() ) )
+		dataType: string
+		isHidden
+		displayFolder: Pessoa
+		lineageTag: a3177d49-ffe6-5451-893b-60da9d0c5caa
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Responsável (Ramal)' = IF( ISBLANK( Ligacoes_API[Email do Ramal] ), "(ramal sem cadastro)", LOOKUPVALUE( dColaborador[Colaborador], dColaborador[email], Ligacoes_API[Email do Ramal], BLANK() ) )
+		dataType: string
+		displayFolder: Pessoa
+		lineageTag: f638cc04-0ec9-5051-8c00-e98242c40112
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe (Ramal)' = IF( ISBLANK( Ligacoes_API[Email do Ramal] ), "(ramal sem cadastro)", COALESCE( LOOKUPVALUE( dColaboradorMes[Equipe], dColaboradorMes[email], Ligacoes_API[Email do Ramal], dColaboradorMes[AnoMes], Ligacoes_API[Mês da Composição], BLANK() ), "(sem equipe)" ) )
+		dataType: string
+		displayFolder: Pessoa
+		lineageTag: 7d40503b-5acb-5875-a6cf-3b27027953c8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês da Composição' = ( VAR _d = Ligacoes_API[Data_Inicio] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Pessoa
+		lineageTag: fe755949-64f1-59da-bb4b-4d279580a7ba
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Ligacoes_API = m
+		mode: import
+		queryGroup: Telefonia
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Ligacoes_API",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"id", Int64.Type}, {"Protocolo", Int64.Type}, {"Situação", type text}, {"Sentido", type text}, {"Tipo", type text}, {"Nome", type text}, {"Origem", type text}, {"Destino", type text}, {"Ramal", Int64.Type}, {"Data_hora_inicio", type datetime}, {"Data_hora_fim", type datetime}, {"Tempo Falado", type text}, {"Motivo Desligamento", type text}, {"Lado Desligamento", type text}, {"UUID", type text}, {"data_extracao", type datetime}, {"Data_Inicio", type datetime}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

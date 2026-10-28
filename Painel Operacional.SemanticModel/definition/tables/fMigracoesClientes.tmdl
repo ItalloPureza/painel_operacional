@@ -1,0 +1,291 @@
+table fMigracoesClientes
+	lineageTag: 1f785488-088c-5cdf-ae2b-48cc0bc35e27
+
+	/// Média de dias do registro do cliente até a migração. Clientes registrados em 2026; tickets criados do registro até a migração. Pela data da MIGRAÇÃO.
+	measure 'Dias até Migrar (média)' = AVERAGE( fMigracoesClientes[Dias até Migrar] )
+		formatString: 0.00
+		displayFolder: Migrações dos Clientes
+		lineageTag: dc02ffd5-4c11-58b4-93cf-d1b21558b72e
+
+	/// Migrados SEM ticket de homologação do App entre o registro e a migração — conferência da regra. Clientes registrados em 2026; tickets criados do registro até a migração. Pela data da MIGRAÇÃO.
+	measure 'Migrados sem Homologação do App' = CALCULATE( COUNTROWS( fMigracoesClientes ), fMigracoesClientes[Homologação do App] = "Não" )
+		formatString: #,0
+		displayFolder: Migrações dos Clientes
+		lineageTag: 636e740e-96e4-5738-8fff-a02b55c29173
+
+	/// Migrados com pelo menos um ticket do serviço Homologação da Área Vip e Aplicativo entre o registro e a migração ÷ migrados (regra: não migra sem homologação do App). Clientes registrados em 2026; tickets criados do registro até a migração. Pela data da MIGRAÇÃO.
+	measure '% Migrados com Homologação do App' = DIVIDE( CALCULATE( COUNTROWS( fMigracoesClientes ), fMigracoesClientes[Homologação do App] = "Sim" ), [Clientes Migrados] )
+		formatString: 0.00%
+		displayFolder: Migrações dos Clientes
+		lineageTag: 34cb5888-cb40-5f73-b70b-90ce333f064f
+
+	/// Média dos tickets dos demais serviços (Financeiro, Cancelamento, Comercial etc.). Clientes registrados em 2026; tickets criados do registro até a migração. Pela data da MIGRAÇÃO.
+	measure 'Outros Serviços por Migrado (média)' = AVERAGE( fMigracoesClientes[Outros Serviços] )
+		formatString: 0.00
+		displayFolder: Migrações dos Clientes
+		lineageTag: 0f78b74f-e197-5087-a92a-62bc8f0f5877
+
+	/// Média de tickets de homologação (App e Guias, com os ajustes) por cliente migrado. Clientes registrados em 2026; tickets criados do registro até a migração. Pela data da MIGRAÇÃO.
+	measure 'Homologação por Migrado (média)' = AVERAGE( fMigracoesClientes[Homologação] )
+		formatString: 0.00
+		displayFolder: Migrações dos Clientes
+		lineageTag: 68680073-6916-52ea-a6b5-9b65f1ca0712
+
+	/// Média de tickets do Suporte Técnico por cliente migrado. Clientes registrados em 2026; tickets criados do registro até a migração. Pela data da MIGRAÇÃO.
+	measure 'Suporte por Migrado (média)' = AVERAGE( fMigracoesClientes[Suporte] )
+		formatString: 0.00
+		displayFolder: Migrações dos Clientes
+		lineageTag: 4d544f25-cba0-52c0-a661-cfaa4ac66854
+
+	/// Média dos demais tickets de consultoria (agendamento, confirmação, tira-dúvidas, dispensa etc.). Clientes registrados em 2026; tickets criados do registro até a migração. Pela data da MIGRAÇÃO.
+	measure 'Outros na Consultoria (média)' = AVERAGE( fMigracoesClientes[Consultoria: Outros] )
+		formatString: 0.00
+		displayFolder: Migrações dos Clientes
+		lineageTag: 16aaee43-4161-56dc-8537-7f90c55047eb
+
+	/// Média de tickets de consultoria com falha: falta, remarcação, tentativa de contato, ongoing sem contato. Clientes registrados em 2026; tickets criados do registro até a migração. Pela data da MIGRAÇÃO.
+	measure 'Falhas na Consultoria (média)' = AVERAGE( fMigracoesClientes[Consultoria: Falha] )
+		formatString: 0.00
+		displayFolder: Migrações dos Clientes
+		lineageTag: 5e75927e-2e99-5655-84eb-acb25dbf8dbf
+
+	/// Média de tickets de consultoria (Treinamento + Sucesso do Cliente) com sucesso: checkout, tratativa, contato efetivo, finalização, formalização. Clientes registrados em 2026; tickets criados do registro até a migração. Pela data da MIGRAÇÃO.
+	measure 'Sucessos na Consultoria (média)' = AVERAGE( fMigracoesClientes[Consultoria: Sucesso] )
+		formatString: 0.00
+		displayFolder: Migrações dos Clientes
+		lineageTag: 24f6d379-737b-5a0a-b4ad-6b3773139a56
+
+	/// Média de tickets (todos os serviços) por cliente migrado. Clientes registrados em 2026; tickets criados do registro até a migração. Pela data da MIGRAÇÃO.
+	measure 'Tickets por Migrado (média)' = AVERAGE( fMigracoesClientes[Tickets] )
+		formatString: 0.00
+		displayFolder: Migrações dos Clientes
+		lineageTag: a24ea2df-7427-5561-a1ff-1fd4256e5aa3
+
+	/// Migrações concluídas (Ativado + Não ativado) de clientes registrados em 2026. Pela data da MIGRAÇÃO.
+	measure 'Clientes Migrados' = COUNTROWS( fMigracoesClientes )
+		formatString: #,0
+		displayFolder: Migrações dos Clientes
+		lineageTag: d84a622e-191d-5c47-aaaf-fa1b697e531f
+
+	column ID
+		lineageTag: 13c94cb5-8f9b-5855-884a-d7cd7588a9ce
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cliente
+		lineageTag: d89a9bdb-5992-5bbc-8906-c16f451f87cf
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cliente]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Situação da Migração'
+		lineageTag: 83af0642-ce89-56f0-8c33-9ffc9eb472fa
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Situação da Migração]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data da Migração'
+		formatString: dd/mm/yy
+		lineageTag: cd66f368-1ead-5302-8172-79b37df9fc8f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Data da Migração]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Registro
+		formatString: dd/mm/yy
+		lineageTag: cb233267-42d0-5993-a33c-a3a2cc8bb590
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Registro]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias até Migrar'
+		formatString: #,0
+		lineageTag: 23fd63eb-8fde-5f70-adb7-95747a9debf2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Dias até Migrar]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Responsável pelo Cliente'
+		lineageTag: ef121b83-32f8-58b5-8123-d37572961dc4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Responsável pelo Cliente]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe do Responsável'
+		lineageTag: b0213bf3-7b16-5d33-b0e4-04d6c9534f45
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Equipe do Responsável]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tickets
+		formatString: #,0
+		lineageTag: 3f4b0fdd-6987-5236-8256-0c774505b216
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tickets]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Treinamento
+		formatString: #,0
+		lineageTag: 3f5d3c24-4abb-59eb-8b7a-9c2b524b66b0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Treinamento]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sucesso do Cliente'
+		formatString: #,0
+		lineageTag: c0e8dc0a-50b0-54c8-82a7-145280eab97a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Sucesso do Cliente]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Consultoria: Sucesso'
+		formatString: #,0
+		lineageTag: 592f70f3-d0d3-511a-93c1-2868d47dfaad
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Consultoria: Sucesso]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Consultoria: Falha'
+		formatString: #,0
+		lineageTag: f31ad085-ddc8-5e97-8ece-a792bc5382ba
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Consultoria: Falha]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Consultoria: Outros'
+		formatString: #,0
+		lineageTag: 870d4ca0-f38a-5859-819c-15e426a22694
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Consultoria: Outros]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Suporte
+		formatString: #,0
+		lineageTag: 3ae26b2c-2b6e-5a8e-b1f0-d9a2d1e23d26
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Suporte]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Homologação
+		formatString: #,0
+		lineageTag: 44899066-9a90-5e68-b278-650c6bc28847
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Homologação]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Homologações do App'
+		formatString: #,0
+		lineageTag: 8dea8ac6-13c7-56ee-a9b8-6d6d1997b257
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Homologações do App]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Outros Serviços' = fMigracoesClientes[Tickets] - fMigracoesClientes[Treinamento] - fMigracoesClientes[Sucesso do Cliente] - fMigracoesClientes[Suporte] - fMigracoesClientes[Homologação]
+		dataType: int64
+		formatString: #,0
+		displayFolder: Migrações dos Clientes
+		lineageTag: ac3fae10-b327-5cc1-b500-491351e1d9a6
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Homologação do App' = IF( fMigracoesClientes[Homologações do App] > 0, "Sim", "Não" )
+		dataType: string
+		displayFolder: Migrações dos Clientes
+		lineageTag: 394f865d-87cb-5d83-ad08-28169c704b43
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID do Cliente (busca)' = VAR i = TRIM( "" & fMigracoesClientes[ID] ) RETURN IF( i = "" || i = "0", BLANK(), i )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 63585c23-2f7d-5016-b6ad-884c00ac07d8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ do Cliente (busca)' = VAR c = LOOKUPVALUE( dBuscaCliente[CNPJ], dBuscaCliente[ID], TRIM( "" & fMigracoesClientes[ID] ), BLANK() ) RETURN IF( c = "", BLANK(), c )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: dc77cfab-f6dd-5fd6-97cc-440856e36ab7
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fMigracoesClientes = calculated
+		mode: import
+		source =
+				
+				-- Uma linha por migração (Ativado/Não ativado) de cliente registrado em 2026, com os tickets do cliente
+				-- criados do registro até a migração. Gerado por scripts/gerar_migracoes.py.
+				VAR base =
+				    FILTER(
+				        CRM_Atividades,
+				        CRM_Atividades[Tipo de Atividade] = "Análise de Migração"
+				            && CRM_Atividades[Categoria] IN { "Migração - Ativado", "Migração - Não Ativado" }
+				            && NOT ISBLANK( CRM_Atividades[Data_Resolucao] )
+				            && CRM_Atividades[Apagada_status] <> TRUE()
+				            && CRM_Atividades[Registro do Cliente] >= DATE( 2026, 1, 1 )
+				    )
+				VAR mig =
+				    SELECTCOLUMNS(
+				        base,
+				        "ID", TRIM( CRM_Atividades[ID_Alfa] ),
+				        "Cliente", CRM_Atividades[Cliente_Nome_Fantasia],
+				        "Situação da Migração", IF( CRM_Atividades[Categoria] = "Migração - Ativado", "Ativado", "Não ativado" ),
+				        "Data da Migração", VAR d = CRM_Atividades[Data_Resolucao] RETURN DATE( YEAR( d ), MONTH( d ), DAY( d ) ),
+				        "Registro", CRM_Atividades[Registro do Cliente],
+				        "Dias até Migrar", CRM_Atividades[Dias até a Migração],
+				        "Responsável pelo Cliente", CRM_Atividades[Responsavel_Pelo_Cliente],
+				        "Equipe do Responsável", CRM_Atividades[Equipe do Responsável pelo Cliente]
+				    )
+				RETURN
+				    ADDCOLUMNS(
+				        mig,
+				        "Tickets", VAR i = [ID] VAR r = [Registro] VAR f = [Data da Migração] RETURN CALCULATE( COUNTROWS( Helpdesk_Tickets ), REMOVEFILTERS( Helpdesk_Tickets ), Helpdesk_Tickets[ID Legado do Cliente] = i, Helpdesk_Tickets[Data_Criacao_Ticket] >= r, Helpdesk_Tickets[Data_Criacao_Ticket] < f + 1, NOT ISBLANK( Helpdesk_Tickets[owner] ) && Helpdesk_Tickets[owner] <> "" ) + 0,
+				        "Treinamento", VAR i = [ID] VAR r = [Registro] VAR f = [Data da Migração] RETURN CALCULATE( COUNTROWS( Helpdesk_Tickets ), REMOVEFILTERS( Helpdesk_Tickets ), Helpdesk_Tickets[ID Legado do Cliente] = i, Helpdesk_Tickets[Data_Criacao_Ticket] >= r, Helpdesk_Tickets[Data_Criacao_Ticket] < f + 1, NOT ISBLANK( Helpdesk_Tickets[owner] ) && Helpdesk_Tickets[owner] <> "", TRIM( Helpdesk_Tickets[service] ) = "Treinamento" ) + 0,
+				        "Sucesso do Cliente", VAR i = [ID] VAR r = [Registro] VAR f = [Data da Migração] RETURN CALCULATE( COUNTROWS( Helpdesk_Tickets ), REMOVEFILTERS( Helpdesk_Tickets ), Helpdesk_Tickets[ID Legado do Cliente] = i, Helpdesk_Tickets[Data_Criacao_Ticket] >= r, Helpdesk_Tickets[Data_Criacao_Ticket] < f + 1, NOT ISBLANK( Helpdesk_Tickets[owner] ) && Helpdesk_Tickets[owner] <> "", TRIM( Helpdesk_Tickets[service] ) = "Sucesso do Cliente" ) + 0,
+				        "Consultoria: Sucesso", VAR i = [ID] VAR r = [Registro] VAR f = [Data da Migração] RETURN CALCULATE( COUNTROWS( Helpdesk_Tickets ), REMOVEFILTERS( Helpdesk_Tickets ), Helpdesk_Tickets[ID Legado do Cliente] = i, Helpdesk_Tickets[Data_Criacao_Ticket] >= r, Helpdesk_Tickets[Data_Criacao_Ticket] < f + 1, NOT ISBLANK( Helpdesk_Tickets[owner] ) && Helpdesk_Tickets[owner] <> "", Helpdesk_Tickets[Resultado da Consultoria] = "Sucesso" ) + 0,
+				        "Consultoria: Falha", VAR i = [ID] VAR r = [Registro] VAR f = [Data da Migração] RETURN CALCULATE( COUNTROWS( Helpdesk_Tickets ), REMOVEFILTERS( Helpdesk_Tickets ), Helpdesk_Tickets[ID Legado do Cliente] = i, Helpdesk_Tickets[Data_Criacao_Ticket] >= r, Helpdesk_Tickets[Data_Criacao_Ticket] < f + 1, NOT ISBLANK( Helpdesk_Tickets[owner] ) && Helpdesk_Tickets[owner] <> "", Helpdesk_Tickets[Resultado da Consultoria] = "Falha" ) + 0,
+				        "Consultoria: Outros", VAR i = [ID] VAR r = [Registro] VAR f = [Data da Migração] RETURN CALCULATE( COUNTROWS( Helpdesk_Tickets ), REMOVEFILTERS( Helpdesk_Tickets ), Helpdesk_Tickets[ID Legado do Cliente] = i, Helpdesk_Tickets[Data_Criacao_Ticket] >= r, Helpdesk_Tickets[Data_Criacao_Ticket] < f + 1, NOT ISBLANK( Helpdesk_Tickets[owner] ) && Helpdesk_Tickets[owner] <> "", Helpdesk_Tickets[Resultado da Consultoria] = "Outros" ) + 0,
+				        "Suporte", VAR i = [ID] VAR r = [Registro] VAR f = [Data da Migração] RETURN CALCULATE( COUNTROWS( Helpdesk_Tickets ), REMOVEFILTERS( Helpdesk_Tickets ), Helpdesk_Tickets[ID Legado do Cliente] = i, Helpdesk_Tickets[Data_Criacao_Ticket] >= r, Helpdesk_Tickets[Data_Criacao_Ticket] < f + 1, NOT ISBLANK( Helpdesk_Tickets[owner] ) && Helpdesk_Tickets[owner] <> "", TRIM( Helpdesk_Tickets[service] ) IN { "Suporte Técnico" } ) + 0,
+				        "Homologação", VAR i = [ID] VAR r = [Registro] VAR f = [Data da Migração] RETURN CALCULATE( COUNTROWS( Helpdesk_Tickets ), REMOVEFILTERS( Helpdesk_Tickets ), Helpdesk_Tickets[ID Legado do Cliente] = i, Helpdesk_Tickets[Data_Criacao_Ticket] >= r, Helpdesk_Tickets[Data_Criacao_Ticket] < f + 1, NOT ISBLANK( Helpdesk_Tickets[owner] ) && Helpdesk_Tickets[owner] <> "", TRIM( Helpdesk_Tickets[service] ) IN { "Homologação da Área Vip e Aplicativo", "Ajuste de Homologação da Área VIP e Aplicativo", "Homologação de Guias do e-Contínuo", "Ajuste de Homologação de Guias" } ) + 0,
+				        "Homologações do App", VAR i = [ID] VAR r = [Registro] VAR f = [Data da Migração] RETURN CALCULATE( COUNTROWS( Helpdesk_Tickets ), REMOVEFILTERS( Helpdesk_Tickets ), Helpdesk_Tickets[ID Legado do Cliente] = i, Helpdesk_Tickets[Data_Criacao_Ticket] >= r, Helpdesk_Tickets[Data_Criacao_Ticket] < f + 1, NOT ISBLANK( Helpdesk_Tickets[owner] ) && Helpdesk_Tickets[owner] <> "", Helpdesk_Tickets[Serviço Homologação] = "Homologação App" ) + 0
+				    )
+

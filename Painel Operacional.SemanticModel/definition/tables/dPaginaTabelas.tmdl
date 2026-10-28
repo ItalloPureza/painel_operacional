@@ -1,0 +1,136 @@
+table dPaginaTabelas
+	lineageTag: 2e5501a1-4fcd-5df3-bb49-a17fab0885ef
+
+	column Pagina
+		lineageTag: ce868ced-bc10-524e-a60f-c9394ff192c4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Pagina]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tabela
+		lineageTag: ed67e351-b265-524a-a8f4-1dfd37e38b1f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tabela]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dPaginaTabelas = calculated
+		mode: import
+		source =
+				
+				-- GERADO por scripts/saude_dados.py: tabelas que cada tela mostra (lidas dos visuais).
+				-- Rodar o script de novo depois de criar/migrar telas.
+				DATATABLE ( "Pagina", STRING, "Tabela", STRING, {
+				  {"pg_agendamento_01", "Helpdesk_Tickets"},
+				  {"pg_agendamento_02", "Helpdesk_Tickets"},
+				  {"pg_agendamento_03", "Helpdesk_Tickets"},
+				  {"pg_agendamento_04", "Helpdesk_Survey"},
+				  {"pg_gerencia_01", "CRM_Backup_Diario"},
+				  {"pg_gerencia_02", "CRM_Backup_Diario"},
+				  {"pg_gerencia_03", "Helpdesk_Tickets"},
+				  {"pg_gerencia_03", "CRM_Backup_Diario"},
+				  {"pg_gerencia_04", "Helpdesk_Cancelamentos"},
+				  {"pg_gerencia_04", "Helpdesk_Tickets"},
+				  {"pg_gerencia_04", "Contratos_historico_contratos"},
+				  {"pg_gerencia_04", "Contratos_historico_items"},
+				  {"pg_gerencia_04", "CRM_Atividades"},
+				  {"pg_gerencia_04", "CRM_Backup_Diario"},
+				  {"pg_gerencia_05", "Helpdesk_Cancelamentos"},
+				  {"pg_gerencia_05", "Helpdesk_Tickets"},
+				  {"pg_gerencia_05", "Contratos_historico_contratos"},
+				  {"pg_gerencia_05", "Contratos_historico_items"},
+				  {"pg_gerencia_05", "CRM_Atividades"},
+				  {"pg_gerencia_05", "CRM_Backup_Diario"},
+				  {"pg_gerencia_06", "Helpdesk_Cancelamentos"},
+				  {"pg_gerencia_06", "Helpdesk_Survey"},
+				  {"pg_gerencia_06", "Helpdesk_Tickets"},
+				  {"pg_gerencia_06", "CRM_Atividades"},
+				  {"pg_gerencia_06", "CRM_Backup_Diario"},
+				  {"pg_global_01", "Contratos_historico_contratos"},
+				  {"pg_global_01", "Contratos_historico_items"},
+				  {"pg_global_01", "CRM_Backup_Diario"},
+				  {"pg_global_02", "Contratos_historico_contratos"},
+				  {"pg_global_02", "Contratos_historico_items"},
+				  {"pg_global_02", "CRM_Backup_Diario"},
+				  {"pg_global_03", "Helpdesk_Tickets"},
+				  {"pg_global_04", "Helpdesk_Tickets"},
+				  {"pg_global_04", "CRM_Backup_Diario"},
+				  {"pg_global_05", "Contratos_historico_contratos"},
+				  {"pg_global_05", "Contratos_historico_items"},
+				  {"pg_global_05", "CRM_Backup_Diario"},
+				  {"pg_global_06", "Contratos_historico_contratos"},
+				  {"pg_global_06", "Contratos_historico_items"},
+				  {"pg_global_06", "CRM_Backup_Diario"},
+				  {"pg_global_07", "CRM_Atividades"},
+				  {"pg_global_07", "CRM_Backup_Diario"},
+				  {"pg_global_08", "Legado_Clientes"},
+				  {"pg_global_10", "CRM_Backup_Diario"},
+				  {"pg_homologacao_01", "Helpdesk_Tickets"},
+				  {"pg_homologacao_01", "CRM_Backup_Diario"},
+				  {"pg_homologacao_02", "Helpdesk_Tickets"},
+				  {"pg_homologacao_03", "Helpdesk_Survey"},
+				  {"pg_homologacao_04", "Helpdesk_Tickets"},
+				  {"pg_onboarding_01", "Helpdesk_Cancelamentos"},
+				  {"pg_onboarding_01", "Helpdesk_Tickets"},
+				  {"pg_onboarding_01", "CRM_Atividades"},
+				  {"pg_onboarding_01", "CRM_Backup_Diario"},
+				  {"pg_onboarding_02", "Helpdesk_Tickets"},
+				  {"pg_onboarding_03", "Helpdesk_Cancelamentos"},
+				  {"pg_onboarding_03", "CRM_Backup_Diario"},
+				  {"pg_onboarding_04", "Helpdesk_Cancelamentos"},
+				  {"pg_onboarding_04", "CRM_Backup_Diario"},
+				  {"pg_onboarding_05", "CRM_Atividades"},
+				  {"pg_onboarding_06", "CRM_Atividades"},
+				  {"pg_onboarding_06", "CRM_Backup_Diario"},
+				  {"pg_onboarding_07", "Ligacoes_API"},
+				  {"pg_onboarding_08", "Helpdesk_Tickets"},
+				  {"pg_onboarding_08", "Contratos_historico_contratos"},
+				  {"pg_onboarding_08", "Contratos_historico_items"},
+				  {"pg_onboarding_08", "CRM_Backup_Diario"},
+				  {"pg_onboarding_09", "WhatsApp_Atendimentos"},
+				  {"pg_onboarding_09", "WhatsApp_CSAT"},
+				  {"pg_onboarding_10", "WhatsApp_Contatos"},
+				  {"pg_onboarding_10", "WhatsApp_Envios"},
+				  {"pg_onboarding_11", "WhatsApp_Atendimentos"},
+				  {"pg_onboarding_11", "WhatsApp_Envios"},
+				  {"pg_ongoing_01", "Ligacoes_API"},
+				  {"pg_ongoing_01", "Helpdesk_Survey"},
+				  {"pg_ongoing_01", "Helpdesk_Tickets"},
+				  {"pg_ongoing_01", "CRM_Atividades"},
+				  {"pg_ongoing_01", "CRM_Backup_Diario"},
+				  {"pg_ongoing_02", "Helpdesk_Tickets"},
+				  {"pg_ongoing_03", "Helpdesk_Cancelamentos"},
+				  {"pg_ongoing_03", "CRM_Backup_Diario"},
+				  {"pg_ongoing_04", "Helpdesk_Cancelamentos"},
+				  {"pg_ongoing_04", "CRM_Backup_Diario"},
+				  {"pg_ongoing_05", "CRM_Atividades"},
+				  {"pg_ongoing_06", "Ligacoes_API"},
+				  {"pg_ongoing_07", "CRM_Atividades"},
+				  {"pg_ongoing_07", "CRM_Backup_Diario"},
+				  {"pg_ongoing_08", "Helpdesk_Tickets"},
+				  {"pg_ongoing_08", "Contratos_historico_contratos"},
+				  {"pg_ongoing_08", "Contratos_historico_items"},
+				  {"pg_ongoing_08", "CRM_Backup_Diario"},
+				  {"pg_ongoing_09", "WhatsApp_Atendimentos"},
+				  {"pg_ongoing_09", "WhatsApp_CSAT"},
+				  {"pg_ongoing_10", "WhatsApp_Contatos"},
+				  {"pg_ongoing_10", "WhatsApp_Envios"},
+				  {"pg_ongoing_11", "WhatsApp_Atendimentos"},
+				  {"pg_ongoing_11", "WhatsApp_Envios"},
+				  {"pg_relacionamento_01", "Helpdesk_Cancelamentos"},
+				  {"pg_relacionamento_02", "Helpdesk_Cancelamentos"},
+				  {"pg_relacionamento_03", "Helpdesk_Survey"},
+				  {"pg_relacionamento_03", "Helpdesk_Tickets"},
+				  {"pg_relacionamento_04", "Helpdesk_Cancelamentos"},
+				  {"pg_relacionamento_05", "Helpdesk_Cancelamentos"},
+				  {"pg_suporte_01", "Helpdesk_Tickets"},
+				  {"pg_suporte_02", "Helpdesk_Survey"},
+				  {"pg_suporte_03", "Helpdesk_Tickets"},
+				  {"pg_suporte_04", "Helpdesk_Tickets"}
+				} )
+
+	annotation PBI_Id = ce9c6222fdd955d78bdaa81a846c6d30
+

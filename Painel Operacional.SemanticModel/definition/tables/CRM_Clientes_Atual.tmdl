@@ -1,0 +1,57 @@
+table CRM_Clientes_Atual
+	lineageTag: 1cbc0667-9653-4415-a7d9-3dcfcb975151
+
+	/// Último retrato do CRM, 1 linha por cliente (ID_Legado = id_legacy): cancelamento, reativação e aviso prévio. Pequena de propósito: não mexe na CRM_Backup_Diario.
+	column ID_Legado
+		dataType: string
+		lineageTag: ff17ac7f-7e2c-470c-9d02-46d8745049f7
+		summarizeBy: none
+		sourceColumn: ID_Legado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data_Cancelamento
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: efe5e4b7-703c-4ba3-868d-5d7d9e861b81
+		summarizeBy: none
+		sourceColumn: Data_Cancelamento
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Data_Reativacao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: e1c222c0-0d9f-4a6b-aad4-bd0f572e44f0
+		summarizeBy: none
+		sourceColumn: Data_Reativacao
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Aviso_Previo
+		dataType: string
+		lineageTag: f409ff4e-1952-44b9-8040-654b24a1b5db
+		summarizeBy: none
+		sourceColumn: Aviso_Previo
+
+		annotation SummarizationSetBy = Automatic
+
+	partition CRM_Clientes_Atual = m
+		mode: import
+		queryGroup: CRM
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="CRM_Clientes_Atual",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"ID_Legado", type text}, {"Data_Cancelamento", type datetime}, {"Data_Reativacao", type datetime}, {"Aviso_Previo", type text}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

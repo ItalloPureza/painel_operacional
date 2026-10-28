@@ -1,0 +1,28 @@
+table dAnalistaRelacionamento
+	lineageTag: 9a8550b2-9271-5c94-824a-08a2d7569420
+
+	column email
+		lineageTag: a0011054-0cf8-546e-827a-36542f9a3289
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [email]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Analista Relacionamento'
+		lineageTag: 10d68437-0cdf-5c42-87f9-b0fdbc7aced8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Analista Relacionamento]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dAnalistaRelacionamento = calculated
+		mode: import
+		source =
+				
+				-- Pessoas do setor Relacionamento (em algum mês da composição) — filtro "Analista Relacionamento" do Gerência -
+				-- Resumo Alfa e Kappa, separado do dColaboradorMes para poder ser usado junto com o Analista CS.
+				-- Sem relação com nada: as medidas "(resumo produtos)" leem o filtro (scripts/gerar_resumo_produtos.py).
+				SELECTCOLUMNS( SUMMARIZE( FILTER( dColaboradorMes, dColaboradorMes[Setor] = "Relacionamento" ), dColaboradorMes[email], dColaboradorMes[Colaborador] ), "email", dColaboradorMes[email], "Analista Relacionamento", dColaboradorMes[Colaborador] )
+

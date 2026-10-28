@@ -1,0 +1,216 @@
+table WhatsApp_Envios
+	lineageTag: 697104a2-31a8-57f0-a610-aac69e4c06a3
+
+	measure Disparos = COUNTROWS( WhatsApp_Envios )
+		formatString: #,0
+		displayFolder: WhatsApp
+		lineageTag: dbd358d6-d10a-5f06-bfbc-7d0da8d6def6
+
+	measure Campanhas = DISTINCTCOUNT( WhatsApp_Envios[campaign_id] )
+		formatString: #,0
+		displayFolder: WhatsApp
+		lineageTag: a98f38bf-71fc-5fdd-9b98-56704a11a533
+
+	measure Falhas = CALCULATE( [Disparos], WhatsApp_Envios[Status] = "Falhou" )
+		formatString: #,0
+		displayFolder: WhatsApp
+		lineageTag: dd603c05-bb6e-514d-9131-0a6f2f55bcd4
+
+	measure '% Entregues' = DIVIDE( CALCULATE( [Disparos], WhatsApp_Envios[Status] IN { "Entregue", "Lido" } ), [Disparos] )
+		formatString: 0.00%
+		displayFolder: WhatsApp
+		lineageTag: 836683ff-5ad3-536f-b0b8-921a3ad90f64
+
+	measure '% Lidos' = DIVIDE( CALCULATE( [Disparos], WhatsApp_Envios[Status] = "Lido" ), [Disparos] )
+		formatString: 0.00%
+		displayFolder: WhatsApp
+		lineageTag: 4652db3f-e418-5352-b2fc-4819a1c7900f
+
+	measure '% Falhas' = DIVIDE( [Falhas], [Disparos] )
+		formatString: 0.00%
+		displayFolder: WhatsApp
+		lineageTag: cc95cc55-be0c-5723-8dfc-3807cae81b3a
+
+	/// Disparos (mensagens proativas) ÷ dias com atendimento no filtro, separados das mensagens do time.
+	measure 'Disparos por Dia' = DIVIDE( [Disparos], [Dias com Atendimento] )
+		formatString: #,0.00
+		displayFolder: Volumetria
+		lineageTag: 2ce3a731-e696-5f18-a1e5-68e4ddb1ae6f
+
+	/// Disparos com continuidade ÷ disparos entregues.
+	measure '% Continuidade dos Disparos' = DIVIDE( [Disparos com Continuidade], [Disparos Entregues] )
+		formatString: 0.00%
+		displayFolder: Volumetria
+		lineageTag: dd2f21d7-feab-54f7-9278-874a0ea934d3
+
+	/// Disparos entregues que abriram atendimento depois do envio (janela do banco). Não conta o disparo feito com o atendimento já aberto.
+	measure 'Disparos com Continuidade' = CALCULATE( [Disparos Entregues], KEEPFILTERS( WhatsApp_Envios[Continuidade] = "Virou atendimento" ) )
+		formatString: #,0
+		displayFolder: Volumetria
+		lineageTag: 1ac00138-95b5-52e1-81a1-5bc6566e0832
+
+	/// Disparos que chegaram ao cliente (entregues ou lidos).
+	measure 'Disparos Entregues' = CALCULATE( [Disparos], KEEPFILTERS( WhatsApp_Envios[Status] IN { "Entregue", "Lido" } ) )
+		formatString: #,0
+		displayFolder: Volumetria
+		lineageTag: b7721355-025c-5aa9-ae95-1c66aca55d6c
+
+	column campaign_id
+		dataType: string
+		isHidden
+		lineageTag: 8d4c1f33-fd50-5451-bdbc-15d209fac592
+		summarizeBy: none
+		sourceColumn: campaign_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column destinatario_identity
+		dataType: string
+		isHidden
+		lineageTag: 9e112faa-d5a4-5f94-a19f-81b582234a98
+		summarizeBy: none
+		sourceColumn: destinatario_identity
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Código da falha'
+		dataType: string
+		lineageTag: 2573f15f-fbd1-521c-a3e4-e8c7af916f93
+		summarizeBy: none
+		sourceColumn: Código da falha
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Detalhe da falha'
+		dataType: string
+		lineageTag: b363958e-c0b5-50f1-a877-35ce71d13358
+		summarizeBy: none
+		sourceColumn: Detalhe da falha
+
+		annotation SummarizationSetBy = Automatic
+
+	column Origem
+		dataType: string
+		lineageTag: 331d2d0b-da4f-59da-b3da-fa331b966d6c
+		summarizeBy: none
+		sourceColumn: Origem
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de disparo'
+		dataType: string
+		lineageTag: 1e5ad5bd-ce33-557f-bc9e-d6fffcf5f029
+		summarizeBy: none
+		sourceColumn: Tipo de disparo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Template
+		dataType: string
+		lineageTag: 232b20ce-75ff-533f-b3ed-9da43a22b160
+		summarizeBy: none
+		sourceColumn: Template
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Enviado em'
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 847ac670-2281-5e29-bed4-ed98fc6a73ea
+		summarizeBy: none
+		sourceColumn: Enviado em
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 96956b2b-6afe-5c95-80c6-6cb19d628263
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+	column remetente_email
+		dataType: string
+		isHidden
+		lineageTag: 27281ce2-d504-5504-a6a8-715ac4bae98b
+		summarizeBy: none
+		sourceColumn: remetente_email
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 81580d38-cb05-55e1-b36d-5677694b4045
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Motivo da falha'
+		dataType: string
+		lineageTag: 20d913a4-e1f6-5b9a-88f1-dfb07b6f020d
+		summarizeBy: none
+		sourceColumn: Motivo da falha
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor = RELATED( dColaboradorMes[Setor] )
+		dataType: string
+		lineageTag: e4e174aa-fd85-5c73-8f50-0443a422a1fb
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Extracao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 0adc26c2-b493-5555-a194-8a7419bda17b
+		summarizeBy: none
+		sourceColumn: Extracao
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês da Composição' = ( VAR _d = WhatsApp_Envios[Data] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Pessoa
+		lineageTag: c6291d03-87e4-5553-968d-c215325bd8bf
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Chave Pessoa Mês' = IF( TRIM( WhatsApp_Envios[remetente_email] ) <> "", LOWER( TRIM( WhatsApp_Envios[remetente_email] ) ) & "|" & WhatsApp_Envios[Mês da Composição] )
+		dataType: string
+		isHidden
+		displayFolder: Pessoa
+		lineageTag: d410d209-c98f-5c09-85e8-c48e8212a0d7
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Continuidade
+		dataType: string
+		lineageTag: 26197e57-38cf-526a-b5b8-71c3a03c7952
+		summarizeBy: none
+		sourceColumn: Continuidade
+
+		annotation SummarizationSetBy = Automatic
+
+	partition WhatsApp_Envios = m
+		mode: import
+		queryGroup: WhatsApp
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="WhatsApp_Envios",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"campaign_id", type text}, {"destinatario_identity", type text}, {"Código da falha", type text}, {"Detalhe da falha", type text}, {"Origem", type text}, {"Tipo de disparo", type text}, {"Template", type text}, {"Enviado em", type datetime}, {"Data", type datetime}, {"remetente_email", type text}, {"Status", type text}, {"Motivo da falha", type text}, {"Extracao", type datetime}, {"Continuidade", type text}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,690 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "ong_chart_4",
+  "position": {
+    "x": 1106,
+    "y": 692,
+    "z": 33000,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 33000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Cliente"
+                }
+              },
+              "queryRef": "dCarteira.Cliente",
+              "nativeQueryRef": "Cliente",
+              "displayName": "Cliente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "ID Legado"
+                }
+              },
+              "queryRef": "dCarteira.ID Legado",
+              "nativeQueryRef": "ID Legado",
+              "displayName": "ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "CS"
+                }
+              },
+              "queryRef": "dCarteira.CS",
+              "nativeQueryRef": "CS",
+              "displayName": "Responsável"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Status"
+                }
+              },
+              "queryRef": "dCarteira.Status",
+              "nativeQueryRef": "Status",
+              "displayName": "Status"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Status de Saúde"
+                }
+              },
+              "queryRef": "dCarteira.Status de Saúde",
+              "nativeQueryRef": "Status de Saúde",
+              "displayName": "Status de Saúde"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Data de Registro"
+                }
+              },
+              "queryRef": "dCarteira.Data de Registro",
+              "nativeQueryRef": "Data de Registro",
+              "displayName": "Registro"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Dias desde o Registro"
+                }
+              },
+              "queryRef": "dCarteira.Dias desde o Registro",
+              "nativeQueryRef": "Dias desde o Registro",
+              "displayName": "Idade (dias)"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Empresas Usadas"
+                }
+              },
+              "queryRef": "dCarteira.Empresas Usadas",
+              "nativeQueryRef": "Empresas Usadas",
+              "displayName": "Empresas"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Empresas do Contrato"
+                }
+              },
+              "queryRef": "dCarteira.Empresas do Contrato",
+              "nativeQueryRef": "Empresas do Contrato",
+              "displayName": "Contratadas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Mensalidade (Contratos)"
+                }
+              },
+              "queryRef": "dCarteira.Mensalidade (Contratos)",
+              "nativeQueryRef": "Mensalidade (Contratos)",
+              "displayName": "Mensalidade"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Data da Última Tratativa Ongoing"
+                }
+              },
+              "queryRef": "dCarteira.Data da Última Tratativa Ongoing",
+              "nativeQueryRef": "Data da Última Tratativa Ongoing",
+              "displayName": "Última tratativa"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Categoria da Última Tratativa Ongoing"
+                }
+              },
+              "queryRef": "dCarteira.Categoria da Última Tratativa Ongoing",
+              "nativeQueryRef": "Categoria da Última Tratativa Ongoing",
+              "displayName": "Categoria"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Dias sem Tratativa Ongoing"
+                }
+              },
+              "queryRef": "dCarteira.Dias sem Tratativa Ongoing",
+              "nativeQueryRef": "Dias sem Tratativa Ongoing",
+              "displayName": "Dias s/ trat."
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Data da Penúltima Tratativa Ongoing"
+                }
+              },
+              "queryRef": "dCarteira.Data da Penúltima Tratativa Ongoing",
+              "nativeQueryRef": "Data da Penúltima Tratativa Ongoing",
+              "displayName": "Penúltima"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Dias entre as Tratativas Ongoing"
+                }
+              },
+              "queryRef": "dCarteira.Dias entre as Tratativas Ongoing",
+              "nativeQueryRef": "Dias entre as Tratativas Ongoing",
+              "displayName": "Dias entre"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCarteira"
+                    }
+                  },
+                  "Property": "Última Tentativa de Contato"
+                }
+              },
+              "queryRef": "dCarteira.Última Tentativa de Contato",
+              "nativeQueryRef": "Última Tentativa de Contato",
+              "displayName": "Última tentativa"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dCarteira"
+                  }
+                },
+                "Property": "Dias sem Tratativa Ongoing"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "96.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Cliente"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "52.2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.ID Legado"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "48.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.CS"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "81.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Status"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "81.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Status de Saúde"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Data de Registro"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Dias desde o Registro"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "70.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Data da Última Tratativa Ongoing"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "72.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Categoria da Última Tratativa Ongoing"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Dias sem Tratativa Ongoing"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "70.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Data da Penúltima Tratativa Ongoing"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "54.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Dias entre as Tratativas Ongoing"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "70.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Última Tentativa de Contato"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Empresas Usadas"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "83.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Empresas do Contrato"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "78.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dCarteira.Mensalidade (Contratos)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Lista de clientes'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Retrato mais recente do CRM (não muda com o período) · inclui inativos (como no OKR 2026)'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

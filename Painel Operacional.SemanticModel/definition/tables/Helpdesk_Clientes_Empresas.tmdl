@@ -1,0 +1,83 @@
+table Helpdesk_Clientes_Empresas
+	lineageTag: 39d9cd0d-93de-497e-a009-63f97cb4615b
+
+	column id
+		dataType: string
+		lineageTag: 4ada1822-c124-40f8-8a76-6f61561a8495
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: c0f84942-8df0-4ad2-878f-bc42fda262ab
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column email
+		dataType: string
+		lineageTag: b8a286f9-745a-49b7-b052-1c2eaa4ae72e
+		summarizeBy: none
+		sourceColumn: email
+
+		annotation SummarizationSetBy = Automatic
+
+	column idEmpresa
+		dataType: string
+		lineageTag: 401a3ef8-033e-4ad9-a718-17fcdd30d614
+		summarizeBy: none
+		sourceColumn: idEmpresa
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Helpdesk_Empresas.name'
+		dataType: string
+		lineageTag: 07c1c034-5789-48bf-9ec6-9e624d930b06
+		summarizeBy: none
+		sourceColumn: Helpdesk_Empresas.name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Helpdesk_Empresas.idLegado'
+		dataType: string
+		lineageTag: c8428e83-c3c4-4db7-874b-c1a528e13c12
+		summarizeBy: none
+		sourceColumn: Helpdesk_Empresas.idLegado
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Helpdesk_Empresas.cnpj'
+		dataType: string
+		lineageTag: ee3c4521-77eb-420e-a8a2-53b37048165e
+		summarizeBy: none
+		sourceColumn: Helpdesk_Empresas.cnpj
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_extracao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: e8d19999-f5ee-4a89-99ef-9d2095e95a37
+		summarizeBy: none
+		sourceColumn: data_extracao
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Helpdesk_Clientes_Empresas = m
+		mode: import
+		queryGroup: Helpdesk
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Helpdesk_Clientes_Empresas",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"id", type text}, {"name", type text}, {"email", type text}, {"idEmpresa", type text}, {"Helpdesk_Empresas.name", type text}, {"Helpdesk_Empresas.idLegado", type text}, {"Helpdesk_Empresas.cnpj", type text}, {"data_extracao", type datetime}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

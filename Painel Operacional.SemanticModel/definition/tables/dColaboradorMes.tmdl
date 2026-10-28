@@ -1,0 +1,192 @@
+table dColaboradorMes
+	lineageTag: 777246f8-486b-507a-948d-a94a2a007324
+
+	column Chave
+		isHidden
+		lineageTag: d84c2981-bc6f-5405-bef8-a18b794dcd19
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Chave]
+
+		annotation SummarizationSetBy = Automatic
+
+	column email
+		isHidden
+		lineageTag: f682c457-de44-5f3b-a380-e52c5d3a9527
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [email]
+
+		annotation SummarizationSetBy = Automatic
+
+	column AnoMes
+		isHidden
+		formatString: 0
+		lineageTag: e9deeb0e-5434-53d6-97aa-4ec2506d86d2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [AnoMes]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mês
+		formatString: mmm/yy
+		lineageTag: 0969b1b5-fe5b-5f15-8e25-c0820a3bcba1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Colaborador
+		lineageTag: 0a6d4e68-f2d7-531f-8f02-f815ee8a0da2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Colaborador]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Equipe
+		lineageTag: a1009ed4-da96-50dd-9715-9a097cf75ff5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Equipe]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor
+		lineageTag: de7bbad1-4da4-5075-8dba-6828c87c3856
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Setor]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Setor RH'
+		lineageTag: 6a64d8ca-e5c8-53dc-901a-557a3f8b73bd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Setor RH]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Área RH'
+		lineageTag: 22662d52-5902-5c9b-a684-ab1d172e8ac0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Área RH]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Papel
+		lineageTag: 67b39c78-2a3c-5062-8eae-35475d9d2a3a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Papel]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		lineageTag: 5337593f-c7d4-5c7c-9fed-ed0ad1797091
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Status]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Composição
+		lineageTag: 199ef07a-8460-5a27-ab34-641e7844be83
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Composição]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Período Fechado no RH'
+		lineageTag: 249dc533-446d-5a0c-8c0c-bd9f4e884fd8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Período Fechado no RH]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ramal
+		isHidden
+		lineageTag: 1610eb11-59fd-5936-8001-a94352d43cba
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ramal]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Líder = VAR eq = dColaboradorMes[Equipe] VAR am = dColaboradorMes[AnoMes] VAR base = MAXX( FILTER( RH_ComposicaoMensal, RH_ComposicaoMensal[AnoMes] <= am ), RH_ComposicaoMensal[AnoMes] ) VAR em = MAXX( FILTER( RH_ComposicaoMensal, RH_ComposicaoMensal[AnoMes] = base && RH_ComposicaoMensal[Equipe] = eq && RH_ComposicaoMensal[papel] = "lider" ), RH_ComposicaoMensal[email] ) VAR nome = LOOKUPVALUE( Time_Usuarios[nome], Time_Usuarios[email], em ) RETURN IF( ISBLANK( em ), "Sem líder", COALESCE( nome, em ) )
+		dataType: string
+		displayFolder: Pessoa
+		lineageTag: bd658a20-ced9-59d3-b56d-646f4cdea610
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dColaboradorMes = calculated
+		mode: import
+		source =
+				
+				-- Pessoa × mês -> equipe/setor/papel pela composição DAQUELE mês (RH_ComposicaoMensal, intranet). Capítulo 1b,
+				-- 20/10/2026 (scripts/composicao_mensal.py). Meses de 2026/08 em diante; mês ainda sem composição gravada (até o mês de hoje) = cópia do último gravado.
+				-- Pessoa em 2+ equipes no mês: prefere a equipe com setor de tela, depois status "ativo", depois o maior nome.
+				-- Setor do painel = mesmo mapa do dMapaSetor (setor_id do RH). Ramal = o atual (o RH não guarda histórico de ramal).
+				-- O ACESSO (RLS) NÃO usa esta tabela: vale o vínculo atual.
+				VAR ini = 202608
+				VAR linhas = FILTER( RH_ComposicaoMensal, RH_ComposicaoMensal[AnoMes] >= ini )
+				VAR ultimo = MAXX( linhas, RH_ComposicaoMensal[AnoMes] )
+				VAR d0 = IF( ISBLANK( ultimo ), DATE( YEAR( TODAY() ), MONTH( TODAY() ), 1 ), DATE( INT( ultimo / 100 ), MOD( ultimo, 100 ), 1 ) )
+				VAR d1 = MAX( d0, DATE( YEAR( TODAY() ), MONTH( TODAY() ), 1 ) )
+				VAR provisorios = FILTER( DISTINCT( SELECTCOLUMNS( CALENDAR( d0, d1 ), "@mes", YEAR( [Date] ) * 100 + MONTH( [Date] ) ) ), [@mes] > ultimo )
+				VAR pares =
+				    UNION(
+				        DISTINCT( SELECTCOLUMNS( linhas, "email", RH_ComposicaoMensal[email], "AnoMes", RH_ComposicaoMensal[AnoMes], "Base", RH_ComposicaoMensal[AnoMes] ) ),
+				        GENERATE(
+				            DISTINCT( SELECTCOLUMNS( FILTER( linhas, RH_ComposicaoMensal[AnoMes] = ultimo ), "email", RH_ComposicaoMensal[email] ) ),
+				            SELECTCOLUMNS( provisorios, "AnoMes", [@mes], "Base", ultimo )
+				        )
+				    )
+				VAR t =
+				    ADDCOLUMNS(
+				        pares,
+				        "@eq",
+				            VAR e = [email] VAR b = [Base]
+				            VAR minhas = ADDCOLUMNS( FILTER( linhas, RH_ComposicaoMensal[email] = e && RH_ComposicaoMensal[AnoMes] = b ),
+				                "@nota", IF( RH_ComposicaoMensal[setor_id] IN { 2, 3, 4, 5, 6, 17 }, 2, 0 ) + IF( RH_ComposicaoMensal[status] = "ativo", 1, 0 ) )
+				            VAR melhor = MAXX( minhas, [@nota] )
+				            RETURN MAXX( FILTER( minhas, [@nota] = melhor ), RH_ComposicaoMensal[Equipe] )
+				    )
+				VAR t2 =
+				    ADDCOLUMNS(
+				        t,
+				        "@sid", VAR e = [email] VAR b = [Base] VAR qe = [@eq] RETURN MAXX( FILTER( linhas, RH_ComposicaoMensal[email] = e && RH_ComposicaoMensal[AnoMes] = b && RH_ComposicaoMensal[Equipe] = qe ), RH_ComposicaoMensal[setor_id] ),
+				        "@setorRH", VAR e = [email] VAR b = [Base] VAR qe = [@eq] RETURN MAXX( FILTER( linhas, RH_ComposicaoMensal[email] = e && RH_ComposicaoMensal[AnoMes] = b && RH_ComposicaoMensal[Equipe] = qe ), RH_ComposicaoMensal[Setor RH] ),
+				        "@area", VAR e = [email] VAR b = [Base] VAR qe = [@eq] RETURN MAXX( FILTER( linhas, RH_ComposicaoMensal[email] = e && RH_ComposicaoMensal[AnoMes] = b && RH_ComposicaoMensal[Equipe] = qe ), RH_ComposicaoMensal[Área RH] ),
+				        "@papel", VAR e = [email] VAR b = [Base] VAR qe = [@eq] RETURN MAXX( FILTER( linhas, RH_ComposicaoMensal[email] = e && RH_ComposicaoMensal[AnoMes] = b && RH_ComposicaoMensal[Equipe] = qe ), RH_ComposicaoMensal[papel] ),
+				        "@status", VAR e = [email] VAR b = [Base] VAR qe = [@eq] RETURN MAXX( FILTER( linhas, RH_ComposicaoMensal[email] = e && RH_ComposicaoMensal[AnoMes] = b && RH_ComposicaoMensal[Equipe] = qe ), RH_ComposicaoMensal[status] ),
+				        "@nome", VAR e = [email] VAR b = [Base] VAR qe = [@eq] RETURN MAXX( FILTER( linhas, RH_ComposicaoMensal[email] = e && RH_ComposicaoMensal[AnoMes] = b && RH_ComposicaoMensal[Equipe] = qe ), RH_ComposicaoMensal[Nome] ),
+				        "@fechada", VAR b = [Base] RETURN MAXX( FILTER( linhas, RH_ComposicaoMensal[AnoMes] = b ), IF( RH_ComposicaoMensal[Período Fechado], 1, 0 ) )
+				    )
+				RETURN
+				    SELECTCOLUMNS(
+				        t2,
+				        "Chave", [email] & "|" & [AnoMes],
+				        "email", [email],
+				        "AnoMes", [AnoMes],
+				        "Mês", DATE( INT( [AnoMes] / 100 ), MOD( [AnoMes], 100 ), 1 ),
+				        "Colaborador", COALESCE( LOOKUPVALUE( dColaborador[Colaborador], dColaborador[email], [email], BLANK() ), [@nome] ),
+				        "Equipe", [@eq],
+				        "Setor", SWITCH( [@sid], 2, "Ongoing", 3, "Onboarding", 4, "Suporte", 5, "Homologação", 6, "Relacionamento", 17, "Lives" ),
+				        "Setor RH", [@setorRH],
+				        "Área RH", [@area],
+				        "Papel", [@papel],
+				        "Status", [@status],
+				        "Composição", IF( [Base] = [AnoMes], "Gravada", "Provisória (cópia de " & FORMAT( DATE( INT( [Base] / 100 ), MOD( [Base], 100 ), 1 ), "mm/yy" ) & ")" ),
+				        "Período Fechado no RH", IF( [@fechada] = 1, "Sim", "Não" ),
+				        "Ramal", LOOKUPVALUE( dPessoaSetor[ramal_norm], dPessoaSetor[email_norm], [email], BLANK() )
+				    )
+

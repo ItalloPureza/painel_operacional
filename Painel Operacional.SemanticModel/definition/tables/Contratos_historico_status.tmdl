@@ -1,0 +1,73 @@
+table Contratos_historico_status
+	lineageTag: 52e00453-4d04-4bf8-a13e-6d9d51a0e330
+
+	column periodo
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: d12c1074-a5f2-4466-b435-436f0ca2ca98
+		summarizeBy: none
+		sourceColumn: periodo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: b45dc084-bd1d-4938-8758-0b110afe834f
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome
+		dataType: string
+		lineageTag: 42105632-ff4e-4bb3-8624-3e7742129679
+		summarizeBy: none
+		sourceColumn: nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column ativo
+		dataType: int64
+		formatString: 0
+		lineageTag: 0a29588b-e597-4481-a108-bd4fe005c3f5
+		summarizeBy: sum
+		sourceColumn: ativo
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: e0031094-810a-4d4b-8c1e-f3f56bd17be2
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: f40a3b4c-b80a-4391-86ff-72c559ffe907
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Contratos_historico_status = m
+		mode: import
+		queryGroup: Contratos
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Contratos_historico_status",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"periodo", type datetime}, {"id", Int64.Type}, {"nome", type text}, {"ativo", Int64.Type}, {"created_at", type datetime}, {"updated_at", type datetime}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,82 @@
+role Setor
+	modelPermission: read
+
+	tablePermission Helpdesk_Tickets =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN
+			    "*" IN meus || Helpdesk_Tickets[Setor] IN meus
+
+	tablePermission Helpdesk_Cancelamentos =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN
+			    "*" IN meus || Helpdesk_Cancelamentos[Setor] IN meus
+
+	tablePermission Helpdesk_Survey =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN
+			    "*" IN meus || Helpdesk_Survey[Setor] IN meus
+
+	tablePermission Helpdesk_Chat =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN
+			    "*" IN meus || Helpdesk_Chat[Setor] IN meus
+
+	tablePermission CRM_Atividades =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN
+			    "*" IN meus || CRM_Atividades[Setor] IN meus
+
+	tablePermission Ligacoes_API =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN
+			    "*" IN meus || Ligacoes_API[Setor] IN meus
+
+	tablePermission WhatsApp_Atendimentos =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN
+			    "*" IN meus || WhatsApp_Atendimentos[Setor] IN meus
+
+	tablePermission WhatsApp_CSAT =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN
+			    "*" IN meus || WhatsApp_CSAT[Setor] IN meus
+
+	tablePermission WhatsApp_Envios =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN
+			    "*" IN meus || WhatsApp_Envios[Setor] IN meus
+
+	tablePermission WhatsApp_Contatos =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN
+			    "*" IN meus || WhatsApp_Contatos[Setor] IN meus
+
+	tablePermission fConcessoes =
+			
+			VAR u = LOWER( USERPRINCIPALNAME() )
+			VAR meus = UNION( CALCULATETABLE( VALUES( dAcessoSetor[Setor] ), dAcessoSetor[email] = u ), FILTER( { "*" }, CONTAINSSTRING( u, "\" ) ) )
+			RETURN
+			    "*" IN meus || fConcessoes[Setor] IN meus
+
+	annotation PBI_Id = 322d3a4078af486386ef1c6299a6f756
+

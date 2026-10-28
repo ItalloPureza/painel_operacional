@@ -1,0 +1,50 @@
+table dAcessoSetor
+	isHidden
+	lineageTag: c6d45385-bf22-5e02-93cb-a98deb246068
+
+	column email
+		lineageTag: d212ca5a-e627-57ea-8385-9803b888be7f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [email]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor
+		lineageTag: 4497666f-c773-556c-adb4-9ef3ec9b0ec1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Setor]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dAcessoSetor = calculated
+		mode: import
+		source =
+				
+				-- Regra ÚNICA de acesso (RLS, cadeados e navegação leem daqui). Uma linha por (pessoa, setor visível).
+				-- "*" = vê tudo (admin, diretoria, gerentes e as equipes de EQUIPES_TUDO). Ver docs/rls-e-acesso.md.
+				VAR membros =
+				    ADDCOLUMNS(
+				        SELECTCOLUMNS( Time_Equipes, "email", LOWER( TRIM( Time_Equipes[email] ) ), "papel", LOWER( Time_Equipes[papel] ), "@eq", Time_Equipes[nome_equipe] ),
+				        "@setor", LOOKUPVALUE( dMapaSetor[Setor], dMapaSetor[Equipe], [@eq] )
+				    )
+				VAR tudo =
+				    UNION(
+				        SELECTCOLUMNS( FILTER( Time_Usuarios, LOWER( Time_Usuarios[perfil] ) IN { "admin", "diretoria" } ), "email", LOWER( TRIM( Time_Usuarios[email] ) ) ),
+				        SELECTCOLUMNS( FILTER( membros, [papel] = "diretoria" ), "email", [email] ),
+				        SELECTCOLUMNS( FILTER( Time_Usuarios, LOWER( Time_Usuarios[perfil] ) = "gerente" ), "email", LOWER( TRIM( Time_Usuarios[email] ) ) ),
+				        SELECTCOLUMNS( FILTER( membros, [papel] = "gerente" ), "email", [email] ),
+				        SELECTCOLUMNS( FILTER( membros, [@eq] IN { "Projetos" } ), "email", [email] )
+				    )
+				VAR porVinculo = SELECTCOLUMNS( FILTER( membros, NOT ISBLANK( [@setor] ) ), "email", [email], "Setor", [@setor] )
+				VAR resultado =
+				    UNION(
+				        porVinculo,
+				        SELECTCOLUMNS( tudo, "email", [email], "Setor", "*" )
+				    )
+				RETURN
+				    DISTINCT( FILTER( resultado, NOT ISBLANK( [email] ) ) )
+
+	annotation PBI_Id = c6d45385bf225e0293cba98deb246068
+

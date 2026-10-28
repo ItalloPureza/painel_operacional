@@ -1,0 +1,683 @@
+table dColaborador
+	lineageTag: 2ab0e70a-982b-5af4-ac27-5b5ed0e64a1e
+
+	/// [% Entregas Feitas (média)] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure '% Entregas Feitas (por pessoa)' = CALCULATE( [% Entregas Feitas (média)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) )
+		formatString: 0.00%
+		displayFolder: Por pessoa
+		lineageTag: 2c125b72-a16b-59f1-84ae-20cb086f5088
+
+	/// [% Uso eContinuo (média)] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure '% Uso eContinuo (por pessoa)' = CALCULATE( [% Uso eContinuo (média)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) )
+		formatString: 0.00%
+		displayFolder: Por pessoa
+		lineageTag: e3a0cb50-b854-56b4-a5da-2dbbf48b4776
+
+	/// [% Prazo de Todas as Atividades] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure '% Prazo das Atividades (por pessoa)' = CALCULATE( [% Prazo de Todas as Atividades], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) )
+		formatString: 0.00%
+		displayFolder: Por pessoa
+		lineageTag: a79fc299-4104-5be6-b863-9b0a85fef8cb
+
+	/// [Clientes na Carteira] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Clientes na Carteira (por pessoa)' = CALCULATE( [Clientes na Carteira], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), dCarteira[Email do CS], dCarteira[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 28de2f0c-1594-51b9-943d-5b661f90d02d
+
+	/// [% SLA das Atividades] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure '% SLA das Atividades (por pessoa)' = CALCULATE( [% SLA das Atividades], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) )
+		formatString: 0.00%
+		displayFolder: Por pessoa
+		lineageTag: 0fdce3a3-43ab-5061-8d31-cb73b3c4f7db
+
+	/// [% Migração Ativa] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure '% Migração Ativa (por pessoa)' = CALCULATE( [% Migração Ativa], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Mês da Composição] ) )
+		formatString: 0.00%
+		displayFolder: Por pessoa
+		lineageTag: 3805c148-7208-5344-b04d-a975acb1c872
+
+	/// [Migrações Não Ativadas] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Migrações Não Ativadas (por pessoa)' = CALCULATE( [Migrações Não Ativadas], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: ba459ce6-a79f-5ac2-9544-79269aaecd62
+
+	/// [Migrações Ativadas] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Migrações Ativadas (por pessoa)' = CALCULATE( [Migrações Ativadas], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: a4194d11-98b6-5f1a-9469-dc3832753297
+
+	/// [R$ Cancelado] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'R$ Cancelado AF (por pessoa)' = CALCULATE( [R$ Cancelado], Helpdesk_Cancelamentos[sistema] = "Alfa", Helpdesk_Cancelamentos[areaDeAtuacao] = "Consultoria", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) )
+		formatString: \R$ #,0.00
+		displayFolder: Por pessoa
+		lineageTag: d26ed97c-cbb8-509d-ab1f-85b4c27df7e1
+
+	/// [Cancelamentos Efetivados] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Cancelamentos AF (por pessoa)' = CALCULATE( [Cancelamentos Efetivados], Helpdesk_Cancelamentos[sistema] = "Alfa", Helpdesk_Cancelamentos[areaDeAtuacao] = "Consultoria", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: be2e87de-5ada-5b34-89fe-75ff5c7c1a96
+
+	/// [Tentativas de Contato] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Tentativas de Contato (por pessoa)' = CALCULATE( [Tentativas de Contato], Helpdesk_Tickets[owner_team] = "Treinamento", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 1ce91555-226c-5173-8216-337fae1661ac
+
+	/// [Contatos Efetivos] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Contatos Efetivos (por pessoa)' = CALCULATE( [Contatos Efetivos], Helpdesk_Tickets[owner_team] = "Treinamento", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 8e4719b9-4afe-5cfe-9210-c581716f3a16
+
+	/// [Interações em Processos (hoje)] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Interações em Processos (por pessoa)' = CALCULATE( [Interações em Processos (hoje)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) )
+		formatString: #,0.00
+		displayFolder: Por pessoa
+		lineageTag: 0a3d4538-432a-565d-95c4-cfcc2066263f
+
+	/// [% eContinuo da Carteira (hoje)] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure '% eContinuo da Carteira (por pessoa)' = CALCULATE( [% eContinuo da Carteira (hoje)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) )
+		formatString: 0.00%
+		displayFolder: Por pessoa
+		lineageTag: 82ab5b3a-5bc3-56f1-b15e-e594972bc2ec
+
+	/// [Uso Geral da Carteira (hoje)] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Uso Geral da Carteira (por pessoa)' = CALCULATE( [Uso Geral da Carteira (hoje)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) )
+		formatString: 0.00
+		displayFolder: Por pessoa
+		lineageTag: c46649b6-7afd-57b4-9892-a880f4cf31d2
+
+	/// [Atividades Concluídas] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Atividades Concluídas (por pessoa)' = CALCULATE( [Atividades Concluídas], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 41c025f3-8148-5c03-9e8c-7c936d7f8f83
+
+	/// [Tempo Falado (h)] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Tempo Falado (h) (por pessoa)' = CALCULATE( [Tempo Falado (h)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Ligacoes_API[Email do Ramal], Ligacoes_API[Mês da Composição] ) )
+		displayFolder: Por pessoa
+		lineageTag: f5f901b2-91b7-571e-a240-dc262d51a05d
+
+		formatStringDefinition = VAR _s = ROUND( SELECTEDMEASURE() * 3600, 0 ) RETURN """" & FORMAT( INT( _s / 3600 ), "00" ) & ":" & FORMAT( INT( MOD( _s, 3600 ) / 60 ), "00" ) & ":" & FORMAT( MOD( _s, 60 ), "00" ) & """"
+
+	/// [Ligações Atendidas] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Ligações Atendidas (por pessoa)' = CALCULATE( [Ligações Atendidas], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Ligacoes_API[Email do Ramal], Ligacoes_API[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: b1c3b31c-c834-578a-aeb5-083d6ac7f9dd
+
+	/// [Notas Detratoras (0 a 6)] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Notas Detratoras (por pessoa)' = CALCULATE( [Notas Detratoras (0 a 6)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Survey[Email do Analista do Ticket], Helpdesk_Survey[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 09322386-3b34-5c2f-b512-ef4ca3d87555
+
+	/// [Tira-Dúvidas Internos] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Tira-Dúvidas Internos (por pessoa)' = CALCULATE( [Tira-Dúvidas Internos], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: d4e238cf-1c4f-5f98-bd94-0a08a23e34d3
+
+	/// [Tira-Dúvidas por WhatsApp] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Tira-Dúvidas por WhatsApp (por pessoa)' = CALCULATE( [Tira-Dúvidas por WhatsApp], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 3648fcfc-a293-5861-b4ca-15f955c86e75
+
+	/// [Tira-Dúvidas por Ticket] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Tira-Dúvidas por Ticket (por pessoa)' = CALCULATE( [Tira-Dúvidas por Ticket], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 5b3e455d-287b-5ce6-9166-fc72c4e64a97
+
+	/// [Tratativas de Negociação] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Tratativas de Negociação (por pessoa)' = CALCULATE( [Tratativas de Negociação], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 389253b7-c417-510e-a9fe-9cbc895ce117
+
+	/// [Tratativas de Desenvolvimento] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Tratativas de Desenvolvimento (por pessoa)' = CALCULATE( [Tratativas de Desenvolvimento], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 9a75ddef-650e-54f7-954c-0aa90616e61c
+
+	/// [Ongoing sem Contato] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Ongoing sem Contato (por pessoa)' = CALCULATE( [Ongoing sem Contato], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 4260f8d0-1093-5d25-995e-6f77573d3e63
+
+	/// [Tentativas de Contato Ongoing] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Tentativas de Contato Ongoing (por pessoa)' = CALCULATE( [Tentativas de Contato Ongoing], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: abad68e3-f39f-501e-86b7-dc66c3a302f6
+
+	/// [Checkouts Feitos] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Checkouts Feitos (por pessoa)' = CALCULATE( [Checkouts Feitos], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: b9fd2a56-2212-5161-b7bc-54c7204ff247
+
+	/// [Tratativas Feitas] das pessoas em contexto no dColaboradorMes (tela Performance: linhas = pessoa, filtro de setor/equipe; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Tratativas Feitas (por pessoa)' = CALCULATE( [Tratativas Feitas], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 992e40d5-82dc-5af0-8e98-0271cac1e5e1
+
+	/// [Pedidos Outros Atendidos] dos atendentes (owner) em contexto no dColaboradorMes (tela Cancelamentos Atendidos; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Pedidos Outros Atendidos (por pessoa)' = CALCULATE( [Pedidos Outros Atendidos], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 740174f6-41d5-51e5-b187-44742fd8f2b6
+
+	/// [Pedidos em Aberto há 5+ Dias] dos atendentes (owner) em contexto no dColaboradorMes (tela Cancelamentos Atendidos; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Pedidos em Aberto há 5+ Dias (por pessoa)' = CALCULATE( [Pedidos em Aberto há 5+ Dias], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 794266b7-956b-547b-9b52-8984cc402321
+
+	/// [Pedidos em Aberto] dos atendentes (owner) em contexto no dColaboradorMes (tela Cancelamentos Atendidos; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Pedidos em Aberto (por pessoa)' = CALCULATE( [Pedidos em Aberto], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 5e20a3e9-d03d-5c6d-b5b1-506e4aa131d0
+
+	/// [% Reversão Atendida] dos atendentes (owner) em contexto no dColaboradorMes (tela Cancelamentos Atendidos; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure '% Reversão Atendida (por pessoa)' = CALCULATE( [% Reversão Atendida], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) )
+		formatString: 0.00%
+		displayFolder: Por pessoa
+		lineageTag: 1ec7d9ea-2295-5c75-a953-408f20a7d8fd
+
+	/// [Reversões Atendidas] dos atendentes (owner) em contexto no dColaboradorMes (tela Cancelamentos Atendidos; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Reversões Atendidas (por pessoa)' = CALCULATE( [Reversões Atendidas], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 46b41383-ba0b-5cd9-b7d3-b1099a1646aa
+
+	/// [Pedidos Atendidos] dos atendentes (owner) em contexto no dColaboradorMes (tela Cancelamentos Atendidos; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Pedidos Atendidos (por pessoa)' = CALCULATE( [Pedidos Atendidos], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 71caff0d-db83-52a3-9c43-a492af38892d
+
+	/// 1ª camada: MRR revertido - (descontos + reduções) da pessoa.
+	measure 'Saldo após Descontos e Reduções (por pessoa)' = VAR m = [MRR Revertido (por pessoa)] VAR c = [Descontos e Reduções Concedidos (por pessoa)] RETURN IF( NOT ISBLANK( m ) || NOT ISBLANK( c ), m - c )
+		formatString: \R$ #,0.00
+		displayFolder: Por pessoa
+		lineageTag: dc715ac6-3a56-5935-a200-2b7f3f7cd83f
+
+	/// 2ª camada: saldo após descontos e reduções - isenções (mensalidade + aviso prévio) da pessoa (22/10/2026).
+	measure 'Total Final da Reversão (por pessoa)' = VAR s = [Saldo após Descontos e Reduções (por pessoa)] VAR i = [Isenções Concedidas (por pessoa)] RETURN IF( NOT ISBLANK( s ) || NOT ISBLANK( i ), s - i )
+		formatString: \R$ #,0.00
+		displayFolder: Por pessoa
+		lineageTag: 080a5106-6c1a-51a0-8ca7-1383eae91ef2
+
+	/// [Descontos e Reduções Concedidos] das pessoas em contexto no dColaboradorMes (tela Reversão × Concessões; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Descontos e Reduções Concedidos (por pessoa)' = CALCULATE( [Descontos e Reduções Concedidos], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), fConcessoes[Email do Responsável], fConcessoes[Mês da Composição] ) )
+		formatString: \R$ #,0.00
+		displayFolder: Por pessoa
+		lineageTag: 8c4c6fd6-eef9-5f04-8c75-f3fd7f75febc
+
+	/// [Isenções Concedidas] das pessoas em contexto no dColaboradorMes (tela Reversão × Concessões; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Isenções Concedidas (por pessoa)' = CALCULATE( [Isenções Concedidas], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), fConcessoes[Email do Responsável], fConcessoes[Mês da Composição] ) )
+		formatString: \R$ #,0.00
+		displayFolder: Por pessoa
+		lineageTag: fe855dac-9ce7-54c2-9e3c-cf78a06b1bee
+
+	/// [Isenções de Aviso Prévio Concedidas] das pessoas em contexto no dColaboradorMes (tela Reversão × Concessões; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Isenções de Aviso Prévio Concedidas (por pessoa)' = CALCULATE( [Isenções de Aviso Prévio Concedidas], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), fConcessoes[Email do Responsável], fConcessoes[Mês da Composição] ) )
+		formatString: \R$ #,0.00
+		displayFolder: Por pessoa
+		lineageTag: af5a4f05-ddee-5b1c-9e2d-aaa2ea5c71fa
+
+	/// [Isenções de Mensalidade Concedidas] das pessoas em contexto no dColaboradorMes (tela Reversão × Concessões; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Isenções de Mensalidade Concedidas (por pessoa)' = CALCULATE( [Isenções de Mensalidade Concedidas], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), fConcessoes[Email do Responsável], fConcessoes[Mês da Composição] ) )
+		formatString: \R$ #,0.00
+		displayFolder: Por pessoa
+		lineageTag: 8e85f483-2f6e-56a9-879a-f4cd70364525
+
+	/// [Reduções Concedidas] das pessoas em contexto no dColaboradorMes (tela Reversão × Concessões; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Reduções Concedidas (por pessoa)' = CALCULATE( [Reduções Concedidas], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), fConcessoes[Email do Responsável], fConcessoes[Mês da Composição] ) )
+		formatString: \R$ #,0.00
+		displayFolder: Por pessoa
+		lineageTag: d7b30e6e-63f7-5926-9ea5-ca581967e679
+
+	/// [Descontos Concedidos] das pessoas em contexto no dColaboradorMes (tela Reversão × Concessões; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'Descontos Concedidos (por pessoa)' = CALCULATE( [Descontos Concedidos], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), fConcessoes[Email do Responsável], fConcessoes[Mês da Composição] ) )
+		formatString: \R$ #,0.00
+		displayFolder: Por pessoa
+		lineageTag: 2375c5ce-eef7-5140-9cbf-6b6a04e30836
+
+	/// [MRR Revertido] das pessoas em contexto no dColaboradorMes (tela Reversão × Concessões; cada evento pela equipe/setor da pessoa NO MÊS do evento).
+	measure 'MRR Revertido (por pessoa)' = CALCULATE( [MRR Revertido], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) )
+		formatString: \R$ #,0.00
+		displayFolder: Por pessoa
+		lineageTag: 346e12a0-25a3-546f-a84a-e2da03d57bc2
+
+	/// Revertidos ÷ (efetivados + revertidos) da pessoa. Mês mais recente do período; cada evento pela equipe/setor da pessoa NO MÊS do evento.
+	measure '% Revertidos no Mês (por pessoa)' = DIVIDE( [Cancelamentos Revertidos no Mês (por pessoa)], [Cancelamentos Efetivados no Mês (por pessoa)] + [Cancelamentos Revertidos no Mês (por pessoa)] )
+		formatString: 0.00%
+		displayFolder: Por pessoa
+		lineageTag: dda5d504-55d8-53f2-adf8-0ea317a30a5a
+
+	/// Pedidos revertidos em que a pessoa é o treinador. Mês mais recente do período; cada evento pela equipe/setor da pessoa NO MÊS do evento.
+	measure 'Cancelamentos Revertidos no Mês (por pessoa)' = VAR _fim = MIN( MAX( Calendario[Date] ), TODAY() ) RETURN CALCULATE( [Cancelamentos Revertidos], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ), KEEPFILTERS( FILTER( ALL( Calendario[Date] ), Calendario[Date] >= DATE( YEAR( _fim ), MONTH( _fim ), 1 ) && Calendario[Date] <= _fim ) ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: b55c36f0-4525-58aa-8d4d-385d4ff8bb87
+
+	/// Mensalidade dos cancelamentos efetivados em que a pessoa é o treinador. Mês mais recente do período; cada evento pela equipe/setor da pessoa NO MÊS do evento.
+	measure 'R$ Cancelado no Mês (por pessoa)' = VAR _fim = MIN( MAX( Calendario[Date] ), TODAY() ) RETURN CALCULATE( [R$ Cancelado], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ), KEEPFILTERS( FILTER( ALL( Calendario[Date] ), Calendario[Date] >= DATE( YEAR( _fim ), MONTH( _fim ), 1 ) && Calendario[Date] <= _fim ) ) )
+		formatString: \R$ #,0.00
+		displayFolder: Por pessoa
+		lineageTag: 6940e890-b441-5106-bd0b-cf77c70316a2
+
+	/// Cancelamentos efetivados ÷ clientes KP no início do mês da pessoa. Mês mais recente do período; cada evento pela equipe/setor da pessoa NO MÊS do evento.
+	measure '% Cancelamento KP no Mês (por pessoa)' = DIVIDE( [Cancelamentos Efetivados no Mês (por pessoa)], [Clientes KP no Início do Mês (por pessoa)] )
+		formatString: 0.00%
+		displayFolder: Por pessoa
+		lineageTag: 47c603f7-3a2e-5c65-8834-51fd0a675b49
+
+	/// Cancelamentos efetivados em que a pessoa é o treinador (área e sistema da tela). Mês mais recente do período; cada evento pela equipe/setor da pessoa NO MÊS do evento.
+	measure 'Cancelamentos Efetivados no Mês (por pessoa)' = VAR _fim = MIN( MAX( Calendario[Date] ), TODAY() ) RETURN CALCULATE( [Cancelamentos Efetivados], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ), KEEPFILTERS( FILTER( ALL( Calendario[Date] ), Calendario[Date] >= DATE( YEAR( _fim ), MONTH( _fim ), 1 ) && Calendario[Date] <= _fim ) ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: 27f97699-d026-5619-acec-2e7e214d7dc2
+
+	/// Clientes KP da carteira da pessoa no 1º retrato do mês (tela Cancelamento KP). Mês mais recente do período; cada evento pela equipe/setor da pessoa NO MÊS do evento.
+	measure 'Clientes KP no Início do Mês (por pessoa)' = VAR _fim = MIN( MAX( Calendario[Date] ), TODAY() ) RETURN CALCULATE( [Clientes KP no Início do Mês (área)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ), KEEPFILTERS( FILTER( ALL( Calendario[Date] ), Calendario[Date] >= DATE( YEAR( _fim ), MONTH( _fim ), 1 ) && Calendario[Date] <= _fim ) ) )
+		formatString: #,0
+		displayFolder: Por pessoa
+		lineageTag: ceb9e890-0524-5214-bddd-0684c37d14a3
+
+	/// Pedidos de cancelamento do Kappa efetivados (data de fechamento) em que o treinador é da equipe.
+	measure 'Cancelamentos Kappa (resumo)' = CALCULATE( [Cancelamentos Efetivados], Helpdesk_Cancelamentos[sistema] = "Kappa", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Ongoing
+		lineageTag: 8be6e30c-344f-58b1-ab8a-69f5d17a9517
+
+	/// Receita perdida ÷ mensalidade da carteira no início do mês.
+	measure '% Churn de Receita (resumo)' = DIVIDE( [Receita Perdida (resumo)], [Mensalidade no Início do Mês (resumo)] )
+		formatString: 0.00%
+		displayFolder: Resumo Ongoing
+		lineageTag: ae65857d-b8c0-5720-bbbb-4d8bad48f110
+
+	/// Mensalidade (Contratos) dos clientes Alfa da carteira no 1º retrato do mês.
+	measure 'Mensalidade no Início do Mês (resumo)' = CALCULATE( [Mensalidade AF (início do mês)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) )
+		formatString: \R$ #,0.00
+		displayFolder: Resumo Ongoing
+		lineageTag: d24ba7c7-0016-551d-a986-7b47e925d157
+
+	/// Mensalidade dos cancelamentos do Alfa efetivados (só quem saiu), pelo treinador da equipe.
+	measure 'Receita Perdida (resumo)' = CALCULATE( [R$ Cancelado], Helpdesk_Cancelamentos[sistema] = "Alfa", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) )
+		formatString: \R$ #,0.00
+		displayFolder: Resumo Ongoing
+		lineageTag: 587b4a91-bad0-57d0-b616-58e1c1d48234
+
+	/// Clientes cancelados ÷ clientes no início do mês.
+	measure '% Logo Churn (resumo)' = DIVIDE( [Clientes Cancelados (resumo)], [Clientes no Início do Mês (resumo)] )
+		formatString: 0.00%
+		displayFolder: Resumo Ongoing
+		lineageTag: 01baa72b-f106-5cf1-9ed4-72cdee40e37f
+
+	/// Pedidos de cancelamento do Alfa efetivados (data de fechamento) em que o treinador é da equipe.
+	measure 'Clientes Cancelados (resumo)' = CALCULATE( [Cancelamentos Efetivados], Helpdesk_Cancelamentos[sistema] = "Alfa", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Ongoing
+		lineageTag: 84d9b54b-fa2c-5f7a-8ffb-d7c710f3b017
+
+	/// Migrações ativadas ÷ migrações concluídas no mês.
+	measure '% Ativados (resumo)' = DIVIDE( [Migrações Ativadas (resumo)], [Clientes Migrados (resumo)] )
+		formatString: 0.00%
+		displayFolder: Resumo Ongoing
+		lineageTag: 4fb6f2a4-e8db-5f36-be29-415d0ec9ed97
+
+	/// Análises de Migração concluídas no mês com categoria Migração - Não Ativado, pelo CS que recebeu.
+	measure 'Migrações Não Ativadas (resumo)' = CALCULATE( [Migrações Não Ativadas], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Ongoing
+		lineageTag: 391d204c-9292-590f-951e-f415db2e7b3c
+
+	/// Análises de Migração concluídas no mês com categoria Migração - Ativado, pelo CS que recebeu.
+	measure 'Migrações Ativadas (resumo)' = CALCULATE( [Migrações Ativadas], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Ongoing
+		lineageTag: 3e559e6d-8e1f-5fdd-b092-c816864e529c
+
+	/// Análises de Migração concluídas no mês (ativadas + não ativadas), pelo CS do Ongoing que recebeu (responsável da atividade).
+	measure 'Clientes Migrados (resumo)' = CALCULATE( [Migrações], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Ongoing
+		lineageTag: 9b5f78ce-30e1-5a39-8140-f816f8255400
+
+	/// Clientes da carteira no início do mês cujo registro no CRM (dt_register) completa 120 dias dentro do mês.
+	measure 'Clientes que Completam 120 Dias (resumo)' = VAR d1 = CALCULATE( MIN( CRM_Backup_Diario[Periodo] ) ) VAR ini = DATE( YEAR( d1 ), MONTH( d1 ), 1 ) VAR fim = EOMONTH( ini, 0 ) RETURN IF( NOT ISBLANK( d1 ) && DAY( d1 ) <= 3, CALCULATE( DISTINCTCOUNT( CRM_Backup_Diario[CNPJ] ), CRM_Backup_Diario[Periodo] = d1, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado", "Suspenso" } ), CRM_Backup_Diario[Só Kappa] = "Não", KEEPFILTERS( FILTER( ALL( CRM_Backup_Diario[Dt_Cadastro] ), CRM_Backup_Diario[Dt_Cadastro] + 120 >= ini && CRM_Backup_Diario[Dt_Cadastro] + 120 <= fim ) ), TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) ) )
+		formatString: #,0
+		displayFolder: Resumo Ongoing
+		lineageTag: ef9c5436-bafb-51d5-b75b-bac33f233f5a
+
+	/// Clientes da carteira de hoje sem tratativa do Ongoing há mais de 45 dias (regra do Ongoing - Últimos Contatos), das pessoas que estavam na equipe no mês.
+	measure 'Clientes sem Atividade (resumo)' = IF( ISBLANK( [Equipe no Mês (resumo)] ), BLANK(), CALCULATE( [Clientes sem Tratativa em Dia], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), dCarteira[Email do CS], dCarteira[Mês da Composição] ) ) )
+		formatString: #,0
+		displayFolder: Resumo Ongoing
+		lineageTag: c29cfe94-74d4-5da6-a675-e636b00bb361
+
+	/// Atividades do CRM (tipos do SLA) concluídas no prazo ÷ concluídas, pelo responsável da atividade.
+	measure '% SLA CRM (resumo)' = CALCULATE( [% SLA das Atividades], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) )
+		formatString: 0.00%
+		displayFolder: Resumo Ongoing
+		lineageTag: 318745db-66df-5a9c-b0a0-a4fe096597fe
+
+	/// Clientes atuais ÷ analistas com carteira.
+	measure 'Média de Carteira por Analista (resumo)' = DIVIDE( [Clientes Atuais (resumo)], [Analistas com Carteira (resumo)] )
+		formatString: #,0.00
+		displayFolder: Resumo Ongoing
+		lineageTag: e55a8c78-1a10-5b53-bfe1-260be44e8ec2
+
+	/// Pessoas em contexto com pelo menos um cliente na carteira (último retrato do mês).
+	measure 'Analistas com Carteira (resumo)' = COUNTROWS( FILTER( VALUES( dColaboradorMes[email] ), [Clientes Atuais (resumo)] > 0 ) )
+		formatString: #,0
+		displayFolder: Resumo Ongoing
+		lineageTag: b9ee30dc-b8b8-566a-b5f6-d7b40e4d4892
+
+	/// Clientes Alfa (Ativo/Bloqueado) no último retrato do mês (no mês atual, o de hoje), na carteira dos CS.
+	measure 'Clientes Atuais (resumo)' = CALCULATE( [Clientes na Carteira (no dia)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Ongoing
+		lineageTag: 37eafee7-d090-5e3e-aaa5-6faf0fa036ab
+
+	/// Clientes Alfa (Ativo/Bloqueado/Suspenso, CNPJ distinto) no 1º retrato do mês, na carteira dos CS em contexto.
+	measure 'Clientes no Início do Mês (resumo)' = VAR d1 = CALCULATE( MIN( CRM_Backup_Diario[Periodo] ) ) RETURN IF( NOT ISBLANK( d1 ) && DAY( d1 ) <= 3, CALCULATE( DISTINCTCOUNT( CRM_Backup_Diario[CNPJ] ), CRM_Backup_Diario[Periodo] = d1, KEEPFILTERS( CRM_Backup_Diario[Status_Office] IN { "Ativo", "Bloqueado", "Suspenso" } ), CRM_Backup_Diario[Só Kappa] = "Não", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) ) )
+		formatString: #,0
+		displayFolder: Resumo Ongoing
+		lineageTag: 23e7239d-832d-54db-97a9-b7d82f04cea8
+
+	/// Tickets Contato Efetivo do Treinamento fechados no mês, pelo owner.
+	measure 'Contatos Efetivos (resumo Onboarding)' = CALCULATE( [Contatos Efetivos], Helpdesk_Tickets[owner_team] = "Treinamento", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: 64efedb3-a50b-5bd7-b71e-b3ff8ade0924
+
+	/// Tickets Tentativa de Contato do Treinamento fechados no mês, pelo owner.
+	measure 'Tentativas de Contato (resumo Onboarding)' = CALCULATE( [Tentativas de Contato], Helpdesk_Tickets[owner_team] = "Treinamento", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: 694b17e1-e4d6-51bc-88da-de56eab7a9ad
+
+	/// Quedas no treinamento (Falta ou Remarcação, regra do No Show), por data de criação, pela pessoa da reunião.
+	measure 'Faltas em Consultoria (resumo Onboarding)' = CALCULATE( [Quedas no Treinamento], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email da Reunião], Helpdesk_Tickets[Mês da Reunião] ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: 0f8f6e31-2078-552b-9aab-3b26e6d386ba
+
+	/// Reuniões feitas (checkouts do Treinamento, regra do No Show), por data de criação, pela pessoa da reunião.
+	measure 'Consultorias Realizadas (resumo Onboarding)' = CALCULATE( [Reuniões Feitas (Checkout)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email da Reunião], Helpdesk_Tickets[Mês da Reunião] ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: 8a8e11b7-f6c8-550f-9143-57a7332c1b6d
+
+	/// Tickets Checkout Alinhamento Inicial fechados no mês, pelo owner.
+	measure 'Alinhamentos de Expectativa (resumo Onboarding)' = CALCULATE( [Tickets Fechados], Helpdesk_Tickets[category] = "Checkout Alinhamento Inicial", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: 924aa694-5a28-5c5b-8dbd-11795e29d8f0
+
+	/// Tickets no prazo ÷ tickets fechados com SLA previsto.
+	measure '% SLA dos Tickets (resumo Onboarding)' = DIVIDE( [Tickets no Prazo (resumo Onboarding)], [Tickets com SLA (resumo Onboarding)] )
+		formatString: 0.00%
+		displayFolder: Resumo Onboarding
+		lineageTag: c8f1b998-8eac-5eea-ac4a-a1b06717d9b9
+
+	/// Tickets fechados no mês resolvidos depois do SLA previsto, pelo owner.
+	measure 'Tickets fora do Prazo (resumo Onboarding)' = CALCULATE( COUNTROWS( Helpdesk_Tickets ), Helpdesk_Tickets[Status SLA] = "Fora do prazo", NOT ISBLANK( Helpdesk_Tickets[Data_Fechamento_Ticket] ), TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: b84fb7c2-bb24-54fc-b4ca-ee4be646936f
+
+	/// Tickets fechados no mês resolvidos até o SLA previsto, pelo owner.
+	measure 'Tickets no Prazo (resumo Onboarding)' = CALCULATE( [Tickets no Prazo do SLA], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: d86c7afb-79bd-5588-977e-bbfeaa11dbee
+
+	/// Tickets fechados no mês com SLA previsto, pelo owner.
+	measure 'Tickets com SLA (resumo Onboarding)' = CALCULATE( [Tickets com SLA], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: c677aa34-f0db-50c9-b571-2898c056c00e
+
+	/// Atividades dos tipos do SLA concluídas no mês depois do prazo, pelo responsável da atividade.
+	measure 'Atividades Atrasadas (resumo Onboarding)' = CALCULATE( [Atividades Fora do Prazo], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: 66d5dd0f-0c76-56fc-8fee-f184793debb6
+
+	/// Atividades do CRM concluídas no mês (sem o tipo Onboarding), pelo responsável da atividade.
+	measure 'Atividades Concluídas (resumo Onboarding)' = CALCULATE( [Atividades Concluídas], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: eca2d0a7-76d1-525b-8e14-3147733d3cc5
+
+	/// Migrações ativadas ÷ migrações concluídas no mês.
+	measure '% Ativados (resumo Onboarding)' = DIVIDE( [Migrações Ativadas (resumo Onboarding)], [Clientes Migrados (resumo Onboarding)] )
+		formatString: 0.00%
+		displayFolder: Resumo Onboarding
+		lineageTag: dc4528da-4228-5980-bae3-cd7029dbdb76
+
+	/// Análises de Migração concluídas no mês com categoria Migração - Ativado, por quem migrou.
+	measure 'Migrações Ativadas (resumo Onboarding)' = CALCULATE( [Migrações Ativadas], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: cf3e7462-76bd-5557-9385-8024eb1fa73f
+
+	/// Análises de Migração concluídas no mês (ativadas + não ativadas), pelo responsável pelo cliente (quem migrou).
+	measure 'Clientes Migrados (resumo Onboarding)' = CALCULATE( [Migrações], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: 159f6c7c-a70e-54bb-a846-f9cd7b520ecd
+
+	/// Clientes Alfa (Ativo/Bloqueado) na fase da jornada Tratativa Cancelamento no último retrato do mês.
+	measure 'Clientes em Tratativa de Cancelamento (resumo Onboarding)' = CALCULATE( [Clientes na Carteira (no dia)], CRM_Backup_Diario[Fase_Jornada] = "Tratativa Cancelamento", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: 5d4f80a9-5d81-5d06-8152-78a53a2e3996
+
+	/// Clientes Alfa (Ativo/Bloqueado) na fase da jornada Alinhamento no último retrato do mês, na carteira dos CS.
+	measure 'Clientes em Alinhamento Inicial (resumo Onboarding)' = CALCULATE( [Clientes na Carteira (no dia)], CRM_Backup_Diario[Fase_Jornada] = "Alinhamento", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: 91497f1b-4b69-5b48-aa3f-cab002cad734
+
+	/// Clientes da carteira de hoje sem ticket de Treinamento há mais de 10 dias (regra do Onboarding - Últimos Contatos), das pessoas que estavam na equipe no mês.
+	measure 'Clientes sem Contato (resumo Onboarding)' = IF( ISBLANK( [Equipe no Mês (resumo)] ), BLANK(), CALCULATE( [Clientes sem Contato em Dia], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), dCarteira[Email do CS], dCarteira[Mês da Composição] ) ) )
+		formatString: #,0
+		displayFolder: Resumo Onboarding
+		lineageTag: 530f32df-5525-509e-a388-c0356781c656
+
+	/// Cancelamentos do Kappa fechados no mês: da empresa (= Global - Cancelamento KP) ou os pedidos efetivados em que a pessoa é o treinador ou o atendente.
+	measure 'Clientes KP Cancelados (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [Cancelamentos Efetivados], Helpdesk_Cancelamentos[sistema] = "Kappa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) && ( ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ) ), ISFILTERED( dColaboradorMes ), CALCULATE( [Cancelamentos Efetivados], Helpdesk_Cancelamentos[sistema] = "Kappa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [Cancelamentos Efetivados], Helpdesk_Cancelamentos[sistema] = "Kappa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), CALCULATE( [Cancelamentos (Fechado)], fGlobalCancelamentos[Sistema] = "Kappa" ) )
+		formatString: #,0
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: 75cce821-1026-539d-8547-965e632a7ad9
+
+	/// Pedidos de cancelamento do Kappa abertos no mês; com filtro de pessoa, os em que ela é o treinador ou o atendente.
+	measure 'Solicitações de Cancelamento KP (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [Pedidos de Cancelamento (Empresa)], Helpdesk_Cancelamentos[sistema] = "Kappa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) && ( ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ) ), ISFILTERED( dColaboradorMes ), CALCULATE( [Pedidos de Cancelamento (Empresa)], Helpdesk_Cancelamentos[sistema] = "Kappa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [Pedidos de Cancelamento (Empresa)], Helpdesk_Cancelamentos[sistema] = "Kappa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), CALCULATE( [Pedidos de Cancelamento (Empresa)], Helpdesk_Cancelamentos[sistema] = "Kappa" ) )
+		formatString: #,0
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: ba9510f7-8836-59c9-8054-54f604f03a3a
+
+	/// Tickets Checkout - Kappa (treinamento do Kappa) fechados no mês; com filtro de pessoa, os dela (owner).
+	measure 'Treinamentos KP (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), CALCULATE( CALCULATE( [Tickets Fechados], Helpdesk_Tickets[category] = "Checkout - Kappa" ), TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ), TREATAS( SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) ), ISFILTERED( dColaboradorMes ), CALCULATE( CALCULATE( [Tickets Fechados], Helpdesk_Tickets[category] = "Checkout - Kappa" ), TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) ), ISFILTERED( dAnalistaRelacionamento ), CALCULATE( CALCULATE( [Tickets Fechados], Helpdesk_Tickets[category] = "Checkout - Kappa" ), TREATAS( SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) ), CALCULATE( [Tickets Fechados], Helpdesk_Tickets[category] = "Checkout - Kappa" ) )
+		formatString: #,0
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: 9c71f76f-1e66-5f22-8af2-b9db9a9e4664
+
+	/// Clientes com o Kappa ativo no último retrato do mês: da empresa ou da carteira dos CS filtrados.
+	measure 'Clientes KP Atuais (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [Clientes KP (no dia)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) ), ISFILTERED( dColaboradorMes ), CALCULATE( [Clientes KP (no dia)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) ), ISFILTERED( dAnalistaRelacionamento ), [Clientes KP (no dia)], [Clientes KP (no dia)] )
+		formatString: #,0
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: ee9173eb-33fd-56ea-bbf3-007b7c99cbb8
+
+	/// Clientes com o Kappa ativo no 1º retrato do mês: da empresa (= Global - Cancelamento KP) ou da carteira dos CS.
+	measure 'Clientes KP no Início do Mês (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), VAR d1 = CALCULATE( MIN( CRM_Backup_Diario[Periodo] ) ) RETURN IF( NOT ISBLANK( d1 ) && DAY( d1 ) <= 3, CALCULATE( DISTINCTCOUNT( CRM_Backup_Diario[CNPJ] ), CRM_Backup_Diario[Periodo] = d1, CRM_Backup_Diario[Status KP] = "Ativo", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) ) ), ISFILTERED( dColaboradorMes ), VAR d1 = CALCULATE( MIN( CRM_Backup_Diario[Periodo] ) ) RETURN IF( NOT ISBLANK( d1 ) && DAY( d1 ) <= 3, CALCULATE( DISTINCTCOUNT( CRM_Backup_Diario[CNPJ] ), CRM_Backup_Diario[Periodo] = d1, CRM_Backup_Diario[Status KP] = "Ativo", TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) ) ), ISFILTERED( dAnalistaRelacionamento ), [Clientes Ativos KP (início do mês)], [Clientes Ativos KP (início do mês)] )
+		formatString: #,0
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: 748c2b33-6ff8-56bd-afbb-f09a87513d97
+
+	/// Tempo médio de espera dos chats do Helpdesk até o analista responder, em minutos (TME, regra do Suporte - Resultados); com filtro de pessoa, os chats dela.
+	measure 'Primeira Resposta no Chat (min) (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [TME Chat (min)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ), TREATAS( SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) ), ISFILTERED( dColaboradorMes ), CALCULATE( [TME Chat (min)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) ), ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [TME Chat (min)], TREATAS( SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Tickets[Email do Analista], Helpdesk_Tickets[Mês da Composição] ) ), [TME Chat (min)] )
+		formatString: #,0.00
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: 84f42c66-3527-5b80-80f2-bab29f269f8e
+
+	/// CSAT das pesquisas do Helpdesk respondidas no mês (todas as áreas; nota 0 vale 1); com filtro de pessoa, as dos tickets dela.
+	measure 'CSAT (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [CSAT Helpdesk], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Survey[Email do Analista do Ticket], Helpdesk_Survey[Mês da Composição] ), TREATAS( SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Survey[Email do Analista do Ticket], Helpdesk_Survey[Mês da Composição] ) ), ISFILTERED( dColaboradorMes ), CALCULATE( [CSAT Helpdesk], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Survey[Email do Analista do Ticket], Helpdesk_Survey[Mês da Composição] ) ), ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [CSAT Helpdesk], TREATAS( SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ), Helpdesk_Survey[Email do Analista do Ticket], Helpdesk_Survey[Mês da Composição] ) ), [CSAT Helpdesk] )
+		formatString: 0.00%
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: a5664116-716f-5bb1-a1fa-1e791f594949
+
+	/// Migrações ativadas ÷ migrações concluídas no mês (recusadas fora).
+	measure '% Ativados (resumo produtos)' = DIVIDE( [Migrações Ativadas (resumo produtos)], [Migrações (resumo produtos)] )
+		formatString: 0.00%
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: c6369fb7-ef0d-5e92-b882-945614a343fd
+
+	/// Análises de Migração concluídas no mês (ativadas + não ativadas); com filtro de pessoa, as em que ela migrou o cliente (responsável pelo cliente) ou recebeu (responsável da atividade).
+	measure 'Migrações (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [Migrações], KEEPFILTERS( FILTER( SUMMARIZE( CRM_Atividades, CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ), ( CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ), KEEPFILTERS( FILTER( SUMMARIZE( CRM_Atividades, CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ), ( CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), ISFILTERED( dColaboradorMes ), CALCULATE( [Migrações], KEEPFILTERS( FILTER( SUMMARIZE( CRM_Atividades, CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ), ( CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [Migrações], KEEPFILTERS( FILTER( SUMMARIZE( CRM_Atividades, CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ), ( CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), [Migrações] )
+		formatString: #,0
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: 96aa2684-458f-5775-85e8-0d377b38ab8d
+
+	/// Análises de Migração concluídas no mês com categoria Migração - Ativado.
+	measure 'Migrações Ativadas (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [Migrações Ativadas], KEEPFILTERS( FILTER( SUMMARIZE( CRM_Atividades, CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ), ( CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ), KEEPFILTERS( FILTER( SUMMARIZE( CRM_Atividades, CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ), ( CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), ISFILTERED( dColaboradorMes ), CALCULATE( [Migrações Ativadas], KEEPFILTERS( FILTER( SUMMARIZE( CRM_Atividades, CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ), ( CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [Migrações Ativadas], KEEPFILTERS( FILTER( SUMMARIZE( CRM_Atividades, CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ), ( CRM_Atividades[Email do Responsável pelo Cliente], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( CRM_Atividades[Responsavel_Email], CRM_Atividades[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), [Migrações Ativadas] )
+		formatString: #,0
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: cc37f9d0-99c7-55af-a8fa-e892b741613a
+
+	/// Mensalidade dos cancelamentos do Alfa fechados no mês (só quem saiu): da empresa ou dos pedidos da pessoa.
+	measure 'Receita Perdida AF (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [R$ Cancelado], Helpdesk_Cancelamentos[sistema] = "Alfa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) && ( ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ) ), ISFILTERED( dColaboradorMes ), CALCULATE( [R$ Cancelado], Helpdesk_Cancelamentos[sistema] = "Alfa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [R$ Cancelado], Helpdesk_Cancelamentos[sistema] = "Alfa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), CALCULATE( [R$ Cancelado (Fechado)], fGlobalCancelamentos[Sistema] = "Alfa" ) )
+		formatString: \R$ #,0.00
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: 7575a2ab-1edb-55fc-9426-1423b34470a4
+
+	/// Clientes cancelados ÷ clientes no início do mês.
+	measure '% Churn AF (resumo produtos)' = DIVIDE( [Clientes AF Cancelados (resumo produtos)], [Clientes AF no Início do Mês (resumo produtos)] )
+		formatString: 0.00%
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: 51fbd988-8538-5538-9c86-f853b717dde5
+
+	/// Cancelamentos do Alfa fechados no mês: da empresa (= Global - Cancelamento AF) ou os pedidos efetivados em que a pessoa é o treinador ou o atendente.
+	measure 'Clientes AF Cancelados (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [Cancelamentos Efetivados], Helpdesk_Cancelamentos[sistema] = "Alfa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) && ( ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ) ), ISFILTERED( dColaboradorMes ), CALCULATE( [Cancelamentos Efetivados], Helpdesk_Cancelamentos[sistema] = "Alfa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [Cancelamentos Efetivados], Helpdesk_Cancelamentos[sistema] = "Alfa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), CALCULATE( [Cancelamentos (Fechado)], fGlobalCancelamentos[Sistema] = "Alfa" ) )
+		formatString: #,0
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: cde6fa34-777e-5d58-8385-63b63682b3a3
+
+	/// Pedidos de cancelamento do Alfa abertos no mês (regra do Relacionamento - Cancelamentos); com filtro de pessoa, os pedidos em que ela é o treinador ou o atendente.
+	measure 'Solicitações de Cancelamento AF (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [Pedidos de Cancelamento (Empresa)], Helpdesk_Cancelamentos[sistema] = "Alfa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) && ( ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ) ), ISFILTERED( dColaboradorMes ), CALCULATE( [Pedidos de Cancelamento (Empresa)], Helpdesk_Cancelamentos[sistema] = "Alfa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [Pedidos de Cancelamento (Empresa)], Helpdesk_Cancelamentos[sistema] = "Alfa", KEEPFILTERS( FILTER( SUMMARIZE( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ), ( Helpdesk_Cancelamentos[Email do Treinador], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) || ( Helpdesk_Cancelamentos[Email do Atendente], Helpdesk_Cancelamentos[Mês da Composição] ) IN SUMMARIZE( FILTER( ALL( dColaboradorMes ), dColaboradorMes[Setor] = "Relacionamento" && dColaboradorMes[email] IN VALUES( dAnalistaRelacionamento[email] ) ), dColaboradorMes[email], dColaboradorMes[AnoMes] ) ) ) ), CALCULATE( [Pedidos de Cancelamento (Empresa)], Helpdesk_Cancelamentos[sistema] = "Alfa" ) )
+		formatString: #,0
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: 4871e3ca-7cf1-50c0-82a5-41e4f6d654c2
+
+	/// Média, nos retratos do mês, de entregas pelo eContínuo ÷ prazos gerados (clientes Alfa Ativo/Bloqueado): da empresa ou da carteira dos CS filtrados.
+	measure '% Uso eContínuo (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), CALCULATE( [% Uso eContinuo (média)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) ), ISFILTERED( dColaboradorMes ), CALCULATE( [% Uso eContinuo (média)], TREATAS( SUMMARIZE( dColaboradorMes, dColaboradorMes[email], dColaboradorMes[AnoMes] ), CRM_Backup_Diario[Responsavel_Email], CRM_Backup_Diario[Mês da Composição] ) ), ISFILTERED( dAnalistaRelacionamento ), [% Uso eContinuo (média)], [% Uso eContinuo (média)] )
+		formatString: 0.00%
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: 2020fdc8-e498-5daa-b93d-1ac96b345f3f
+
+	/// Clientes Alfa (Ativo/Bloqueado) no último retrato do mês (no mês atual, o de hoje): da empresa ou da carteira dos CS filtrados.
+	measure 'Clientes AF Atuais (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), [Clientes Atuais (resumo)], ISFILTERED( dColaboradorMes ), [Clientes Atuais (resumo)], ISFILTERED( dAnalistaRelacionamento ), [Clientes na Carteira (no dia)], [Clientes na Carteira (no dia)] )
+		formatString: #,0
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: 4aedf38a-9fdd-53e5-8403-fd66c654b80b
+
+	/// Clientes Alfa (Ativo/Bloqueado/Suspenso) no 1º retrato do mês: da empresa (= Global - Cancelamento AF) ou da carteira dos CS filtrados.
+	measure 'Clientes AF no Início do Mês (resumo produtos)' = SWITCH( TRUE(), ISFILTERED( dColaboradorMes ) && ISFILTERED( dAnalistaRelacionamento ), [Clientes no Início do Mês (resumo)], ISFILTERED( dColaboradorMes ), [Clientes no Início do Mês (resumo)], ISFILTERED( dAnalistaRelacionamento ), [Clientes Ativos AF (início do mês)], [Clientes Ativos AF (início do mês)] )
+		formatString: #,0
+		displayFolder: Resumo Alfa e Kappa
+		lineageTag: 747ef8db-12d3-54e3-90cb-95a3606dab2e
+
+	/// Equipe da pessoa na composição do mês mais recente do período (a tabela por consultor fica com uma linha por pessoa).
+	measure 'Equipe no Mês (resumo)' = VAR hoje = YEAR( TODAY() ) * 100 + MONTH( TODAY() ) VAR am = MIN( MAX( MAX( Calendario[AnoMes] ), 202608 ), hoje ) RETURN CALCULATE( CONCATENATEX( VALUES( dColaboradorMes[Equipe] ), dColaboradorMes[Equipe], " / " ), dColaboradorMes[AnoMes] = am )
+		displayFolder: Resumo Ongoing
+		lineageTag: 129419c3-ab95-527b-998e-2d4db3ec832a
+
+	column email
+		lineageTag: 40dd4ab2-8be7-5b8e-9e53-30b747eb399e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [email]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Colaborador
+		lineageTag: 076e37c4-1df2-5491-a915-b0d72ee91922
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Colaborador]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Equipe
+		lineageTag: 5b0589e2-970c-5de9-99f9-2198ffd344fe
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Equipe]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor
+		lineageTag: c0410919-2693-5cc0-b1c6-a58ec2eeeb3c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Setor]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome Normalizado' = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( LOWER( TRIM( dColaborador[Colaborador] ) ), "á", "a" ), "à", "a" ), "â", "a" ), "ã", "a" ), "ä", "a" ), "é", "e" ), "è", "e" ), "ê", "e" ), "ë", "e" ), "í", "i" ), "ì", "i" ), "î", "i" ), "ï", "i" ), "ó", "o" ), "ò", "o" ), "ô", "o" ), "õ", "o" ), "ö", "o" ), "ú", "u" ), "ù", "u" ), "û", "u" ), "ü", "u" ), "ç", "c" ), "ñ", "n" ), "  ", " " )
+		dataType: string
+		isHidden
+		displayFolder: Pessoa
+		lineageTag: cfd7ef49-4b7f-5164-91d2-e64f5823363d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome Curto Normalizado' = VAR p = SUBSTITUTE( dColaborador[Nome Normalizado], " ", "|" ) RETURN IF( PATHLENGTH( p ) > 1, PATHITEM( p, 1 ) & " " & PATHITEMREVERSE( p, 1 ), dColaborador[Nome Normalizado] )
+		dataType: string
+		isHidden
+		displayFolder: Pessoa
+		lineageTag: f275a082-ad86-5431-932e-a4a2b08a74a2
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dColaborador = calculated
+		mode: import
+		source =
+				
+				-- 1 linha por pessoa. Dimensão das telas do WhatsApp: liga analista/remetente/atendente
+				-- -> nome, equipe e setor. A equipe vem de Time_Equipes (membros, igual ao RLS):
+				-- (RH_equipes liga pelo lider_id = equipe que a pessoa LIDERA, não a que ela participa.)
+				-- dPessoaSetor (Ligações/CRM) deriva desta tabela.
+				-- Pessoa em mais de uma equipe: prefere a que tem setor no dMapaSetor.
+				VAR base =
+				    ADDCOLUMNS(
+				        DISTINCT( SELECTCOLUMNS( FILTER( Time_Usuarios, NOT ISBLANK( Time_Usuarios[email] ) ), "email", LOWER( TRIM( Time_Usuarios[email] ) ) ) ),
+				        "Colaborador", VAR e = [email] RETURN MAXX( FILTER( Time_Usuarios, LOWER( TRIM( Time_Usuarios[email] ) ) = e ), Time_Usuarios[nome] ),
+				        "Equipe",
+				            VAR e = [email]
+				            VAR minhas = FILTER( Time_Equipes, LOWER( TRIM( Time_Equipes[email] ) ) = e )
+				            VAR mapeadas = FILTER( minhas, NOT ISBLANK( LOOKUPVALUE( dMapaSetor[Setor], dMapaSetor[Equipe], Time_Equipes[nome_equipe] ) ) )
+				            RETURN IF( NOT ISEMPTY( mapeadas ), MAXX( mapeadas, Time_Equipes[nome_equipe] ), MAXX( minhas, Time_Equipes[nome_equipe] ) )
+				    )
+				RETURN
+				    ADDCOLUMNS( base, "Setor", LOOKUPVALUE( dMapaSetor[Setor], dMapaSetor[Equipe], [Equipe] ) )
+
+	annotation PBI_Id = 2ab0e70a982b5af4ac275b5ed0e64a1e
+

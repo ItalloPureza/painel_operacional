@@ -1,0 +1,87 @@
+table Meta_Def
+	isHidden
+	lineageTag: 8d012e2c-ff25-4469-b351-452c631960af
+
+	/// Definições de meta cadastradas na intranet (RH_meta_def): nome, unidade, sentido (maior/menor é melhor), escopo (empresa/setor/area) e como agrega no período (trimestre_modo: media, soma, ultimo).
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 65e061da-d524-48c9-9480-b00ed0778934
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome
+		dataType: string
+		lineageTag: af2a49af-a27c-4fdf-95a3-24b429675ffc
+		summarizeBy: none
+		sourceColumn: nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column unidade
+		dataType: string
+		lineageTag: 706c4954-67d1-4954-b354-e0ec7c0f8a8c
+		summarizeBy: none
+		sourceColumn: unidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column sentido
+		dataType: string
+		lineageTag: 6bdba908-dfce-422d-874c-53d36d0a7b9b
+		summarizeBy: none
+		sourceColumn: sentido
+
+		annotation SummarizationSetBy = Automatic
+
+	column escopo
+		dataType: string
+		lineageTag: 84c09bed-ac63-4da2-8413-b750a5c49b02
+		summarizeBy: none
+		sourceColumn: escopo
+
+		annotation SummarizationSetBy = Automatic
+
+	column trimestre_modo
+		dataType: string
+		lineageTag: 6127c4d5-003c-468f-b2af-332e29865cf5
+		summarizeBy: none
+		sourceColumn: trimestre_modo
+
+		annotation SummarizationSetBy = Automatic
+
+	column ativo
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4ac136b2-77e4-465f-ace2-8e294b100d5f
+		summarizeBy: none
+		sourceColumn: ativo
+
+		annotation SummarizationSetBy = Automatic
+
+	column ordem
+		dataType: int64
+		formatString: 0
+		lineageTag: b46e1a1d-658e-4b12-9c42-0f7f4b2dc877
+		summarizeBy: none
+		sourceColumn: ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Meta_Def = m
+		mode: import
+		queryGroup: Estrutura
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Meta_Def",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"id", Int64.Type}, {"nome", type text}, {"unidade", type text}, {"sentido", type text}, {"escopo", type text}, {"trimestre_modo", type text}, {"ativo", type logical}, {"ordem", Int64.Type}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

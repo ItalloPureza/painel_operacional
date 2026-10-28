@@ -1,0 +1,487 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "glb_chart_3",
+  "position": {
+    "x": 292,
+    "y": 692,
+    "z": 55037,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 55037
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Backup_Diario"
+                    }
+                  },
+                  "Property": "Responsavel"
+                }
+              },
+              "queryRef": "CRM_Backup_Diario.Responsavel",
+              "nativeQueryRef": "Responsavel",
+              "displayName": "CS"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Backup_Diario"
+                    }
+                  },
+                  "Property": "Equipe do CS"
+                }
+              },
+              "queryRef": "CRM_Backup_Diario.Equipe do CS",
+              "nativeQueryRef": "Equipe do CS",
+              "displayName": "Equipe"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Backup_Diario"
+                    }
+                  },
+                  "Property": "Clientes na Carteira (no dia)"
+                }
+              },
+              "queryRef": "CRM_Backup_Diario.Clientes na Carteira (no dia)",
+              "nativeQueryRef": "Clientes na Carteira (no dia)",
+              "displayName": "Clientes"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Backup_Diario"
+                    }
+                  },
+                  "Property": "Clientes KP (no dia)"
+                }
+              },
+              "queryRef": "CRM_Backup_Diario.Clientes KP (no dia)",
+              "nativeQueryRef": "Clientes KP (no dia)",
+              "displayName": "KP"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Backup_Diario"
+                    }
+                  },
+                  "Property": "Clientes Mayday (no dia)"
+                }
+              },
+              "queryRef": "CRM_Backup_Diario.Clientes Mayday (no dia)",
+              "nativeQueryRef": "Clientes Mayday (no dia)",
+              "displayName": "Mayday"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Backup_Diario"
+                    }
+                  },
+                  "Property": "Clientes Alert (no dia)"
+                }
+              },
+              "queryRef": "CRM_Backup_Diario.Clientes Alert (no dia)",
+              "nativeQueryRef": "Clientes Alert (no dia)",
+              "displayName": "Alert"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Backup_Diario"
+                    }
+                  },
+                  "Property": "Clientes En Route (no dia)"
+                }
+              },
+              "queryRef": "CRM_Backup_Diario.Clientes En Route (no dia)",
+              "nativeQueryRef": "Clientes En Route (no dia)",
+              "displayName": "En Route"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Backup_Diario"
+                    }
+                  },
+                  "Property": "Clientes do Legado (no dia)"
+                }
+              },
+              "queryRef": "CRM_Backup_Diario.Clientes do Legado (no dia)",
+              "nativeQueryRef": "Clientes do Legado (no dia)",
+              "displayName": "Cruzeiro"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Contratos_historico_contratos"
+                    }
+                  },
+                  "Property": "Mensalidade Total (Contratos)"
+                }
+              },
+              "queryRef": "Contratos_historico_contratos.Mensalidade Total (Contratos)",
+              "nativeQueryRef": "Mensalidade Total (Contratos)",
+              "displayName": "Mensalidade"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "CRM_Backup_Diario"
+                  }
+                },
+                "Property": "Clientes na Carteira (no dia)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "134.2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Backup_Diario.Responsavel"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "134.2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Backup_Diario.Equipe do CS"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "71.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Backup_Diario.Clientes na Carteira (no dia)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Backup_Diario.Clientes KP (no dia)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Backup_Diario.Clientes Mayday (no dia)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Backup_Diario.Clientes Alert (no dia)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Backup_Diario.Clientes En Route (no dia)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Backup_Diario.Clientes do Legado (no dia)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "120.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Contratos_historico_contratos.Mensalidade Total (Contratos)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Carteira por CS'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Último dia do período com retrato do CRM e Contratos · CS do dia'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,220 @@
+table dReferenciaDados
+	isHidden
+	lineageTag: 668746bd-b098-58ed-8132-126efcfef4ab
+
+	column Data
+		formatString: dd/mm/yy hh:nn
+		lineageTag: cd655c53-f0b2-5e71-a9e8-fc9072aa9d16
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Data]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Texto
+		lineageTag: c60db73c-e1cc-5fe9-b69e-4ff18117ce39
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Texto]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pagina
+		lineageTag: ce868ced-bc10-524e-a60f-c9394ff192c4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Pagina]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tela
+		lineageTag: e4d8e4f3-d15d-50e1-92b9-d8c46d0c9bc1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tela]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordem
+		formatString: 0
+		lineageTag: 4b3b3626-e1b7-5422-a98f-4f4993dbd4af
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ordem]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quando
+		lineageTag: 47294d14-6c4b-5c9a-8482-214db41c6565
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quando]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Item
+		lineageTag: 0c46c21d-17fd-5018-b025-d27c6ad2d83b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Item]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fonte
+		lineageTag: 1564c0cd-649c-5b24-872a-9171e188357f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Fonte]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dReferenciaDados = calculated
+		mode: import
+		source =
+				
+				-- GERADO por scripts/saude_dados.py (REF_TELA + FONTES; estudo em docs/dados-ate-por-tela.md): a data da
+				-- tabela principal de cada tela (extração > atualização > data do registro) e o registro mais recente.
+				-- Calculada no refresh (sem RLS nem filtros).
+				VAR _er1 = MAX ( 'Helpdesk_Tickets'[data_extracao] )
+				VAR _ur1 = MAX ( 'Helpdesk_Tickets'[lastUpdate] )
+				VAR _nr1 = MAXX ( Helpdesk_Tickets, Helpdesk_Tickets[Data_Criacao_Ticket] + Helpdesk_Tickets[Hora_Criacao_Ticket] )
+				VAR _dr1 = COALESCE ( _er1, _ur1, _nr1 )
+				VAR _cr1 = IF ( NOT ISBLANK ( _er1 ), "última extração", IF ( NOT ISBLANK ( _ur1 ), "última atualização", "última abertura" ) )
+				VAR _kr1 = IF ( NOT ISBLANK ( _er1 ), "extração (data_extracao)", IF ( NOT ISBLANK ( _ur1 ), "atualização (lastUpdate)", "última abertura (data do registro)" ) )
+				VAR _ior1 = MAXX ( Helpdesk_Tickets, Helpdesk_Tickets[id] )
+				VAR _ir1 = MAXX ( FILTER ( Helpdesk_Tickets, Helpdesk_Tickets[id] = _ior1 ), "ticket nº " & Helpdesk_Tickets[id] & ", aberto em " & FORMAT ( Helpdesk_Tickets[Data_Criacao_Ticket] + Helpdesk_Tickets[Hora_Criacao_Ticket], "dd/mm/yy hh:nn" ) )
+				VAR _er2 = MAX ( 'Helpdesk_Survey'[data_extracao] )
+				VAR _nr2 = MAXX ( Helpdesk_Survey, Helpdesk_Survey[Data Avaliacao] )
+				VAR _dr2 = COALESCE ( _er2, _nr2 )
+				VAR _cr2 = IF ( NOT ISBLANK ( _er2 ), "última extração", "última avaliação" )
+				VAR _kr2 = IF ( NOT ISBLANK ( _er2 ), "extração (data_extracao)", "última avaliação (data do registro)" )
+				VAR _ior2 = MAXX ( Helpdesk_Survey, Helpdesk_Survey[Data Avaliacao] )
+				VAR _idr2 = MAXX ( FILTER ( Helpdesk_Survey, Helpdesk_Survey[Data Avaliacao] = _ior2 ), Helpdesk_Survey[ticketId] )
+				VAR _ir2 = MAXX ( FILTER ( Helpdesk_Survey, Helpdesk_Survey[Data Avaliacao] = _ior2 && Helpdesk_Survey[ticketId] = _idr2 ), "ticket nº " & Helpdesk_Survey[ticketId] & ", avaliado em " & FORMAT ( Helpdesk_Survey[Data Avaliacao], "dd/mm/yy" ) )
+				VAR _er3 = MAX ( 'CRM_Backup_Diario'[Extracao] )
+				VAR _nr3 = MAXX ( CRM_Backup_Diario, CRM_Backup_Diario[Periodo] )
+				VAR _dr3 = COALESCE ( _er3, _nr3 )
+				VAR _cr3 = IF ( NOT ISBLANK ( _er3 ), "última extração", "último retrato" )
+				VAR _kr3 = IF ( NOT ISBLANK ( _er3 ), "extração (Extracao)", "último retrato (data do registro)" )
+				VAR _ior3 = MAXX ( CRM_Backup_Diario, CRM_Backup_Diario[Periodo] )
+				VAR _ir3 = "retrato de " & FORMAT ( _ior3, "dd/mm/yy" ) & " com " & FORMAT ( CALCULATE ( DISTINCTCOUNT ( CRM_Backup_Diario[Id_CRM] ), CRM_Backup_Diario[Periodo] = _ior3 ), "#,0" ) & " clientes"
+				VAR _er4 = MAX ( 'Helpdesk_Cancelamentos'[data_extracao] )
+				VAR _ur4 = MAX ( 'Helpdesk_Cancelamentos'[Data da Ultima Atualização] )
+				VAR _nr4 = MAXX ( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[Data de Fechamento] )
+				VAR _dr4 = COALESCE ( _er4, _ur4, _nr4 )
+				VAR _cr4 = IF ( NOT ISBLANK ( _er4 ), "última extração", IF ( NOT ISBLANK ( _ur4 ), "última atualização", "último fechamento" ) )
+				VAR _kr4 = IF ( NOT ISBLANK ( _er4 ), "extração (data_extracao)", IF ( NOT ISBLANK ( _ur4 ), "atualização (Data da Ultima Atualização)", "último fechamento (data do registro)" ) )
+				VAR _ior4 = MAXX ( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[id] )
+				VAR _ir4 = MAXX ( FILTER ( Helpdesk_Cancelamentos, Helpdesk_Cancelamentos[id] = _ior4 ), "ticket nº " & Helpdesk_Cancelamentos[id] & ", aberto em " & FORMAT ( Helpdesk_Cancelamentos[Data de Criação], "dd/mm/yy" ) )
+				VAR _er5 = MAX ( 'Helpdesk_Tickets'[data_extracao] )
+				VAR _ur5 = MAX ( 'Helpdesk_Tickets'[lastUpdate] )
+				VAR _nr5 = MAXX ( Helpdesk_Tickets, Helpdesk_Tickets[Data_Fechamento_Ticket] + Helpdesk_Tickets[Hora_Fechamento_Ticket] )
+				VAR _dr5 = COALESCE ( _er5, _ur5, _nr5 )
+				VAR _cr5 = IF ( NOT ISBLANK ( _er5 ), "última extração", IF ( NOT ISBLANK ( _ur5 ), "última atualização", "último fechamento" ) )
+				VAR _kr5 = IF ( NOT ISBLANK ( _er5 ), "extração (data_extracao)", IF ( NOT ISBLANK ( _ur5 ), "atualização (lastUpdate)", "último fechamento (data do registro)" ) )
+				VAR _ior5 = MAXX ( Helpdesk_Tickets, Helpdesk_Tickets[id] )
+				VAR _ir5 = MAXX ( FILTER ( Helpdesk_Tickets, Helpdesk_Tickets[id] = _ior5 ), "ticket nº " & Helpdesk_Tickets[id] & ", aberto em " & FORMAT ( Helpdesk_Tickets[Data_Criacao_Ticket] + Helpdesk_Tickets[Hora_Criacao_Ticket], "dd/mm/yy hh:nn" ) )
+				VAR _dx15 = MIN ( MAX ( CRM_Backup_Diario[Periodo] ), MAX ( Contratos_historico_contratos[periodo] ) )
+				VAR _cx15 = "último dia com retrato do CRM e do sistema de contratos"
+				VAR _ix15 = BLANK ()
+				VAR _dx16 = MIN ( MAX ( CRM_Backup_Diario[Periodo] ), MAX ( Contratos_historico_contratos[periodo] ) )
+				VAR _cx16 = "último dia com retrato do CRM e do sistema de contratos"
+				VAR _ix16 = BLANK ()
+				VAR _er6 = MAX ( 'Legado_Clientes'[Extracao] )
+				VAR _dr6 = _er6
+				VAR _cr6 = "última extração"
+				VAR _kr6 = "extração (Extracao)"
+				VAR _ior6 = MAXX ( Legado_Clientes, Legado_Clientes[Extracao] )
+				VAR _ir6 = FORMAT ( COUNTROWS ( Legado_Clientes ), "#,0" ) & " clientes na consulta"
+				VAR _er7 = MAX ( 'CRM_Atividades'[Extracao] )
+				VAR _nr7 = MAXX ( CRM_Atividades, CRM_Atividades[Data_Resolucao] )
+				VAR _dr7 = COALESCE ( _er7, _nr7 )
+				VAR _cr7 = IF ( NOT ISBLANK ( _er7 ), "última extração", "última conclusão" )
+				VAR _kr7 = IF ( NOT ISBLANK ( _er7 ), "extração (Extracao)", "última conclusão (data do registro)" )
+				VAR _ior7 = MAXX ( CRM_Atividades, CRM_Atividades[Criado_em] )
+				VAR _ir7 = MAXX ( FILTER ( CRM_Atividades, CRM_Atividades[Criado_em] = _ior7 ), "atividade " & CRM_Atividades[Tipo de Atividade] & ", criada em " & FORMAT ( CRM_Atividades[Criado_em], "dd/mm/yy hh:nn" ) )
+				VAR _er8 = MAX ( 'Ligacoes_API'[data_extracao] )
+				VAR _nr8 = MAXX ( Ligacoes_API, Ligacoes_API[Data_hora_inicio] )
+				VAR _dr8 = COALESCE ( _er8, _nr8 )
+				VAR _cr8 = IF ( NOT ISBLANK ( _er8 ), "última extração", "última ligação" )
+				VAR _kr8 = IF ( NOT ISBLANK ( _er8 ), "extração (data_extracao)", "última ligação (data do registro)" )
+				VAR _ior8 = MAXX ( Ligacoes_API, Ligacoes_API[Data_hora_inicio] )
+				VAR _ir8 = MAXX ( FILTER ( Ligacoes_API, Ligacoes_API[Data_hora_inicio] = _ior8 ), "ligação de " & FORMAT ( Ligacoes_API[Data_hora_inicio], "dd/mm/yy hh:nn" ) & " (" & COALESCE ( Ligacoes_API[Responsável (Ramal)], "sem responsável" ) & ")" )
+				VAR _er9 = MAX ( 'WhatsApp_Atendimentos'[Extracao] )
+				VAR _nr9 = MAXX ( WhatsApp_Atendimentos, WhatsApp_Atendimentos[Abertura] )
+				VAR _dr9 = COALESCE ( _er9, _nr9 )
+				VAR _cr9 = IF ( NOT ISBLANK ( _er9 ), "última extração", "última abertura" )
+				VAR _kr9 = IF ( NOT ISBLANK ( _er9 ), "extração (Extracao)", "última abertura (data do registro)" )
+				VAR _ior9 = MAXX ( WhatsApp_Atendimentos, WhatsApp_Atendimentos[Abertura] )
+				VAR _idr9 = MAXX ( FILTER ( WhatsApp_Atendimentos, WhatsApp_Atendimentos[Abertura] = _ior9 ), WhatsApp_Atendimentos[Ticket] )
+				VAR _ir9 = MAXX ( FILTER ( WhatsApp_Atendimentos, WhatsApp_Atendimentos[Abertura] = _ior9 && WhatsApp_Atendimentos[Ticket] = _idr9 ), "ticket " & WhatsApp_Atendimentos[Ticket] & ", aberto em " & FORMAT ( WhatsApp_Atendimentos[Abertura], "dd/mm/yy hh:nn" ) )
+				VAR _er10 = MAX ( 'WhatsApp_Envios'[Extracao] )
+				VAR _nr10 = MAXX ( WhatsApp_Envios, WhatsApp_Envios[Enviado em] )
+				VAR _dr10 = COALESCE ( _er10, _nr10 )
+				VAR _cr10 = IF ( NOT ISBLANK ( _er10 ), "última extração", "último envio" )
+				VAR _kr10 = IF ( NOT ISBLANK ( _er10 ), "extração (Extracao)", "último envio (data do registro)" )
+				VAR _ior10 = MAXX ( WhatsApp_Envios, WhatsApp_Envios[Enviado em] )
+				VAR _ir10 = MAXX ( FILTER ( WhatsApp_Envios, WhatsApp_Envios[Enviado em] = _ior10 ), "template " & WhatsApp_Envios[Template] & ", enviado em " & FORMAT ( WhatsApp_Envios[Enviado em], "dd/mm/yy hh:nn" ) )
+				VAR _t =
+				    UNION (
+				        ROW ( "Pagina", "pg_agendamento_01", "Tela", "Lives - Participação", "Ordem", 17, "Fonte", "Tickets (Helpdesk)", "Data", _dr1, "Quando", IF ( ISBLANK ( _dr1 ), BLANK (), FORMAT ( _dr1, IF ( _dr1 = INT ( _dr1 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr1 ), BLANK (), _cr1 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir1 ), UNICHAR ( 10 ) & "mais recente: " & _ir1 ) ) ),
+				        ROW ( "Pagina", "pg_agendamento_02", "Tela", "Lives - Desempenho das Lives", "Ordem", 18, "Fonte", "Tickets (Helpdesk)", "Data", _dr1, "Quando", IF ( ISBLANK ( _dr1 ), BLANK (), FORMAT ( _dr1, IF ( _dr1 = INT ( _dr1 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr1 ), BLANK (), _cr1 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir1 ), UNICHAR ( 10 ) & "mais recente: " & _ir1 ) ) ),
+				        ROW ( "Pagina", "pg_agendamento_03", "Tela", "Lives - Clientes", "Ordem", 19, "Fonte", "Tickets (Helpdesk)", "Data", _dr1, "Quando", IF ( ISBLANK ( _dr1 ), BLANK (), FORMAT ( _dr1, IF ( _dr1 = INT ( _dr1 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr1 ), BLANK (), _cr1 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir1 ), UNICHAR ( 10 ) & "mais recente: " & _ir1 ) ) ),
+				        ROW ( "Pagina", "pg_agendamento_04", "Tela", "Lives - CSAT", "Ordem", 20, "Fonte", "Pesquisas de satisfação (Helpdesk)", "Data", _dr2, "Quando", IF ( ISBLANK ( _dr2 ), BLANK (), FORMAT ( _dr2, IF ( _dr2 = INT ( _dr2 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr2 ), BLANK (), _cr2 & " das avaliações (Helpdesk)" & IF ( NOT ISBLANK ( _ir2 ), UNICHAR ( 10 ) & "mais recente: " & _ir2 ) ) ),
+				        ROW ( "Pagina", "pg_gerencia_01", "Tela", "Gerência - Cohort AF", "Ordem", 1, "Fonte", "Carteira - retrato diário (CRM)", "Data", _dr3, "Quando", IF ( ISBLANK ( _dr3 ), BLANK (), FORMAT ( _dr3, IF ( _dr3 = INT ( _dr3 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr3 ), BLANK (), _cr3 & " do retrato (CRM)" & IF ( NOT ISBLANK ( _ir3 ), UNICHAR ( 10 ) & "mais recente: " & _ir3 ) ) ),
+				        ROW ( "Pagina", "pg_gerencia_02", "Tela", "Gerência - Cohort KP", "Ordem", 2, "Fonte", "Carteira - retrato diário (CRM)", "Data", _dr3, "Quando", IF ( ISBLANK ( _dr3 ), BLANK (), FORMAT ( _dr3, IF ( _dr3 = INT ( _dr3 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr3 ), BLANK (), _cr3 & " do retrato (CRM)" & IF ( NOT ISBLANK ( _ir3 ), UNICHAR ( 10 ) & "mais recente: " & _ir3 ) ) ),
+				        ROW ( "Pagina", "pg_gerencia_03", "Tela", "Gerência - Inativações", "Ordem", 3, "Fonte", "Carteira - retrato diário (CRM)", "Data", _dr3, "Quando", IF ( ISBLANK ( _dr3 ), BLANK (), FORMAT ( _dr3, IF ( _dr3 = INT ( _dr3 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr3 ), BLANK (), _cr3 & " do retrato (CRM)" & IF ( NOT ISBLANK ( _ir3 ), UNICHAR ( 10 ) & "mais recente: " & _ir3 ) ) ),
+				        ROW ( "Pagina", "pg_gerencia_04", "Tela", "Gerência - Resumo Ongoing", "Ordem", 4, "Fonte", "Carteira - retrato diário (CRM)", "Data", _dr3, "Quando", IF ( ISBLANK ( _dr3 ), BLANK (), FORMAT ( _dr3, IF ( _dr3 = INT ( _dr3 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr3 ), BLANK (), _cr3 & " do retrato (CRM)" & IF ( NOT ISBLANK ( _ir3 ), UNICHAR ( 10 ) & "mais recente: " & _ir3 ) ) ),
+				        ROW ( "Pagina", "pg_gerencia_05", "Tela", "Gerência - Resumo Onboarding", "Ordem", 5, "Fonte", "Carteira - retrato diário (CRM)", "Data", _dr3, "Quando", IF ( ISBLANK ( _dr3 ), BLANK (), FORMAT ( _dr3, IF ( _dr3 = INT ( _dr3 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr3 ), BLANK (), _cr3 & " do retrato (CRM)" & IF ( NOT ISBLANK ( _ir3 ), UNICHAR ( 10 ) & "mais recente: " & _ir3 ) ) ),
+				        ROW ( "Pagina", "pg_gerencia_06", "Tela", "Gerência - Resumo Alfa e Kappa", "Ordem", 6, "Fonte", "Carteira - retrato diário (CRM)", "Data", _dr3, "Quando", IF ( ISBLANK ( _dr3 ), BLANK (), FORMAT ( _dr3, IF ( _dr3 = INT ( _dr3 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr3 ), BLANK (), _cr3 & " do retrato (CRM)" & IF ( NOT ISBLANK ( _ir3 ), UNICHAR ( 10 ) & "mais recente: " & _ir3 ) ) ),
+				        ROW ( "Pagina", "pg_global_01", "Tela", "Global - Cancelamento AF", "Ordem", 7, "Fonte", "Cancelamentos (Helpdesk)", "Data", _dr4, "Quando", IF ( ISBLANK ( _dr4 ), BLANK (), FORMAT ( _dr4, IF ( _dr4 = INT ( _dr4 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr4 ), BLANK (), _cr4 & " dos cancelamentos (Helpdesk)" & IF ( NOT ISBLANK ( _ir4 ), UNICHAR ( 10 ) & "mais recente: " & _ir4 ) ) ),
+				        ROW ( "Pagina", "pg_global_02", "Tela", "Global - Cancelamento KP", "Ordem", 8, "Fonte", "Cancelamentos (Helpdesk)", "Data", _dr4, "Quando", IF ( ISBLANK ( _dr4 ), BLANK (), FORMAT ( _dr4, IF ( _dr4 = INT ( _dr4 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr4 ), BLANK (), _cr4 & " dos cancelamentos (Helpdesk)" & IF ( NOT ISBLANK ( _ir4 ), UNICHAR ( 10 ) & "mais recente: " & _ir4 ) ) ),
+				        ROW ( "Pagina", "pg_global_03", "Tela", "Global - Alteração de Receita", "Ordem", 10, "Fonte", "Tickets (Helpdesk)", "Data", _dr5, "Quando", IF ( ISBLANK ( _dr5 ), BLANK (), FORMAT ( _dr5, IF ( _dr5 = INT ( _dr5 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr5 ), BLANK (), _cr5 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir5 ), UNICHAR ( 10 ) & "mais recente: " & _ir5 ) ) ),
+				        ROW ( "Pagina", "pg_global_04", "Tela", "Global - Idade dos Clientes", "Ordem", 11, "Fonte", "Cancelamentos (Helpdesk)", "Data", _dr4, "Quando", IF ( ISBLANK ( _dr4 ), BLANK (), FORMAT ( _dr4, IF ( _dr4 = INT ( _dr4 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr4 ), BLANK (), _cr4 & " dos cancelamentos (Helpdesk)" & IF ( NOT ISBLANK ( _ir4 ), UNICHAR ( 10 ) & "mais recente: " & _ir4 ) ) ),
+				        ROW ( "Pagina", "pg_global_05", "Tela", "Global - Carteiras", "Ordem", 12, "Fonte", "CRM + Contratos", "Data", _dx15, "Quando", IF ( ISBLANK ( _dx15 ), BLANK (), FORMAT ( _dx15, IF ( _dx15 = INT ( _dx15 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dx15 ), BLANK (), _cx15 ) ),
+				        ROW ( "Pagina", "pg_global_06", "Tela", "Global - Carteiras - Clientes", "Ordem", 13, "Fonte", "CRM + Contratos", "Data", _dx16, "Quando", IF ( ISBLANK ( _dx16 ), BLANK (), FORMAT ( _dx16, IF ( _dx16 = INT ( _dx16 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dx16 ), BLANK (), _cx16 ) ),
+				        ROW ( "Pagina", "pg_global_07", "Tela", "Global - TTFV", "Ordem", 14, "Fonte", "Carteira - retrato diário (CRM)", "Data", _dr3, "Quando", IF ( ISBLANK ( _dr3 ), BLANK (), FORMAT ( _dr3, IF ( _dr3 = INT ( _dr3 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr3 ), BLANK (), _cr3 & " do retrato (CRM)" & IF ( NOT ISBLANK ( _ir3 ), UNICHAR ( 10 ) & "mais recente: " & _ir3 ) ) ),
+				        ROW ( "Pagina", "pg_global_08", "Tela", "Global - Clientes do Legado", "Ordem", 15, "Fonte", "Clientes - API do sistema legado", "Data", _dr6, "Quando", IF ( ISBLANK ( _dr6 ), BLANK (), FORMAT ( _dr6, IF ( _dr6 = INT ( _dr6 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr6 ), BLANK (), _cr6 & " da API do sistema legado" & IF ( NOT ISBLANK ( _ir6 ), UNICHAR ( 10 ) & "mais recente: " & _ir6 ) ) ),
+				        ROW ( "Pagina", "pg_global_09", "Tela", "Global - Migrações dos Clientes", "Ordem", 16, "Fonte", "Atividades (CRM)", "Data", _dr7, "Quando", IF ( ISBLANK ( _dr7 ), BLANK (), FORMAT ( _dr7, IF ( _dr7 = INT ( _dr7 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr7 ), BLANK (), _cr7 & " das atividades (CRM)" & IF ( NOT ISBLANK ( _ir7 ), UNICHAR ( 10 ) & "mais recente: " & _ir7 ) ) ),
+				        ROW ( "Pagina", "pg_global_10", "Tela", "Global - KP por Setor", "Ordem", 9, "Fonte", "Cancelamentos (Helpdesk)", "Data", _dr4, "Quando", IF ( ISBLANK ( _dr4 ), BLANK (), FORMAT ( _dr4, IF ( _dr4 = INT ( _dr4 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr4 ), BLANK (), _cr4 & " dos cancelamentos (Helpdesk)" & IF ( NOT ISBLANK ( _ir4 ), UNICHAR ( 10 ) & "mais recente: " & _ir4 ) ) ),
+				        ROW ( "Pagina", "pg_homologacao_01", "Tela", "Homologação - App", "Ordem", 52, "Fonte", "Tickets (Helpdesk)", "Data", _dr5, "Quando", IF ( ISBLANK ( _dr5 ), BLANK (), FORMAT ( _dr5, IF ( _dr5 = INT ( _dr5 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr5 ), BLANK (), _cr5 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir5 ), UNICHAR ( 10 ) & "mais recente: " & _ir5 ) ) ),
+				        ROW ( "Pagina", "pg_homologacao_02", "Tela", "Homologação - Guias", "Ordem", 53, "Fonte", "Tickets (Helpdesk)", "Data", _dr5, "Quando", IF ( ISBLANK ( _dr5 ), BLANK (), FORMAT ( _dr5, IF ( _dr5 = INT ( _dr5 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr5 ), BLANK (), _cr5 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir5 ), UNICHAR ( 10 ) & "mais recente: " & _ir5 ) ) ),
+				        ROW ( "Pagina", "pg_homologacao_03", "Tela", "Homologação - CSAT", "Ordem", 54, "Fonte", "Pesquisas de satisfação (Helpdesk)", "Data", _dr2, "Quando", IF ( ISBLANK ( _dr2 ), BLANK (), FORMAT ( _dr2, IF ( _dr2 = INT ( _dr2 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr2 ), BLANK (), _cr2 & " das avaliações (Helpdesk)" & IF ( NOT ISBLANK ( _ir2 ), UNICHAR ( 10 ) & "mais recente: " & _ir2 ) ) ),
+				        ROW ( "Pagina", "pg_homologacao_04", "Tela", "Homologação - Tempo de Entrega APP", "Ordem", 55, "Fonte", "Tickets (Helpdesk)", "Data", _dr5, "Quando", IF ( ISBLANK ( _dr5 ), BLANK (), FORMAT ( _dr5, IF ( _dr5 = INT ( _dr5 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr5 ), BLANK (), _cr5 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir5 ), UNICHAR ( 10 ) & "mais recente: " & _ir5 ) ) ),
+				        ROW ( "Pagina", "pg_onboarding_01", "Tela", "Onboarding - Performance", "Ordem", 25, "Fonte", "Tickets (Helpdesk)", "Data", _dr5, "Quando", IF ( ISBLANK ( _dr5 ), BLANK (), FORMAT ( _dr5, IF ( _dr5 = INT ( _dr5 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr5 ), BLANK (), _cr5 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir5 ), UNICHAR ( 10 ) & "mais recente: " & _ir5 ) ) ),
+				        ROW ( "Pagina", "pg_onboarding_02", "Tela", "Onboarding - NoShow", "Ordem", 26, "Fonte", "Tickets (Helpdesk)", "Data", _dr1, "Quando", IF ( ISBLANK ( _dr1 ), BLANK (), FORMAT ( _dr1, IF ( _dr1 = INT ( _dr1 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr1 ), BLANK (), _cr1 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir1 ), UNICHAR ( 10 ) & "mais recente: " & _ir1 ) ) ),
+				        ROW ( "Pagina", "pg_onboarding_03", "Tela", "Onboarding - Cancelamento AF", "Ordem", 27, "Fonte", "Cancelamentos (Helpdesk)", "Data", _dr4, "Quando", IF ( ISBLANK ( _dr4 ), BLANK (), FORMAT ( _dr4, IF ( _dr4 = INT ( _dr4 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr4 ), BLANK (), _cr4 & " dos cancelamentos (Helpdesk)" & IF ( NOT ISBLANK ( _ir4 ), UNICHAR ( 10 ) & "mais recente: " & _ir4 ) ) ),
+				        ROW ( "Pagina", "pg_onboarding_04", "Tela", "Onboarding - Cancelamento KP", "Ordem", 28, "Fonte", "Cancelamentos (Helpdesk)", "Data", _dr4, "Quando", IF ( ISBLANK ( _dr4 ), BLANK (), FORMAT ( _dr4, IF ( _dr4 = INT ( _dr4 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr4 ), BLANK (), _cr4 & " dos cancelamentos (Helpdesk)" & IF ( NOT ISBLANK ( _ir4 ), UNICHAR ( 10 ) & "mais recente: " & _ir4 ) ) ),
+				        ROW ( "Pagina", "pg_onboarding_05", "Tela", "Onboarding - SLA das Atividades", "Ordem", 29, "Fonte", "Atividades (CRM)", "Data", _dr7, "Quando", IF ( ISBLANK ( _dr7 ), BLANK (), FORMAT ( _dr7, IF ( _dr7 = INT ( _dr7 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr7 ), BLANK (), _cr7 & " das atividades (CRM)" & IF ( NOT ISBLANK ( _ir7 ), UNICHAR ( 10 ) & "mais recente: " & _ir7 ) ) ),
+				        ROW ( "Pagina", "pg_onboarding_06", "Tela", "Onboarding - Migrações", "Ordem", 30, "Fonte", "Atividades (CRM)", "Data", _dr7, "Quando", IF ( ISBLANK ( _dr7 ), BLANK (), FORMAT ( _dr7, IF ( _dr7 = INT ( _dr7 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr7 ), BLANK (), _cr7 & " das atividades (CRM)" & IF ( NOT ISBLANK ( _ir7 ), UNICHAR ( 10 ) & "mais recente: " & _ir7 ) ) ),
+				        ROW ( "Pagina", "pg_onboarding_07", "Tela", "Onboarding - Ligações", "Ordem", 31, "Fonte", "Ligações", "Data", _dr8, "Quando", IF ( ISBLANK ( _dr8 ), BLANK (), FORMAT ( _dr8, IF ( _dr8 = INT ( _dr8 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr8 ), BLANK (), _cr8 & " das ligações" & IF ( NOT ISBLANK ( _ir8 ), UNICHAR ( 10 ) & "mais recente: " & _ir8 ) ) ),
+				        ROW ( "Pagina", "pg_onboarding_08", "Tela", "Onboarding - Últimos Contatos", "Ordem", 32, "Fonte", "Tickets (Helpdesk)", "Data", _dr1, "Quando", IF ( ISBLANK ( _dr1 ), BLANK (), FORMAT ( _dr1, IF ( _dr1 = INT ( _dr1 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr1 ), BLANK (), _cr1 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir1 ), UNICHAR ( 10 ) & "mais recente: " & _ir1 ) & UNICHAR ( 10 ) & "carteira de " & FORMAT ( MAX ( CRM_Backup_Diario[Periodo] ), "dd/mm/yy" ) ) ),
+				        ROW ( "Pagina", "pg_onboarding_09", "Tela", "Onboarding - WhatsApp", "Ordem", 33, "Fonte", "WhatsApp - atendimentos (WhatsApp)", "Data", _dr9, "Quando", IF ( ISBLANK ( _dr9 ), BLANK (), FORMAT ( _dr9, IF ( _dr9 = INT ( _dr9 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr9 ), BLANK (), _cr9 & " dos atendimentos (WhatsApp)" & IF ( NOT ISBLANK ( _ir9 ), UNICHAR ( 10 ) & "mais recente: " & _ir9 ) ) ),
+				        ROW ( "Pagina", "pg_onboarding_10", "Tela", "Onboarding - Templates Enviados", "Ordem", 34, "Fonte", "WhatsApp - templates enviados (WhatsApp)", "Data", _dr10, "Quando", IF ( ISBLANK ( _dr10 ), BLANK (), FORMAT ( _dr10, IF ( _dr10 = INT ( _dr10 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr10 ), BLANK (), _cr10 & " dos templates enviados (WhatsApp)" & IF ( NOT ISBLANK ( _ir10 ), UNICHAR ( 10 ) & "mais recente: " & _ir10 ) ) ),
+				        ROW ( "Pagina", "pg_onboarding_11", "Tela", "Onboarding - Volumetria", "Ordem", 35, "Fonte", "WhatsApp - atendimentos (WhatsApp)", "Data", _dr9, "Quando", IF ( ISBLANK ( _dr9 ), BLANK (), FORMAT ( _dr9, IF ( _dr9 = INT ( _dr9 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr9 ), BLANK (), _cr9 & " dos atendimentos (WhatsApp)" & IF ( NOT ISBLANK ( _ir9 ), UNICHAR ( 10 ) & "mais recente: " & _ir9 ) ) ),
+				        ROW ( "Pagina", "pg_ongoing_01", "Tela", "Ongoing - Performance", "Ordem", 36, "Fonte", "Tickets (Helpdesk)", "Data", _dr5, "Quando", IF ( ISBLANK ( _dr5 ), BLANK (), FORMAT ( _dr5, IF ( _dr5 = INT ( _dr5 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr5 ), BLANK (), _cr5 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir5 ), UNICHAR ( 10 ) & "mais recente: " & _ir5 ) ) ),
+				        ROW ( "Pagina", "pg_ongoing_02", "Tela", "Ongoing - NoShow", "Ordem", 37, "Fonte", "Tickets (Helpdesk)", "Data", _dr1, "Quando", IF ( ISBLANK ( _dr1 ), BLANK (), FORMAT ( _dr1, IF ( _dr1 = INT ( _dr1 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr1 ), BLANK (), _cr1 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir1 ), UNICHAR ( 10 ) & "mais recente: " & _ir1 ) ) ),
+				        ROW ( "Pagina", "pg_ongoing_03", "Tela", "Ongoing - Cancelamento AF", "Ordem", 38, "Fonte", "Cancelamentos (Helpdesk)", "Data", _dr4, "Quando", IF ( ISBLANK ( _dr4 ), BLANK (), FORMAT ( _dr4, IF ( _dr4 = INT ( _dr4 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr4 ), BLANK (), _cr4 & " dos cancelamentos (Helpdesk)" & IF ( NOT ISBLANK ( _ir4 ), UNICHAR ( 10 ) & "mais recente: " & _ir4 ) ) ),
+				        ROW ( "Pagina", "pg_ongoing_04", "Tela", "Ongoing - Cancelamento KP", "Ordem", 39, "Fonte", "Cancelamentos (Helpdesk)", "Data", _dr4, "Quando", IF ( ISBLANK ( _dr4 ), BLANK (), FORMAT ( _dr4, IF ( _dr4 = INT ( _dr4 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr4 ), BLANK (), _cr4 & " dos cancelamentos (Helpdesk)" & IF ( NOT ISBLANK ( _ir4 ), UNICHAR ( 10 ) & "mais recente: " & _ir4 ) ) ),
+				        ROW ( "Pagina", "pg_ongoing_05", "Tela", "Ongoing - SLA das Atividades", "Ordem", 40, "Fonte", "Atividades (CRM)", "Data", _dr7, "Quando", IF ( ISBLANK ( _dr7 ), BLANK (), FORMAT ( _dr7, IF ( _dr7 = INT ( _dr7 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr7 ), BLANK (), _cr7 & " das atividades (CRM)" & IF ( NOT ISBLANK ( _ir7 ), UNICHAR ( 10 ) & "mais recente: " & _ir7 ) ) ),
+				        ROW ( "Pagina", "pg_ongoing_06", "Tela", "Ongoing - Ligações", "Ordem", 41, "Fonte", "Ligações", "Data", _dr8, "Quando", IF ( ISBLANK ( _dr8 ), BLANK (), FORMAT ( _dr8, IF ( _dr8 = INT ( _dr8 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr8 ), BLANK (), _cr8 & " das ligações" & IF ( NOT ISBLANK ( _ir8 ), UNICHAR ( 10 ) & "mais recente: " & _ir8 ) ) ),
+				        ROW ( "Pagina", "pg_ongoing_07", "Tela", "Ongoing - Migrações Recebidas", "Ordem", 42, "Fonte", "Atividades (CRM)", "Data", _dr7, "Quando", IF ( ISBLANK ( _dr7 ), BLANK (), FORMAT ( _dr7, IF ( _dr7 = INT ( _dr7 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr7 ), BLANK (), _cr7 & " das atividades (CRM)" & IF ( NOT ISBLANK ( _ir7 ), UNICHAR ( 10 ) & "mais recente: " & _ir7 ) ) ),
+				        ROW ( "Pagina", "pg_ongoing_08", "Tela", "Ongoing - Últimos Contatos", "Ordem", 43, "Fonte", "Tickets (Helpdesk)", "Data", _dr1, "Quando", IF ( ISBLANK ( _dr1 ), BLANK (), FORMAT ( _dr1, IF ( _dr1 = INT ( _dr1 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr1 ), BLANK (), _cr1 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir1 ), UNICHAR ( 10 ) & "mais recente: " & _ir1 ) & UNICHAR ( 10 ) & "carteira de " & FORMAT ( MAX ( CRM_Backup_Diario[Periodo] ), "dd/mm/yy" ) ) ),
+				        ROW ( "Pagina", "pg_ongoing_09", "Tela", "Ongoing - WhatsApp", "Ordem", 44, "Fonte", "WhatsApp - atendimentos (WhatsApp)", "Data", _dr9, "Quando", IF ( ISBLANK ( _dr9 ), BLANK (), FORMAT ( _dr9, IF ( _dr9 = INT ( _dr9 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr9 ), BLANK (), _cr9 & " dos atendimentos (WhatsApp)" & IF ( NOT ISBLANK ( _ir9 ), UNICHAR ( 10 ) & "mais recente: " & _ir9 ) ) ),
+				        ROW ( "Pagina", "pg_ongoing_10", "Tela", "Ongoing - Templates Enviados", "Ordem", 45, "Fonte", "WhatsApp - templates enviados (WhatsApp)", "Data", _dr10, "Quando", IF ( ISBLANK ( _dr10 ), BLANK (), FORMAT ( _dr10, IF ( _dr10 = INT ( _dr10 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr10 ), BLANK (), _cr10 & " dos templates enviados (WhatsApp)" & IF ( NOT ISBLANK ( _ir10 ), UNICHAR ( 10 ) & "mais recente: " & _ir10 ) ) ),
+				        ROW ( "Pagina", "pg_ongoing_11", "Tela", "Ongoing - Volumetria", "Ordem", 46, "Fonte", "WhatsApp - atendimentos (WhatsApp)", "Data", _dr9, "Quando", IF ( ISBLANK ( _dr9 ), BLANK (), FORMAT ( _dr9, IF ( _dr9 = INT ( _dr9 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr9 ), BLANK (), _cr9 & " dos atendimentos (WhatsApp)" & IF ( NOT ISBLANK ( _ir9 ), UNICHAR ( 10 ) & "mais recente: " & _ir9 ) ) ),
+				        ROW ( "Pagina", "pg_relacionamento_01", "Tela", "Relacionamento - Cancelamentos", "Ordem", 47, "Fonte", "Cancelamentos (Helpdesk)", "Data", _dr4, "Quando", IF ( ISBLANK ( _dr4 ), BLANK (), FORMAT ( _dr4, IF ( _dr4 = INT ( _dr4 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr4 ), BLANK (), _cr4 & " dos cancelamentos (Helpdesk)" & IF ( NOT ISBLANK ( _ir4 ), UNICHAR ( 10 ) & "mais recente: " & _ir4 ) ) ),
+				        ROW ( "Pagina", "pg_relacionamento_02", "Tela", "Relacionamento - Cancelamentos Atendidos", "Ordem", 48, "Fonte", "Cancelamentos (Helpdesk)", "Data", _dr4, "Quando", IF ( ISBLANK ( _dr4 ), BLANK (), FORMAT ( _dr4, IF ( _dr4 = INT ( _dr4 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr4 ), BLANK (), _cr4 & " dos cancelamentos (Helpdesk)" & IF ( NOT ISBLANK ( _ir4 ), UNICHAR ( 10 ) & "mais recente: " & _ir4 ) ) ),
+				        ROW ( "Pagina", "pg_relacionamento_03", "Tela", "Relacionamento - CSAT Ouvidoria", "Ordem", 49, "Fonte", "Pesquisas de satisfação (Helpdesk)", "Data", _dr2, "Quando", IF ( ISBLANK ( _dr2 ), BLANK (), FORMAT ( _dr2, IF ( _dr2 = INT ( _dr2 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr2 ), BLANK (), _cr2 & " das avaliações (Helpdesk)" & IF ( NOT ISBLANK ( _ir2 ), UNICHAR ( 10 ) & "mais recente: " & _ir2 ) ) ),
+				        ROW ( "Pagina", "pg_relacionamento_04", "Tela", "Relacionamento - Clientes", "Ordem", 50, "Fonte", "Cancelamentos (Helpdesk)", "Data", _dr4, "Quando", IF ( ISBLANK ( _dr4 ), BLANK (), FORMAT ( _dr4, IF ( _dr4 = INT ( _dr4 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr4 ), BLANK (), _cr4 & " dos cancelamentos (Helpdesk)" & IF ( NOT ISBLANK ( _ir4 ), UNICHAR ( 10 ) & "mais recente: " & _ir4 ) ) ),
+				        ROW ( "Pagina", "pg_relacionamento_05", "Tela", "Relacionamento - Reversão × Concessões", "Ordem", 51, "Fonte", "Cancelamentos (Helpdesk)", "Data", _dr4, "Quando", IF ( ISBLANK ( _dr4 ), BLANK (), FORMAT ( _dr4, IF ( _dr4 = INT ( _dr4 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr4 ), BLANK (), _cr4 & " dos cancelamentos (Helpdesk)" & IF ( NOT ISBLANK ( _ir4 ), UNICHAR ( 10 ) & "mais recente: " & _ir4 ) ) ),
+				        ROW ( "Pagina", "pg_suporte_01", "Tela", "Suporte - Resultados", "Ordem", 21, "Fonte", "Tickets (Helpdesk)", "Data", _dr5, "Quando", IF ( ISBLANK ( _dr5 ), BLANK (), FORMAT ( _dr5, IF ( _dr5 = INT ( _dr5 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr5 ), BLANK (), _cr5 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir5 ), UNICHAR ( 10 ) & "mais recente: " & _ir5 ) ) ),
+				        ROW ( "Pagina", "pg_suporte_02", "Tela", "Suporte - CSAT", "Ordem", 22, "Fonte", "Pesquisas de satisfação (Helpdesk)", "Data", _dr2, "Quando", IF ( ISBLANK ( _dr2 ), BLANK (), FORMAT ( _dr2, IF ( _dr2 = INT ( _dr2 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr2 ), BLANK (), _cr2 & " das avaliações (Helpdesk)" & IF ( NOT ISBLANK ( _ir2 ), UNICHAR ( 10 ) & "mais recente: " & _ir2 ) ) ),
+				        ROW ( "Pagina", "pg_suporte_03", "Tela", "Suporte - Atendimentos", "Ordem", 23, "Fonte", "Tickets (Helpdesk)", "Data", _dr5, "Quando", IF ( ISBLANK ( _dr5 ), BLANK (), FORMAT ( _dr5, IF ( _dr5 = INT ( _dr5 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr5 ), BLANK (), _cr5 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir5 ), UNICHAR ( 10 ) & "mais recente: " & _ir5 ) ) ),
+				        ROW ( "Pagina", "pg_suporte_04", "Tela", "Suporte - Empresas", "Ordem", 24, "Fonte", "Tickets (Helpdesk)", "Data", _dr5, "Quando", IF ( ISBLANK ( _dr5 ), BLANK (), FORMAT ( _dr5, IF ( _dr5 = INT ( _dr5 ), "dd/mm/yy", "dd/mm/yy hh:nn" ) ) ), "Item", IF ( ISBLANK ( _dr5 ), BLANK (), _cr5 & " dos tickets (Helpdesk)" & IF ( NOT ISBLANK ( _ir5 ), UNICHAR ( 10 ) & "mais recente: " & _ir5 ) ) )
+				    )
+				RETURN
+				    ADDCOLUMNS ( _t, "Texto", IF ( ISBLANK ( [Data] ), BLANK (), [Quando] & " · " & [Item] ) )
+
+	annotation PBI_Id = b15a1be711915e858b0048163f24f0fd
+

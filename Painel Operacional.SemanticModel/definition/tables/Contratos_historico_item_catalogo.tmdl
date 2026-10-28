@@ -1,0 +1,136 @@
+table Contratos_historico_item_catalogo
+	lineageTag: bdaf1956-ff6f-4213-bca4-23871b0fb0d6
+
+	column periodo
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: b7641b9d-8ea1-4e8f-92ef-1f87320207df
+		summarizeBy: none
+		sourceColumn: periodo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: b1357a6c-ba5f-48b9-8f02-b12f7b24b7cd
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column empresa_id
+		dataType: int64
+		formatString: 0
+		lineageTag: ee683be2-f30c-43b0-9610-ed4f8dae8fff
+		summarizeBy: sum
+		sourceColumn: empresa_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column linha_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 299568e9-0017-433c-9ccc-04ddf046c187
+		summarizeBy: sum
+		sourceColumn: linha_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome
+		dataType: string
+		lineageTag: d3c46445-841e-4d68-8d2e-0f1af12abb49
+		summarizeBy: none
+		sourceColumn: nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column unidade
+		dataType: string
+		lineageTag: e563af53-49a7-4f91-9b22-5a71adde9328
+		summarizeBy: none
+		sourceColumn: unidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column ativo
+		dataType: int64
+		formatString: 0
+		lineageTag: 4e484756-79d0-4ce5-9c79-089593b20624
+		summarizeBy: sum
+		sourceColumn: ativo
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 23969951-aaca-465f-93ea-af37960303e9
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 3e412787-43da-4697-97d2-3730db97434c
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column vr_unitario
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: e084a661-6890-4817-bcb6-c79e7c542945
+		summarizeBy: sum
+		sourceColumn: vr_unitario
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column descricao
+		dataType: string
+		lineageTag: 6fc841b0-3331-4667-83c5-b3721551bdcf
+		summarizeBy: none
+		sourceColumn: descricao
+
+		annotation SummarizationSetBy = Automatic
+
+	column codigo_servico
+		dataType: string
+		lineageTag: 98e0420e-f01a-4683-bd0d-a12022d05529
+		summarizeBy: none
+		sourceColumn: codigo_servico
+
+		annotation SummarizationSetBy = Automatic
+
+	column iss_aliquota
+		dataType: double
+		lineageTag: de4fd580-87de-4ab1-bb03-038669606bba
+		summarizeBy: sum
+		sourceColumn: iss_aliquota
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Contratos_historico_item_catalogo = m
+		mode: import
+		queryGroup: Contratos
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Contratos_historico_item_catalo",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"periodo", type datetime}, {"id", Int64.Type}, {"empresa_id", Int64.Type}, {"linha_id", Int64.Type}, {"nome", type text}, {"unidade", type text}, {"ativo", Int64.Type}, {"created_at", type datetime}, {"updated_at", type datetime}, {"vr_unitario", type number}, {"descricao", type text}, {"codigo_servico", type text}, {"iss_aliquota", type number}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

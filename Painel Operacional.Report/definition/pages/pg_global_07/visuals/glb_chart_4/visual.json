@@ -1,0 +1,531 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "glb_chart_4",
+  "position": {
+    "x": 1106,
+    "y": 692,
+    "z": 58038,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 58038
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dTTFV"
+                    }
+                  },
+                  "Property": "ID Legado"
+                }
+              },
+              "queryRef": "dTTFV.ID Legado",
+              "nativeQueryRef": "ID Legado",
+              "displayName": "ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dTTFV"
+                    }
+                  },
+                  "Property": "Cliente"
+                }
+              },
+              "queryRef": "dTTFV.Cliente",
+              "nativeQueryRef": "Cliente",
+              "displayName": "Cliente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dTTFV"
+                    }
+                  },
+                  "Property": "CS"
+                }
+              },
+              "queryRef": "dTTFV.CS",
+              "nativeQueryRef": "CS",
+              "displayName": "CS"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dTTFV"
+                    }
+                  },
+                  "Property": "Setor do CS"
+                }
+              },
+              "queryRef": "dTTFV.Setor do CS",
+              "nativeQueryRef": "Setor do CS",
+              "displayName": "Setor"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dTTFV"
+                    }
+                  },
+                  "Property": "Data de Registro"
+                }
+              },
+              "queryRef": "dTTFV.Data de Registro",
+              "nativeQueryRef": "Data de Registro",
+              "displayName": "Registro"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dTTFV"
+                    }
+                  },
+                  "Property": "Data do TTFV"
+                }
+              },
+              "queryRef": "dTTFV.Data do TTFV",
+              "nativeQueryRef": "Data do TTFV",
+              "displayName": "TTFV"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dTTFV"
+                    }
+                  },
+                  "Property": "Dias até o TTFV"
+                }
+              },
+              "queryRef": "dTTFV.Dias até o TTFV",
+              "nativeQueryRef": "Dias até o TTFV",
+              "displayName": "Dias"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dTTFV"
+                  }
+                },
+                "Property": "Data do TTFV"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "58.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dTTFV.ID Legado"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "256.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dTTFV.Cliente"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "128.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dTTFV.CS"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "128.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dTTFV.Setor do CS"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "72.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dTTFV.Data de Registro"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "72.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dTTFV.Data do TTFV"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "46.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dTTFV.Dias até o TTFV"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Clientes que atingiram o TTFV no período'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Pelo dia em que atingiu · Dias = do registro até o TTFV'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "8d3b0594a320d3c89f7f",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dTTFV"
+              }
+            },
+            "Property": "ID Legado"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "e290b88f6a88fb98a9f7",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dTTFV"
+              }
+            },
+            "Property": "Cliente"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "284adcc7331ab55b0eb6",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dTTFV"
+              }
+            },
+            "Property": "CS"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "1151c2bface72ea8d6e5",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dTTFV"
+              }
+            },
+            "Property": "Setor do CS"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "e27684f65c39f06ec936",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dTTFV"
+              }
+            },
+            "Property": "Data de Registro"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "5e9553b4c8788745f1c7",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dTTFV"
+              }
+            },
+            "Property": "Data do TTFV"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "2682098856555be3de73",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dTTFV"
+              }
+            },
+            "Property": "Dias até o TTFV"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

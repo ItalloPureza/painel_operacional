@@ -1,0 +1,32 @@
+table dBuscaCliente
+	isHidden
+	lineageTag: e06dfe74-7428-50d7-af69-4f3912526886
+
+	column ID
+		lineageTag: 44ea0182-1476-5d2d-8f04-90e1111d2379
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column CNPJ
+		lineageTag: 5dab50dd-1205-5ea4-94e4-e10bf3079ba0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CNPJ]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dBuscaCliente = calculated
+		mode: import
+		source =
+				
+				-- ID Legado -> CNPJ (dígitos), do retrato do CRM. Base da busca por CNPJ das tabelas sem CNPJ.
+				-- Gerado por scripts/busca_cliente.py.
+				SELECTCOLUMNS(
+				    FILTER( GROUPBY( CRM_Backup_Diario, CRM_Backup_Diario[ID_Legado], "@c", MAXX( CURRENTGROUP(), CRM_Backup_Diario[CNPJ] ) ),
+				        TRIM( CRM_Backup_Diario[ID_Legado] ) <> "" ),
+				    "ID", TRIM( CRM_Backup_Diario[ID_Legado] ),
+				    "CNPJ", SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( TRIM( [@c] ), ".", "" ), "/", "" ), "-", "" ), " ", "" ) )
+

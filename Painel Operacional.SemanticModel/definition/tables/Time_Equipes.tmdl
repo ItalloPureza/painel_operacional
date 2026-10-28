@@ -1,0 +1,77 @@
+table Time_Equipes
+	lineageTag: d77e09f5-fb3c-4f77-a864-5d2a104b7b12
+
+	column equipe_id
+		dataType: int64
+		formatString: 0
+		lineageTag: d1f00575-cd5b-47ad-8864-6c2cae8e79fd
+		summarizeBy: sum
+		sourceColumn: equipe_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column usuario_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 334a2eed-f433-4073-bd10-0c8b23316a90
+		summarizeBy: sum
+		sourceColumn: usuario_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column papel
+		dataType: string
+		lineageTag: 6d5a02ca-e270-4153-a5b5-4465dfa570a4
+		summarizeBy: none
+		sourceColumn: papel
+
+		annotation SummarizationSetBy = Automatic
+
+	column criado_em
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 2efe6974-cab7-46bf-8491-7615d297130c
+		summarizeBy: none
+		sourceColumn: criado_em
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome_equipe
+		dataType: string
+		lineageTag: 61a77ce6-4007-4306-b42a-62937be3a8ec
+		summarizeBy: none
+		sourceColumn: nome_equipe
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome_usuario
+		dataType: string
+		lineageTag: 7ec42363-7680-4392-aaca-9ed95c075910
+		summarizeBy: none
+		sourceColumn: nome_usuario
+
+		annotation SummarizationSetBy = Automatic
+
+	column email
+		dataType: string
+		lineageTag: 6e60ce97-09da-44ff-8ff0-d3a9b2d13670
+		summarizeBy: none
+		sourceColumn: email
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Time_Equipes = m
+		mode: import
+		queryGroup: Estrutura
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Time_Equipes",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"equipe_id", Int64.Type}, {"usuario_id", Int64.Type}, {"papel", type text}, {"criado_em", type datetime}, {"nome_equipe", type text}, {"nome_usuario", type text}, {"email", type text}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

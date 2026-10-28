@@ -1,0 +1,45 @@
+table dMapaSetor
+	lineageTag: 63ef3681-f884-4783-a1d0-df2114158bed
+
+	column Equipe
+		lineageTag: 42960bbb-0547-4d20-984b-155779ca4097
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Equipe]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor
+		lineageTag: 59c2afe7-789f-4f5d-92d8-e4484daaf349
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Setor]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dMapaSetor = calculated
+		mode: import
+		source =
+				
+				-- Equipe -> setor do PAINEL, a partir do setor cadastrado no RH (Time_EquipeSetor).
+				-- Equipe nova/renomeada no RH entra sozinha; só setor NOVO do RH precisa entrar aqui.
+				-- Setores do RH sem tela no painel (Venda, Pré venda, Desenvolvimento...) ficam de fora.
+				VAR t =
+				    ADDCOLUMNS(
+				        Time_EquipeSetor,
+				        "@Setor",
+				            SWITCH(
+				                Time_EquipeSetor[setor_id],
+				                2, "Ongoing",            -- RH: Ongoing
+				                3, "Onboarding",         -- RH: Onboarding
+				                4, "Suporte",            -- RH: Suporte Técnico
+				                5, "Homologação",        -- RH: Homologação
+				                6, "Relacionamento",     -- RH: Relacionamento com o Cliente
+				                17, "Lives"              -- RH: Live
+				            )
+				    )
+				RETURN
+				    SELECTCOLUMNS( FILTER( t, NOT ISBLANK( [@Setor] ) ), "Equipe", Time_EquipeSetor[Equipe], "Setor", [@Setor] )
+
+	annotation PBI_Id = 8f8721a4cd1043ec816277acda04a4f9
+

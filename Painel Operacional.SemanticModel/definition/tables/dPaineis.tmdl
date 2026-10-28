@@ -1,0 +1,102 @@
+table dPaineis
+	lineageTag: 7c2c739d-8f81-5424-a8cf-83b73f579c32
+
+	column Busca
+		lineageTag: 8bad64ba-312a-5d28-ae32-af2cfa3023fe
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Busca]
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Página
+		lineageTag: a6d5a2c3-fc20-50a7-bca3-5f9ecd9d79f5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Página]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor
+		lineageTag: d578681f-3be0-586e-8e7a-3c4ad54dccb1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Setor]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordem
+		formatString: 0
+		lineageTag: 984d9d73-9b5f-53cf-9f88-7ed35da45417
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ordem]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dPaineis = calculated
+		mode: import
+		source =
+				
+				-- Telas do painel para a busca da HomePage (texto da lista = tela (setor) · palavras-chave).
+				-- Gerado por scripts/busca_paineis.py a partir do pages.json — rodar de novo ao criar/renomear telas.
+				DATATABLE( "Busca", STRING, "Página", STRING, "Setor", STRING, "Ordem", INTEGER, {
+				        { "Cohort AF (Gerência) · retenção", "Gerência - Cohort AF", "Gerência", 1 },
+				        { "Cohort KP (Gerência) · retenção Kappa", "Gerência - Cohort KP", "Gerência", 2 },
+				        { "Inativações (Gerência) · cancelamento sem ticket", "Gerência - Inativações", "Gerência", 3 },
+				        { "Resumo Ongoing (Gerência) · resumo, Ongoing, carteira, logo churn, SLA, migrações, 120 dias, receita perdida", "Gerência - Resumo Ongoing", "Gerência", 4 },
+				        { "Resumo Onboarding (Gerência) · resumo, Onboarding, carteira, logo churn, SLA, migrações, 120 dias, receita perdida, consultorias, faltas, contatos, alinhamento, tickets no prazo", "Gerência - Resumo Onboarding", "Gerência", 5 },
+				        { "Resumo Alfa e Kappa (Gerência) · resumo, Alfa, Kappa, empresa, carteira, churn, receita perdida, eContínuo, CSAT, solicitações de cancelamento, chat, treinamentos Kappa", "Gerência - Resumo Alfa e Kappa", "Gerência", 6 },
+				        { "Cancelamento AF (Global) · churn", "Global - Cancelamento AF", "Global", 7 },
+				        { "Cancelamento KP (Global) · churn Kappa", "Global - Cancelamento KP", "Global", 8 },
+				        { "KP por Setor (Global) · churn Kappa por área, Onboarding, Ongoing, base KP", "Global - KP por Setor", "Global", 9 },
+				        { "Alteração de Receita (Global) · perda de receita, desconto, isenção", "Global - Alteração de Receita", "Global", 10 },
+				        { "Idade dos Clientes (Global)", "Global - Idade dos Clientes", "Global", 11 },
+				        { "Carteiras (Global) · Contratos, mensalidade, status de saúde", "Global - Carteiras", "Global", 12 },
+				        { "Carteiras - Clientes (Global) · Contratos, mensalidade, histórico do cliente", "Global - Carteiras - Clientes", "Global", 13 },
+				        { "TTFV (Global) · Time to First Value", "Global - TTFV", "Global", 14 },
+				        { "Clientes do Legado (Global) · API Cruzeiro, consulta de clientes, status de saúde", "Global - Clientes do Legado", "Global", 15 },
+				        { "Migrações dos Clientes (Global) · migração, tickets por cliente migrado, homologação do App, falta, remarcação, checkout", "Global - Migrações dos Clientes", "Global", 16 },
+				        { "Participação (Lives)", "Lives - Participação", "Lives", 17 },
+				        { "Desempenho das Lives (Lives)", "Lives - Desempenho das Lives", "Lives", 18 },
+				        { "Clientes (Lives)", "Lives - Clientes", "Lives", 19 },
+				        { "CSAT (Lives) · nota, avaliação", "Lives - CSAT", "Lives", 20 },
+				        { "Resultados (Suporte)", "Suporte - Resultados", "Suporte", 21 },
+				        { "CSAT (Suporte) · nota, avaliação", "Suporte - CSAT", "Suporte", 22 },
+				        { "Atendimentos (Suporte)", "Suporte - Atendimentos", "Suporte", 23 },
+				        { "Empresas (Suporte)", "Suporte - Empresas", "Suporte", 24 },
+				        { "Performance (Onboarding)", "Onboarding - Performance", "Onboarding", 25 },
+				        { "NoShow (Onboarding)", "Onboarding - NoShow", "Onboarding", 26 },
+				        { "Cancelamento AF (Onboarding)", "Onboarding - Cancelamento AF", "Onboarding", 27 },
+				        { "Cancelamento KP (Onboarding)", "Onboarding - Cancelamento KP", "Onboarding", 28 },
+				        { "SLA das Atividades (Onboarding)", "Onboarding - SLA das Atividades", "Onboarding", 29 },
+				        { "Migrações (Onboarding) · TTFV", "Onboarding - Migrações", "Onboarding", 30 },
+				        { "Ligações (Onboarding)", "Onboarding - Ligações", "Onboarding", 31 },
+				        { "Últimos Contatos (Onboarding)", "Onboarding - Últimos Contatos", "Onboarding", 32 },
+				        { "WhatsApp (Onboarding)", "Onboarding - WhatsApp", "Onboarding", 33 },
+				        { "Templates Enviados (Onboarding) · WhatsApp, disparos, campanhas", "Onboarding - Templates Enviados", "Onboarding", 34 },
+				        { "Volumetria (Onboarding) · WhatsApp, WhatsApp, mensagens por dia, volumetria, triagem, continuidade dos disparos", "Onboarding - Volumetria", "Onboarding", 35 },
+				        { "Performance (Ongoing)", "Ongoing - Performance", "Ongoing", 36 },
+				        { "NoShow (Ongoing)", "Ongoing - NoShow", "Ongoing", 37 },
+				        { "Cancelamento AF (Ongoing)", "Ongoing - Cancelamento AF", "Ongoing", 38 },
+				        { "Cancelamento KP (Ongoing)", "Ongoing - Cancelamento KP", "Ongoing", 39 },
+				        { "SLA das Atividades (Ongoing)", "Ongoing - SLA das Atividades", "Ongoing", 40 },
+				        { "Ligações (Ongoing)", "Ongoing - Ligações", "Ongoing", 41 },
+				        { "Migrações Recebidas (Ongoing)", "Ongoing - Migrações Recebidas", "Ongoing", 42 },
+				        { "Últimos Contatos (Ongoing)", "Ongoing - Últimos Contatos", "Ongoing", 43 },
+				        { "WhatsApp (Ongoing)", "Ongoing - WhatsApp", "Ongoing", 44 },
+				        { "Templates Enviados (Ongoing) · WhatsApp, disparos, campanhas", "Ongoing - Templates Enviados", "Ongoing", 45 },
+				        { "Volumetria (Ongoing) · WhatsApp, WhatsApp, mensagens por dia, volumetria, triagem, continuidade dos disparos", "Ongoing - Volumetria", "Ongoing", 46 },
+				        { "Cancelamentos (Relacionamento)", "Relacionamento - Cancelamentos", "Relacionamento", 47 },
+				        { "Cancelamentos Atendidos (Relacionamento)", "Relacionamento - Cancelamentos Atendidos", "Relacionamento", 48 },
+				        { "CSAT Ouvidoria (Relacionamento) · nota, avaliação, ouvidoria", "Relacionamento - CSAT Ouvidoria", "Relacionamento", 49 },
+				        { "Clientes (Relacionamento)", "Relacionamento - Clientes", "Relacionamento", 50 },
+				        { "Reversão × Concessões (Relacionamento) · MRR revertido, desconto, redução, isenção, negociação, concessão", "Relacionamento - Reversão × Concessões", "Relacionamento", 51 },
+				        { "App (Homologação)", "Homologação - App", "Homologação", 52 },
+				        { "Guias (Homologação)", "Homologação - Guias", "Homologação", 53 },
+				        { "CSAT (Homologação) · nota, avaliação", "Homologação - CSAT", "Homologação", 54 },
+				        { "Tempo de Entrega APP (Homologação)", "Homologação - Tempo de Entrega APP", "Homologação", 55 },
+				        { "Saúde dos dados", "Saúde dos dados", "Saúde dos dados", 56 }
+				    } )
+

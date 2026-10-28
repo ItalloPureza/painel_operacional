@@ -1,0 +1,29 @@
+table dSetorKC
+	lineageTag: 575050bc-5716-5c40-a5c1-804751191770
+
+	column Setor
+		lineageTag: a0ce8cf2-3d49-5368-8712-5caec7bfe56b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Setor]
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordem
+		isHidden
+		formatString: 0
+		lineageTag: 7ea92835-5e8f-505b-b551-d0e6dd7dbbc8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ordem]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dSetorKC = calculated
+		mode: import
+		source =
+				
+				-- Linhas fixas do % de cancelamento KP por setor (Global - KP por Setor). gerar_kappa_area.py.
+				DATATABLE( "Setor", STRING, "Ordem", INTEGER, { { "Onboarding", 1 }, { "Ongoing", 2 }, { "Outros / sem setor", 3 } } )
+

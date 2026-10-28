@@ -1,0 +1,531 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "glb_chart_1",
+  "position": {
+    "x": 292,
+    "y": 296,
+    "z": 58036,
+    "height": 360,
+    "width": 782,
+    "tabOrder": 58036
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Backup_Diario"
+                    }
+                  },
+                  "Property": "ID_Legado"
+                }
+              },
+              "queryRef": "CRM_Backup_Diario.ID_Legado",
+              "nativeQueryRef": "ID_Legado",
+              "displayName": "ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Backup_Diario"
+                    }
+                  },
+                  "Property": "Nome_Fantasia"
+                }
+              },
+              "queryRef": "CRM_Backup_Diario.Nome_Fantasia",
+              "nativeQueryRef": "Nome_Fantasia",
+              "displayName": "Cliente"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Backup_Diario"
+                    }
+                  },
+                  "Property": "CS no Dia"
+                }
+              },
+              "queryRef": "CRM_Backup_Diario.CS no Dia",
+              "nativeQueryRef": "CS no Dia",
+              "displayName": "CS"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CRM_Backup_Diario"
+                    }
+                  },
+                  "Property": "Status de Saúde no Dia"
+                }
+              },
+              "queryRef": "CRM_Backup_Diario.Status de Saúde no Dia",
+              "nativeQueryRef": "Status de Saúde no Dia",
+              "displayName": "Status de Saúde"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Contratos_historico_contratos"
+                    }
+                  },
+                  "Property": "Mensalidade Alfa (Contratos)"
+                }
+              },
+              "queryRef": "Contratos_historico_contratos.Mensalidade Alfa (Contratos)",
+              "nativeQueryRef": "Mensalidade Alfa (Contratos)",
+              "displayName": "AF"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Contratos_historico_contratos"
+                    }
+                  },
+                  "Property": "Mensalidade KP (Contratos)"
+                }
+              },
+              "queryRef": "Contratos_historico_contratos.Mensalidade KP (Contratos)",
+              "nativeQueryRef": "Mensalidade KP (Contratos)",
+              "displayName": "Kappa"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Contratos_historico_contratos"
+                    }
+                  },
+                  "Property": "Mensalidade Total (Contratos)"
+                }
+              },
+              "queryRef": "Contratos_historico_contratos.Mensalidade Total (Contratos)",
+              "nativeQueryRef": "Mensalidade Total (Contratos)",
+              "displayName": "Total"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Contratos_historico_contratos"
+                  }
+                },
+                "Property": "Mensalidade Total (Contratos)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "58.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Backup_Diario.ID_Legado"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "168.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Backup_Diario.Nome_Fantasia"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "84.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Backup_Diario.CS no Dia"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "90.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CRM_Backup_Diario.Status de Saúde no Dia"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "120.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Contratos_historico_contratos.Mensalidade Alfa (Contratos)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "120.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Contratos_historico_contratos.Mensalidade KP (Contratos)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "120.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Contratos_historico_contratos.Mensalidade Total (Contratos)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Clientes no dia da carteira'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Último dia do período com retrato do CRM e Contratos · CS do dia · clique num cliente para ver o histórico'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "4bb55cfac30ae17eb363",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "CRM_Backup_Diario"
+              }
+            },
+            "Property": "ID_Legado"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "b99cdfa5baaaefc0c34f",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "CRM_Backup_Diario"
+              }
+            },
+            "Property": "Nome_Fantasia"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "aa1a34ba1b6f6b37260d",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "CRM_Backup_Diario"
+              }
+            },
+            "Property": "CS no Dia"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "d9af26b002475ff9b040",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "CRM_Backup_Diario"
+              }
+            },
+            "Property": "Status de Saúde no Dia"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "e52c92d1d9006f10b728",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Contratos_historico_contratos"
+              }
+            },
+            "Property": "Mensalidade Alfa (Contratos)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "4bc113c6edfac2f9d306",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Contratos_historico_contratos"
+              }
+            },
+            "Property": "Mensalidade KP (Contratos)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "f02cc681abd661a87f61",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Contratos_historico_contratos"
+              }
+            },
+            "Property": "Mensalidade Total (Contratos)"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

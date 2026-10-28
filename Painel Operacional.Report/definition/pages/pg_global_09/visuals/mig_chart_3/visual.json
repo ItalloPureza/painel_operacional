@@ -1,0 +1,719 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "mig_chart_3",
+  "position": {
+    "x": 292,
+    "y": 296,
+    "z": 60061,
+    "height": 756,
+    "width": 1596,
+    "tabOrder": 60061
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "ID"
+                }
+              },
+              "queryRef": "fMigracoesClientes.ID",
+              "nativeQueryRef": "ID",
+              "displayName": "ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Cliente"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Cliente",
+              "nativeQueryRef": "Cliente",
+              "displayName": "Cliente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Situação da Migração"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Situação da Migração",
+              "nativeQueryRef": "Situação da Migração",
+              "displayName": "Migração"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Data da Migração"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Data da Migração",
+              "nativeQueryRef": "Data da Migração",
+              "displayName": "Migrou em"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Registro"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Registro",
+              "nativeQueryRef": "Registro",
+              "displayName": "Registro"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Dias até Migrar"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Dias até Migrar",
+              "nativeQueryRef": "Dias até Migrar",
+              "displayName": "Dias até migrar"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Responsável pelo Cliente"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Responsável pelo Cliente",
+              "nativeQueryRef": "Responsável pelo Cliente",
+              "displayName": "Responsável"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Tickets"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Tickets",
+              "nativeQueryRef": "Tickets",
+              "displayName": "Tickets"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Treinamento"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Treinamento",
+              "nativeQueryRef": "Treinamento",
+              "displayName": "Treinamento"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Sucesso do Cliente"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Sucesso do Cliente",
+              "nativeQueryRef": "Sucesso do Cliente",
+              "displayName": "Sucesso do Cliente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Consultoria: Sucesso"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Consultoria: Sucesso",
+              "nativeQueryRef": "Consultoria: Sucesso",
+              "displayName": "Consult. sucesso"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Consultoria: Falha"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Consultoria: Falha",
+              "nativeQueryRef": "Consultoria: Falha",
+              "displayName": "Consult. falha"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Consultoria: Outros"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Consultoria: Outros",
+              "nativeQueryRef": "Consultoria: Outros",
+              "displayName": "Consult. outros"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Suporte"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Suporte",
+              "nativeQueryRef": "Suporte",
+              "displayName": "Suporte"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Homologação"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Homologação",
+              "nativeQueryRef": "Homologação",
+              "displayName": "Homologação"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Outros Serviços"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Outros Serviços",
+              "nativeQueryRef": "Outros Serviços",
+              "displayName": "Outros"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fMigracoesClientes"
+                    }
+                  },
+                  "Property": "Homologação do App"
+                }
+              },
+              "queryRef": "fMigracoesClientes.Homologação do App",
+              "nativeQueryRef": "Homologação do App",
+              "displayName": "Homolog. App?"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fMigracoesClientes"
+                  }
+                },
+                "Property": "Data da Migração"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#264653'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "58.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.ID"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "227.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Cliente"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "113.5D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Situação da Migração"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "72.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Data da Migração"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "72.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Registro"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "74.63055066973345D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Dias até Migrar"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "121.92609529218103D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Responsável pelo Cliente"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Tickets"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "93.2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Treinamento"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "93.48355921561904D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Sucesso do Cliente"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "71.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Consultoria: Sucesso"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "71.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Consultoria: Falha"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "71.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Consultoria: Outros"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Suporte"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "102.49162289161035D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Homologação"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Outros Serviços"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "128.57138218304752D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fMigracoesClientes.Homologação do App"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Clientes migrados'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B2F33'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Pela data da migração · clientes registrados em 2026 · tickets do registro até a migração, sem os do robô (Assistente Virtual / bot)'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#566779'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

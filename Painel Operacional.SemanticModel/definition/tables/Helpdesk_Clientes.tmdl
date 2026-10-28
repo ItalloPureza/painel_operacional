@@ -1,0 +1,59 @@
+table Helpdesk_Clientes
+	lineageTag: ad5d589c-a797-4993-ae21-25fa301d8b10
+
+	column id
+		dataType: string
+		lineageTag: 9aa8aa6b-2ac5-4836-919f-78667e8bc058
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: d0ebbe42-1af3-4897-87fd-6cb273713903
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column email
+		dataType: string
+		lineageTag: 0c499b12-b6bb-4919-8577-35caac6cffc6
+		summarizeBy: none
+		sourceColumn: email
+
+		annotation SummarizationSetBy = Automatic
+
+	column idEmpresa
+		dataType: string
+		lineageTag: d08a1060-341c-430b-a57d-9f31304e1760
+		summarizeBy: none
+		sourceColumn: idEmpresa
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_extracao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 1d3f3a95-36e8-4147-8d70-4aa3e80b98a2
+		summarizeBy: none
+		sourceColumn: data_extracao
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Helpdesk_Clientes = m
+		mode: import
+		queryGroup: Helpdesk
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Helpdesk_Clientes",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"id", type text}, {"name", type text}, {"email", type text}, {"idEmpresa", type text}, {"data_extracao", type datetime}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

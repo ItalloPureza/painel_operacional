@@ -1,0 +1,114 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup CRM
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup Helpdesk
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup 'Gestão de Contratos'
+
+	annotation PBI_QueryGroupOrder = 2
+
+queryGroup Contratos
+
+	annotation PBI_QueryGroupOrder = 3
+
+queryGroup Estrutura
+
+	annotation PBI_QueryGroupOrder = 4
+
+queryGroup Telefonia
+
+	annotation PBI_QueryGroupOrder = 5
+
+queryGroup WhatsApp
+
+	annotation PBI_QueryGroupOrder = 6
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["CaminhoPlanilha","Time_Usuarios","CRM_Backup_Diario","CRM_Clientes_Atual","Meta_Def","Meta_Valor","CRM_Atividades","Helpdesk_Survey","Helpdesk_Tickets","Helpdesk_Cancelamentos","Helpdesk_Clientes","Helpdesk_Empresas","Helpdesk_Clientes_Empresas","Gestao_Contratos_AF_Prod","Gestao_Contratos_Gama_Prod","Gestao_Contratos_Tipos_Contrato","Atualizacao","Helpdesk_Chat","Ligacoes_API","Contratos_historico_status","Contratos_historico_Vendedor","Contratos_historico_plano","Contratos_historico_periodicidade","Contratos_historico_mercado","Contratos_historico_items","Contratos_historico_item_catalogo","Contratos_historico_indice_reajuste","Contratos_historico_gerente_conta","Contratos_historico_fones","Contratos_historico_emails","Contratos_historico_contratos","Time_Equipes","Time_EquipeSetor","WhatsApp_Atendimentos","WhatsApp_CSAT","WhatsApp_Envios","WhatsApp_Contatos","RH_ComposicaoMensal","Legado_Clientes","fConcessoes"]
+
+annotation PBI_ProTooling = ["DevMode","DaxQueryView_Desktop"]
+
+ref table Time_Usuarios
+ref table CRM_Backup_Diario
+ref table CRM_Atividades
+ref table Helpdesk_Survey
+ref table Helpdesk_Tickets
+ref table Helpdesk_Cancelamentos
+ref table Helpdesk_Clientes
+ref table Helpdesk_Empresas
+ref table Helpdesk_Clientes_Empresas
+ref table Gestao_Contratos_AF_Prod
+ref table Gestao_Contratos_Gama_Prod
+ref table Gestao_Contratos_Tipos_Contrato
+ref table Atualizacao
+ref table Helpdesk_Chat
+ref table Ligacoes_API
+ref table Contratos_historico_status
+ref table Contratos_historico_Vendedor
+ref table Contratos_historico_plano
+ref table Contratos_historico_periodicidade
+ref table Contratos_historico_mercado
+ref table Contratos_historico_items
+ref table Contratos_historico_item_catalogo
+ref table Contratos_historico_indice_reajuste
+ref table Contratos_historico_gerente_conta
+ref table Contratos_historico_fones
+ref table Contratos_historico_emails
+ref table Contratos_historico_contratos
+ref table Calendario
+ref table Time_Equipes
+ref table dMapaSetor
+ref table dSetorPagina
+ref table dDeParaOwnerTeam
+ref table dPessoaSetor
+ref table Time_EquipeSetor
+ref table dAcessoSetor
+ref table WhatsApp_Atendimentos
+ref table WhatsApp_CSAT
+ref table WhatsApp_Envios
+ref table WhatsApp_Contatos
+ref table dColaborador
+ref table dSaudeTabelas
+ref table dPaginaTabelas
+ref table dCarteira
+ref table dTTFV
+ref table fGlobalCancelamentos
+ref table fGlobalReceita
+ref table fCohort
+ref table dMesDeVida
+ref table fInativacoes
+ref table fPeriodos
+ref table dBuscaCliente
+ref table dReferenciaDados
+ref table dSetor
+ref table dPaineis
+ref table Competência
+ref table CRM_Clientes_Atual
+ref table Meta_Def
+ref table Meta_Valor
+ref table Meta_Vinculo
+ref table RH_ComposicaoMensal
+ref table dColaboradorMes
+ref table Legado_Clientes
+ref table fMigracoesClientes
+ref table fConcessoes
+ref table dSetorKC
+ref table dAnalistaRelacionamento
+
+ref role Setor
+
+ref cultureInfo pt-BR
+

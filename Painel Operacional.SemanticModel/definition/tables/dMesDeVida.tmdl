@@ -1,0 +1,28 @@
+table dMesDeVida
+	lineageTag: 4bf107e4-9761-5d5a-a8e4-99bcef91c439
+
+	column 'Nº do Mês'
+		formatString: 0
+		lineageTag: be142100-3faf-5c6c-86d2-080a793e1a6e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nº do Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês de Vida'
+		lineageTag: d0a1dd84-821b-59a0-b3f9-95ec200faa16
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mês de Vida]
+		sortByColumn: 'Nº do Mês'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dMesDeVida = calculated
+		mode: import
+		source =
+				
+				-- Colunas da matriz do cohort (1º mês = mês da entrada). Sem relação. Gerado por gerar_gerencia.py.
+				SELECTCOLUMNS( GENERATESERIES( 1, 36, 1 ), "Nº do Mês", [Value], "Mês de Vida", FORMAT( [Value], "0" ) & "º mês" )
+

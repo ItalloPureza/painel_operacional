@@ -1,0 +1,41 @@
+table dDeParaOwnerTeam
+	lineageTag: 53545d6e-6299-4071-a440-8b6b02ca15d1
+
+	column owner_team
+		lineageTag: dfa5058f-9a1a-4991-be64-ac919218d3d4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [owner_team]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor
+		lineageTag: c43dbddb-d412-49bc-9b1a-5ed8c1297f4b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Setor]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dDeParaOwnerTeam = calculated
+		mode: import
+		source =
+				
+				DATATABLE("owner_team", STRING, "Setor", STRING, {
+				  {"Agendamento","Lives"},
+				  {"N2 Agenda","Lives"},
+				  {"Live","Lives"},
+				  {"Suporte Técnico","Suporte"},
+				  {"N2 Suporte","Suporte"},
+				  {"N2 Onboarding","Onboarding"},
+				  {"Treinamento","Onboarding"},
+				  {"N2 Ongoing","Ongoing"},
+				  {"Sucesso do Cliente","Ongoing"},
+				  {"Relacionamento com Cliente","Relacionamento"},
+				  {"Homologação da Área VIP e Aplicativo","Homologação"},
+				  {"Homologação de Guias do e-Continuo","Homologação"},
+				  {"Gerência","Gerência"}
+				})
+
+	annotation PBI_Id = 53545d6e62994071a4408b6b02ca15d1
+

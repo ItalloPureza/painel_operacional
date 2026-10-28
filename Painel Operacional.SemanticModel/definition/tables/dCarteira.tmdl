@@ -1,0 +1,545 @@
+table dCarteira
+	lineageTag: 3fd4bfb7-b42a-5e18-9a4d-ca52633c6d3d
+
+	/// Idade média dos clientes ativos/bloqueados (dias desde a Data Registro do CRM).
+	measure 'Dias desde o Registro (média)' = CALCULATE( AVERAGE( dCarteira[Dias desde o Registro] ), dCarteira[Status] IN { "Ativo", "Bloqueado" } )
+		formatString: #,0
+		displayFolder: Carteira
+		lineageTag: 85c6b076-c7f2-5c12-93c9-a9d2590336ba
+
+	/// Média de dias desde o último ticket de Treinamento (só clientes com ticket).
+	measure 'Dias sem Contato (média)' = CALCULATE( AVERAGE( dCarteira[Dias sem Contato] ), dCarteira[Status] IN { "Ativo", "Bloqueado" }, NOT ISBLANK( dCarteira[Data do Último Ticket de Treinamento] ) )
+		formatString: 0.00
+		displayFolder: Carteira
+		lineageTag: f8c341f5-e016-5f9d-ab4b-fd442ba1854a
+
+	/// Clientes ativos/bloqueados sem nenhum ticket de Treinamento (contam como 'em dia' na regra do OKR 2026).
+	measure 'Clientes sem Ticket de Treinamento' = CALCULATE( COUNTROWS( dCarteira ), dCarteira[Status] IN { "Ativo", "Bloqueado" }, ISBLANK( dCarteira[Data do Último Ticket de Treinamento] ) )
+		formatString: #,0
+		displayFolder: Carteira
+		lineageTag: a3de7fc0-0c23-50e5-a26a-f0d034253882
+
+	/// Clientes ativos/bloqueados com o último ticket de Treinamento há mais de 10 dias.
+	measure 'Clientes sem Contato em Dia' = [Clientes na Carteira] - [Clientes com Contato em Dia]
+		formatString: #,0
+		displayFolder: Carteira
+		lineageTag: cc62c052-a1eb-5da7-8d77-6e8752a1e8c4
+
+	/// Contato há até 10 dias ÷ clientes ativos/bloqueados — conta do OKR 2026 (cliente sem ticket = em dia).
+	measure '% Clientes com Contato em Dia' = DIVIDE( [Clientes com Contato em Dia], [Clientes na Carteira] )
+		formatString: 0.00%
+		displayFolder: Carteira
+		lineageTag: 46f89540-5efc-54a0-a833-2443af546de1
+
+	/// Clientes ativos/bloqueados com ticket de Treinamento criado há até 10 dias (sem ticket conta como em dia, como no OKR 2026).
+	measure 'Clientes com Contato em Dia' = CALCULATE( COUNTROWS( dCarteira ), dCarteira[Status] IN { "Ativo", "Bloqueado" }, dCarteira[Contato em Dia] = "Sim" )
+		formatString: #,0
+		displayFolder: Carteira
+		lineageTag: 127cdf17-4d6d-5f82-a02d-5f0f3ff209a5
+
+	/// Clientes ATIVOS e BLOQUEADOS no retrato mais recente do CRM (FOTO: não muda com o período).
+	measure 'Clientes na Carteira' = CALCULATE( COUNTROWS( dCarteira ), dCarteira[Status] IN { "Ativo", "Bloqueado" } )
+		formatString: #,0
+		displayFolder: Carteira
+		lineageTag: bbd7a768-1b57-5fc2-a458-c2ba88bd08a1
+
+	/// Média de dias desde a última tratativa do Ongoing (só clientes com tratativa).
+	measure 'Dias sem Tratativa (média)' = CALCULATE( AVERAGE( dCarteira[Dias sem Tratativa Ongoing] ), dCarteira[Status] IN { "Ativo", "Bloqueado" }, NOT ISBLANK( dCarteira[Data da Última Tratativa Ongoing] ) )
+		formatString: 0.00
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: ea87a828-94ba-5f2b-8b0b-ee66adffe61d
+
+	/// Clientes ativos/bloqueados sem nenhuma tratativa do Ongoing (contam como 'em dia' na regra do OKR 2026).
+	measure 'Clientes sem Tratativa' = CALCULATE( COUNTROWS( dCarteira ), dCarteira[Status] IN { "Ativo", "Bloqueado" }, ISBLANK( dCarteira[Data da Última Tratativa Ongoing] ) )
+		formatString: #,0
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: 640525f8-8a29-583c-a4f3-aa66d844efb5
+
+	/// Clientes ativos/bloqueados com a última tratativa há mais de 45 dias.
+	measure 'Clientes sem Tratativa em Dia' = [Clientes na Carteira] - [Clientes com Tratativa em Dia]
+		formatString: #,0
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: e8a3e7fa-2b08-5d50-acdb-64a02a0f8279
+
+	/// Tratativa há até 45 dias ÷ clientes ativos/bloqueados — conta do OKR 2026.
+	measure '% Clientes com Tratativa em Dia' = DIVIDE( [Clientes com Tratativa em Dia], [Clientes na Carteira] )
+		formatString: 0.00%
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: 199a05e4-f78c-5b21-8e2d-5df660dc96e0
+
+	/// Clientes ativos/bloqueados com tratativa do Ongoing (checkout, alert, mayday, legado, en route) há até 45 dias (sem tratativa conta como em dia, como no OKR 2026).
+	measure 'Clientes com Tratativa em Dia' = CALCULATE( COUNTROWS( dCarteira ), dCarteira[Status] IN { "Ativo", "Bloqueado" }, dCarteira[Tratativa Ongoing em Dia] = "Sim" )
+		formatString: #,0
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: 78d831f2-9626-5681-b9db-be46c823f4f1
+
+	/// Mensalidade do cliente no sistema de contratos (AF + GB Extra + AF Docs + Pacote de GB + KP), mesma regra do Global - Carteiras: contratos status 3/5, item ativo sem responsável financeiro, no dia mais recente do sistema de contratos até o retrato. Use em tabelas por cliente.
+	measure 'Mensalidade (Contratos)' = VAR cnpj = VALUES( dCarteira[CNPJ do Cliente (busca)] ) VAR ref = MAX( dCarteira[Data do Retrato] ) VAR d = CALCULATE( MAX( Contratos_historico_contratos[periodo] ), REMOVEFILTERS( Contratos_historico_contratos ), Contratos_historico_contratos[periodo] <= ref ) RETURN IF( NOT ISBLANK( d ), CALCULATE( SUMX( GROUPBY( SELECTCOLUMNS( Contratos_historico_items, "@c", RELATED( Contratos_historico_contratos[cnpj_cpf] ), "@i", Contratos_historico_items[item_catalogo_id], "@v", Contratos_historico_items[vr_total] ), [@c], [@i], "@m", MAXX( CURRENTGROUP(), [@v] ) ), [@m] ), Contratos_historico_contratos[periodo] = d, Contratos_historico_contratos[status_id] IN { 3, 5 }, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), TREATAS( cnpj, Contratos_historico_contratos[cnpj_cpf] ), Contratos_historico_items[item_catalogo_id] IN { 2, 3, 4, 5, 6 } ) )
+		formatString: \R$ #,0.00
+		displayFolder: Carteira
+		lineageTag: 54c1d16f-b39e-40ad-97b5-aa78849e54e7
+
+	column 'ID CRM'
+		formatString: 0
+		lineageTag: 8563c6db-50d2-503e-a29c-4958f6b2daf8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ID CRM]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID Legado'
+		lineageTag: d8a32a7a-743b-5af5-83f4-fd2611bd7bbf
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ID Legado]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID Helpdesk'
+		lineageTag: cf5dc273-0a42-5261-b143-8fc482695803
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ID Helpdesk]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cliente
+		lineageTag: 68a51d79-1207-506c-a491-ac41f93baf8b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cliente]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Razão Social'
+		lineageTag: 38209d0c-2e4e-59f2-af12-9bdce4a4c538
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Razão Social]
+
+		annotation SummarizationSetBy = Automatic
+
+	column CNPJ
+		lineageTag: 765d3eb6-ddef-5bc0-ad49-780286bbc5d6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CNPJ]
+
+		annotation SummarizationSetBy = Automatic
+
+	column CS
+		lineageTag: 35f6ea5b-cdfe-51af-a68b-815df84568c3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email do CS'
+		lineageTag: a2543d19-53ef-5519-8dd5-f6e11a27d888
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Email do CS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		lineageTag: 3239a781-aabe-5424-83df-51d6ae16a815
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Status]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Status de Saúde'
+		lineageTag: f79e176f-588c-52bc-b002-67ea80966409
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Status de Saúde]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Plano
+		lineageTag: 7b6e3116-51cc-55eb-89a2-8e0dbedf6653
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Plano]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Registro'
+		formatString: dd/mm/yy
+		lineageTag: 9078280f-a9ed-5321-b2ed-f98004fb80aa
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Data de Registro]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Empresas Usadas'
+		formatString: 0
+		lineageTag: e7848271-8cd7-521c-9ec5-b47886a9fd0e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Empresas Usadas]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Empresas do Contrato'
+		formatString: 0
+		lineageTag: 31423ee9-996d-50f6-9c63-5746bfdd7bde
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Empresas do Contrato]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe do CS'
+		lineageTag: 2c894a39-666e-5559-9b2a-0bdc585ece7e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Equipe do CS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Setor do CS'
+		lineageTag: 0973a882-601e-55f3-85b9-7ad8c3248716
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Setor do CS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data do Retrato'
+		formatString: dd/mm/yy
+		lineageTag: fb72fd20-4b5a-5794-94c9-947fa2afff27
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Data do Retrato]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Último Ticket de Treinamento' = VAR f = dCarteira[ID Legado] RETURN IF( f <> "", CALCULATE( MAX( Helpdesk_Tickets[id] ), Helpdesk_Tickets[service] = "Treinamento", Helpdesk_Tickets[ID Legado do Cliente] = f ) )
+		dataType: int64
+		formatString: 0
+		displayFolder: Últimos contatos
+		lineageTag: edbea591-96d4-5d1a-85c8-24d3a8c9c0ad
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data do Último Ticket de Treinamento' = VAR i = dCarteira[Último Ticket de Treinamento] RETURN IF( NOT ISBLANK( i ), LOOKUPVALUE( Helpdesk_Tickets[Data_Criacao_Ticket], Helpdesk_Tickets[id], i ) )
+		dataType: dateTime
+		formatString: dd/mm/yy
+		displayFolder: Últimos contatos
+		lineageTag: a97993da-4099-5065-9d33-d867a7f50856
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Categoria do Último Ticket' = VAR i = dCarteira[Último Ticket de Treinamento] RETURN IF( NOT ISBLANK( i ), LOOKUPVALUE( Helpdesk_Tickets[category], Helpdesk_Tickets[id], i ) )
+		dataType: string
+		displayFolder: Últimos contatos
+		lineageTag: 98004ae5-6dce-5ea4-9f88-f05f73424385
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Penúltimo Ticket de Treinamento' = VAR f = dCarteira[ID Legado] VAR i = dCarteira[Último Ticket de Treinamento] RETURN IF( NOT ISBLANK( i ), CALCULATE( MAX( Helpdesk_Tickets[id] ), Helpdesk_Tickets[service] = "Treinamento", Helpdesk_Tickets[ID Legado do Cliente] = f, Helpdesk_Tickets[id] < i ) )
+		dataType: int64
+		formatString: 0
+		displayFolder: Últimos contatos
+		lineageTag: 1a32c999-44df-51ba-8589-cdea50109cfa
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data do Penúltimo Ticket de Treinamento' = VAR i = dCarteira[Penúltimo Ticket de Treinamento] RETURN IF( NOT ISBLANK( i ), LOOKUPVALUE( Helpdesk_Tickets[Data_Criacao_Ticket], Helpdesk_Tickets[id], i ) )
+		dataType: dateTime
+		formatString: dd/mm/yy
+		displayFolder: Últimos contatos
+		lineageTag: d85d838e-420b-5443-95ab-a53a8b09f91b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Categoria do Penúltimo Ticket' = VAR i = dCarteira[Penúltimo Ticket de Treinamento] RETURN IF( NOT ISBLANK( i ), LOOKUPVALUE( Helpdesk_Tickets[category], Helpdesk_Tickets[id], i ) )
+		dataType: string
+		displayFolder: Últimos contatos
+		lineageTag: ee211477-5fd0-5ba0-96a9-fe21fa4495de
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias entre os Contatos' = VAR a = dCarteira[Data do Último Ticket de Treinamento] VAR b = dCarteira[Data do Penúltimo Ticket de Treinamento] RETURN IF( ISBLANK( a ) || ISBLANK( b ), BLANK(), INT( a - b ) )
+		dataType: int64
+		formatString: 0
+		displayFolder: Últimos contatos
+		lineageTag: b302c023-5f69-5959-ae68-6c37c3ad55e7
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias sem Contato' = VAR d = dCarteira[Data do Último Ticket de Treinamento] RETURN IF( ISBLANK( d ), 0, INT( dCarteira[Data do Retrato] - d ) )
+		dataType: int64
+		formatString: 0
+		displayFolder: Últimos contatos
+		lineageTag: e78e3004-7f03-536c-a027-e9c79aadc1f1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Contato em Dia' = IF( dCarteira[Dias sem Contato] <= 10, "Sim", "Não" )
+		dataType: string
+		displayFolder: Últimos contatos
+		lineageTag: d4d2d8c7-6fb0-57fb-af7e-f4ff9f3a3dc8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Faixa sem Contato Ordem' = VAR d = dCarteira[Dias sem Contato] RETURN IF( ISBLANK( dCarteira[Data do Último Ticket de Treinamento] ), 6, SWITCH( TRUE(), d <= 10, 1, d <= 20, 2, d <= 30, 3, d <= 60, 4, 5 ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Últimos contatos
+		lineageTag: 0dbbfeab-62b7-5bb4-aa50-cd887ffd143b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Faixa sem Contato' = SWITCH( dCarteira[Faixa sem Contato Ordem], 1, "Até 10 dias", 2, "11 a 20 dias", 3, "21 a 30 dias", 4, "31 a 60 dias", 5, "Mais de 60 dias", "Sem ticket de Treinamento" )
+		dataType: string
+		displayFolder: Últimos contatos
+		lineageTag: 07943b55-a2a9-5996-9430-475099bfb274
+		summarizeBy: none
+		sortByColumn: 'Faixa sem Contato Ordem'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias desde o Registro' = IF( NOT ISBLANK( dCarteira[Data de Registro] ), INT( dCarteira[Data do Retrato] - dCarteira[Data de Registro] ) )
+		dataType: int64
+		formatString: 0
+		displayFolder: Carteira
+		lineageTag: db3012f7-4f70-5637-a0df-23cfde6ce8ca
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Checkouts = VAR f = dCarteira[ID Legado] RETURN IF( f <> "", CALCULATE( COUNTROWS( Helpdesk_Tickets ), Helpdesk_Tickets[ID Legado do Cliente] = f, FILTER( VALUES( Helpdesk_Tickets[category] ), CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "checkout" ) ) ) + 0 )
+		dataType: int64
+		formatString: 0
+		displayFolder: Carteira
+		lineageTag: a84ce295-2d3b-5507-b7fd-c8ca892acd12
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Contatos = VAR f = dCarteira[ID Legado] RETURN IF( f <> "", CALCULATE( COUNTROWS( Helpdesk_Tickets ), Helpdesk_Tickets[ID Legado do Cliente] = f, FILTER( VALUES( Helpdesk_Tickets[category] ), CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "contato efetivo" ) || CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "tentativa de contato" ) || CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "formalização" ) ) ) + 0 )
+		dataType: int64
+		formatString: 0
+		displayFolder: Carteira
+		lineageTag: ebaecdf8-d9a5-5daa-a195-989233f733f7
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Faltas = VAR f = dCarteira[ID Legado] RETURN IF( f <> "", CALCULATE( COUNTROWS( Helpdesk_Tickets ), Helpdesk_Tickets[ID Legado do Cliente] = f, FILTER( VALUES( Helpdesk_Tickets[category] ), CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "falta" ) || CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "remarcação" ) ) ) + 0 )
+		dataType: int64
+		formatString: 0
+		displayFolder: Carteira
+		lineageTag: bf478f62-b27b-5358-9aa4-d76d6a90e666
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Última Tratativa Ongoing' = VAR f = dCarteira[ID Legado] RETURN IF( f <> "", CALCULATE( MAX( Helpdesk_Tickets[id] ), Helpdesk_Tickets[ID Legado do Cliente] = f, FILTER( VALUES( Helpdesk_Tickets[category] ), CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "checkout" ) || CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "tratativa alert" ) || CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "tratativa mayday" ) || CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "tratativa legado" ) || CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "tratativa en route" ) ) ) )
+		dataType: int64
+		formatString: 0
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: a90953c6-9a29-5470-bbd0-b05fdbc29994
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data da Última Tratativa Ongoing' = VAR i = dCarteira[Última Tratativa Ongoing] RETURN IF( NOT ISBLANK( i ), LOOKUPVALUE( Helpdesk_Tickets[Data_Criacao_Ticket], Helpdesk_Tickets[id], i ) )
+		dataType: dateTime
+		formatString: dd/mm/yy
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: d882a3f5-403b-51e8-a1ef-e350fb5d2051
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Categoria da Última Tratativa Ongoing' = VAR i = dCarteira[Última Tratativa Ongoing] RETURN IF( NOT ISBLANK( i ), LOOKUPVALUE( Helpdesk_Tickets[category], Helpdesk_Tickets[id], i ) )
+		dataType: string
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: c5e3cc03-afed-5880-b60b-a92fa72c120c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Penúltima Tratativa Ongoing' = VAR f = dCarteira[ID Legado] VAR i = dCarteira[Última Tratativa Ongoing] RETURN IF( NOT ISBLANK( i ), MAXX( FILTER( CALCULATETABLE( VALUES( Helpdesk_Tickets[id] ), Helpdesk_Tickets[ID Legado do Cliente] = f, FILTER( VALUES( Helpdesk_Tickets[category] ), CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "checkout" ) || CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "tratativa alert" ) || CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "tratativa mayday" ) || CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "tratativa legado" ) || CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "tratativa en route" ) ) ), Helpdesk_Tickets[id] < i ), Helpdesk_Tickets[id] ) )
+		dataType: int64
+		formatString: 0
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: adffbd42-4ec8-5d6d-aa48-b1720d285831
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data da Penúltima Tratativa Ongoing' = VAR i = dCarteira[Penúltima Tratativa Ongoing] RETURN IF( NOT ISBLANK( i ), LOOKUPVALUE( Helpdesk_Tickets[Data_Criacao_Ticket], Helpdesk_Tickets[id], i ) )
+		dataType: dateTime
+		formatString: dd/mm/yy
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: 59ea962a-0cda-58ae-ab2c-8a6c99ee1d35
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias entre as Tratativas Ongoing' = VAR a = dCarteira[Data da Última Tratativa Ongoing] VAR b = dCarteira[Data da Penúltima Tratativa Ongoing] RETURN IF( ISBLANK( a ) || ISBLANK( b ), BLANK(), INT( a - b ) )
+		dataType: int64
+		formatString: 0
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: c4806f5f-c23a-554b-a030-905f7d02e13a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias sem Tratativa Ongoing' = VAR d = dCarteira[Data da Última Tratativa Ongoing] RETURN IF( ISBLANK( d ), 0, INT( dCarteira[Data do Retrato] - d ) )
+		dataType: int64
+		formatString: 0
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: a2e0ff4d-d748-5bad-9e2b-f76494bee8d3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tratativa Ongoing em Dia' = IF( dCarteira[Dias sem Tratativa Ongoing] <= 45, "Sim", "Não" )
+		dataType: string
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: e21b7189-95e2-5e75-8f8b-fbfebf784fbd
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Faixa sem Tratativa Ordem' = VAR d = dCarteira[Dias sem Tratativa Ongoing] RETURN IF( ISBLANK( dCarteira[Data da Última Tratativa Ongoing] ), 6, SWITCH( TRUE(), d <= 15, 1, d <= 30, 2, d <= 45, 3, d <= 90, 4, 5 ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: 22ca3b2e-8d53-5709-8d0e-de538ac631b2
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Faixa sem Tratativa' = SWITCH( dCarteira[Faixa sem Tratativa Ordem], 1, "Até 15 dias", 2, "16 a 30 dias", 3, "31 a 45 dias", 4, "46 a 90 dias", 5, "Mais de 90 dias", "Sem tratativa" )
+		dataType: string
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: 7852ff43-0961-5ed5-8508-d401a527ff3b
+		summarizeBy: none
+		sortByColumn: 'Faixa sem Tratativa Ordem'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Última Tentativa de Contato' = VAR f = dCarteira[ID Legado] VAR i = IF( f <> "", CALCULATE( MAX( Helpdesk_Tickets[id] ), Helpdesk_Tickets[ID Legado do Cliente] = f, FILTER( VALUES( Helpdesk_Tickets[category] ), CONTAINSSTRING( LOWER( Helpdesk_Tickets[category] ), "tentativa de contato" ) ) ) ) RETURN IF( NOT ISBLANK( i ), LOOKUPVALUE( Helpdesk_Tickets[Data_Criacao_Ticket], Helpdesk_Tickets[id], i ) )
+		dataType: dateTime
+		formatString: dd/mm/yy
+		displayFolder: Últimos contatos (Ongoing)
+		lineageTag: 07504009-2e0d-566a-a48b-d47c23bced95
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ordem da Faixa de Idade' = SWITCH( TRUE(), ISBLANK( dCarteira[Dias desde o Registro] ), BLANK(), dCarteira[Dias desde o Registro] <= 90, 1, dCarteira[Dias desde o Registro] <= 180, 2, dCarteira[Dias desde o Registro] <= 365, 3, dCarteira[Dias desde o Registro] <= 730, 4, dCarteira[Dias desde o Registro] <= 1095, 5, 6 )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Global
+		lineageTag: 0ce9f93b-c8f9-5c03-b293-89980d3c4239
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Faixa de Idade' = SWITCH( TRUE(), ISBLANK( dCarteira[Dias desde o Registro] ), BLANK(), dCarteira[Dias desde o Registro] <= 90, "Até 3 meses", dCarteira[Dias desde o Registro] <= 180, "3 a 6 meses", dCarteira[Dias desde o Registro] <= 365, "6 meses a 1 ano", dCarteira[Dias desde o Registro] <= 730, "1 a 2 anos", dCarteira[Dias desde o Registro] <= 1095, "2 a 3 anos", "Mais de 3 anos" )
+		dataType: string
+		displayFolder: Global
+		lineageTag: fbafa3c6-832b-5914-9006-072f572cd130
+		summarizeBy: none
+		sortByColumn: 'Ordem da Faixa de Idade'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID do Cliente (busca)' = VAR i = TRIM( "" & dCarteira[ID Legado] ) RETURN IF( i = "" || i = "0", BLANK(), i )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 9ec17cf7-943d-5d67-8106-0110c7ae739b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ do Cliente (busca)' = VAR c = SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( SUBSTITUTE( TRIM( dCarteira[CNPJ] ), ".", "" ), "/", "" ), "-", "" ), " ", "" ) RETURN IF( c = "", BLANK(), c )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 20f96772-deba-5b51-92b3-e4326a47d98f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês da Composição' = ( VAR _d = dCarteira[Data do Retrato] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Pessoa
+		lineageTag: fb7e9b5f-4372-5d61-ac59-cde8af4d3d82
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dCarteira = calculated
+		mode: import
+		source =
+				
+				-- 1 linha por cliente no retrato MAIS RECENTE do CRM (o retrato vem com 2 linhas por cliente).
+				-- Base das telas de foto do Onboarding (Últimos Contatos, carteira por CS). Gerado por gerar_onboarding.py.
+				VAR ult = MAX( CRM_Backup_Diario[Periodo] )
+				VAR retrato = CALCULATETABLE( CRM_Backup_Diario, CRM_Backup_Diario[Periodo] = ult, CRM_Backup_Diario[Só Kappa] = "Não" )
+				VAR g =
+				    GROUPBY(
+				        retrato, CRM_Backup_Diario[Id_CRM],
+				        "@legado", MAXX( CURRENTGROUP(), CRM_Backup_Diario[ID_Legado] ),
+				        "@helpdesk", MAXX( CURRENTGROUP(), CRM_Backup_Diario[ID_helpdesk] ),
+				        "@fantasia", MAXX( CURRENTGROUP(), CRM_Backup_Diario[Nome_Fantasia] ),
+				        "@razao", MAXX( CURRENTGROUP(), CRM_Backup_Diario[Razao_Social] ),
+				        "@cnpj", MAXX( CURRENTGROUP(), CRM_Backup_Diario[CNPJ] ),
+				        "@cs", MAXX( CURRENTGROUP(), CRM_Backup_Diario[Responsavel] ),
+				        "@email", MAXX( CURRENTGROUP(), CRM_Backup_Diario[Responsavel_Email] ),
+				        "@status", MAXX( CURRENTGROUP(), CRM_Backup_Diario[Status_Office] ),
+				        "@statusCruzeiro", MAXX( CURRENTGROUP(), CRM_Backup_Diario[Status de Saúde] ),
+				        "@plano", MAXX( CURRENTGROUP(), CRM_Backup_Diario[Plano] ),
+				        "@registro", MAXX( CURRENTGROUP(), CRM_Backup_Diario[Dt_Cadastro] ),
+				        "@usadas", MAXX( CURRENTGROUP(), CRM_Backup_Diario[Qtd_CNPJs_Usados] ),
+				        "@contrato", MAXX( CURRENTGROUP(), CRM_Backup_Diario[Qtd_CNPJs_Contrato] )
+				    )
+				RETURN
+				    SELECTCOLUMNS(
+				        g,
+				        "ID CRM", CRM_Backup_Diario[Id_CRM],
+				        "ID Legado", [@legado],
+				        "ID Helpdesk", [@helpdesk],
+				        "Cliente", [@fantasia],
+				        "Razão Social", [@razao],
+				        "CNPJ", [@cnpj],
+				        "CS", [@cs],
+				        "Email do CS", [@email],
+				        "Status", [@status],
+				        "Status de Saúde", [@statusCruzeiro],
+				        "Plano", [@plano],
+				        "Data de Registro", [@registro],
+				        "Empresas Usadas", IFERROR( VALUE( [@usadas] ), BLANK() ),
+				        "Empresas do Contrato", IFERROR( VALUE( [@contrato] ), BLANK() ),
+				        "Equipe do CS", IF( ISBLANK( [@email] ), IF( TRIM( [@cs] ) <> "", "(sem cadastro)" ), COALESCE( LOOKUPVALUE( dColaboradorMes[Equipe], dColaboradorMes[email], [@email], dColaboradorMes[AnoMes], ( VAR _d = ult VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) ), BLANK() ), "(sem equipe)" ) ),
+				        "Setor do CS", LOOKUPVALUE( dColaboradorMes[Setor], dColaboradorMes[email], [@email], dColaboradorMes[AnoMes], ( VAR _d = ult VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) ), BLANK() ),
+				        "Data do Retrato", ult
+				    )
+

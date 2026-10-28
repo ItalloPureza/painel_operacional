@@ -1,0 +1,277 @@
+table WhatsApp_Atendimentos
+	lineageTag: 1fcbb2e2-217f-5a04-808e-d18ea2d693dd
+
+	measure Atendimentos = COUNTROWS( WhatsApp_Atendimentos )
+		formatString: #,0
+		displayFolder: WhatsApp
+		lineageTag: 641dacee-51ba-5585-91f5-643fa03928ea
+
+	measure 'Clientes Atendidos' = DISTINCTCOUNT( WhatsApp_Atendimentos[cliente_identity] )
+		formatString: #,0
+		displayFolder: WhatsApp
+		lineageTag: 4e6696aa-9bc7-584a-bb52-1fa72b1cca69
+
+	measure '% Receptivos' = DIVIDE( CALCULATE( [Atendimentos], WhatsApp_Atendimentos[Tipo] = "Receptivo" ), [Atendimentos] )
+		formatString: 0.00%
+		displayFolder: WhatsApp
+		lineageTag: 03e98211-774a-5d45-a67e-808cfbe871d6
+
+	measure '% Encerrados por Inatividade' = DIVIDE( CALCULATE( [Atendimentos], WhatsApp_Atendimentos[Status] = "Encerrado por inatividade" ), [Atendimentos] )
+		formatString: 0.00%
+		displayFolder: WhatsApp
+		lineageTag: af686f11-ca41-5c14-b1ca-a69f2ea9d617
+
+	measure 'Duração Mediana (h)' = MEDIAN( WhatsApp_Atendimentos[Duração (h)] )
+		displayFolder: WhatsApp
+		lineageTag: c74fd374-90d1-5b7a-a410-e68806754db5
+
+		formatStringDefinition = VAR _s = ROUND( SELECTEDMEASURE() * 3600, 0 ) RETURN """" & FORMAT( INT( _s / 3600 ), "00" ) & ":" & FORMAT( INT( MOD( _s, 3600 ) / 60 ), "00" ) & ":" & FORMAT( MOD( _s, 60 ), "00" ) & """"
+
+	/// Mensagens dos analistas nos atendimentos ÷ dias com atendimento no filtro (disparos à parte).
+	measure 'Mensagens do Time por Dia' = DIVIDE( [Mensagens do Time], [Dias com Atendimento] )
+		formatString: #,0.00
+		displayFolder: Volumetria
+		lineageTag: 06624574-808a-5d27-9412-aaae52d2a2a9
+
+	/// Mensagens dos clientes ÷ pares cliente × dia: quantas mensagens um cliente manda, em média, no dia em que fala.
+	measure 'Mensagens por Cliente-Dia' = DIVIDE( [Mensagens do Cliente], [Clientes-Dia] )
+		formatString: #,0.00
+		displayFolder: Volumetria
+		lineageTag: 98d42d31-704a-5bac-afb0-5b0bd1cdfb07
+
+	/// Mensagens dos clientes ÷ dias com atendimento no filtro.
+	measure 'Mensagens do Cliente por Dia' = DIVIDE( [Mensagens do Cliente], [Dias com Atendimento] )
+		formatString: #,0.00
+		displayFolder: Volumetria
+		lineageTag: 7130f20a-751a-5247-8a99-58171e67e45a
+
+	/// Pares cliente × dia com atendimento: divisor da média por cliente.
+	measure Clientes-Dia = COUNTROWS( SUMMARIZE( WhatsApp_Atendimentos, WhatsApp_Atendimentos[cliente_identity], WhatsApp_Atendimentos[Data] ) )
+		formatString: #,0
+		displayFolder: Volumetria
+		lineageTag: 42889c2c-35c4-5383-a739-3c56dd6e2838
+
+	/// Dias com pelo menos um atendimento no filtro (setor, equipe, analista, período): divisor das médias por dia.
+	measure 'Dias com Atendimento' = DISTINCTCOUNT( WhatsApp_Atendimentos[Data] )
+		formatString: #,0
+		displayFolder: Volumetria
+		lineageTag: d028b354-deef-5bc2-bd05-d954c7e2a92b
+
+	/// Mensagens que os analistas mandaram nos atendimentos (sem as automáticas e sem os disparos), pela abertura.
+	measure 'Mensagens do Time' = SUM( WhatsApp_Atendimentos[Msgs do Time] )
+		formatString: #,0
+		displayFolder: Volumetria
+		lineageTag: f4b5a4f5-a6e4-5c2a-96fe-f641c2a6dc4e
+
+	/// Mensagens que os clientes mandaram nos atendimentos (contagem do WhatsApp por ticket), pela data de abertura.
+	measure 'Mensagens do Cliente' = SUM( WhatsApp_Atendimentos[Msgs do Cliente] )
+		formatString: #,0
+		displayFolder: Volumetria
+		lineageTag: 11afe2e2-7a9a-5a64-9f66-fc3a1b75135e
+
+	column conversa_id
+		dataType: string
+		isHidden
+		lineageTag: 6077c47c-ebf1-5c0f-a1ef-82b56884deea
+		summarizeBy: none
+		sourceColumn: conversa_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column ticket_whatsapp_id
+		dataType: string
+		isHidden
+		lineageTag: e6baf04f-afb2-5493-9628-09ba4f6248b5
+		summarizeBy: none
+		sourceColumn: ticket_whatsapp_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ticket
+		dataType: int64
+		formatString: 0
+		lineageTag: 25dcb6ab-161b-58eb-a79b-f95b8cafe269
+		summarizeBy: none
+		sourceColumn: Ticket
+
+		annotation SummarizationSetBy = Automatic
+
+	column cliente_identity
+		dataType: string
+		isHidden
+		lineageTag: 919bb04c-05b8-54a4-9e80-ec0873b66aac
+		summarizeBy: none
+		sourceColumn: cliente_identity
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cliente
+		dataType: string
+		lineageTag: 8d88a81c-2a99-5cc4-8104-b77e764b5f92
+		summarizeBy: none
+		sourceColumn: Cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column Template
+		dataType: string
+		lineageTag: b54a4c73-6a39-5939-9ce0-1db481909b86
+		summarizeBy: none
+		sourceColumn: Template
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tipo
+		dataType: string
+		lineageTag: 8d308359-e82a-5d64-ae74-ba6a52c61e29
+		summarizeBy: none
+		sourceColumn: Tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column campaign_id
+		dataType: string
+		isHidden
+		lineageTag: ad95ff4e-4939-5479-bbec-7882a013a2e7
+		summarizeBy: none
+		sourceColumn: campaign_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Assunto
+		dataType: string
+		lineageTag: fc1758d0-1d30-5892-9279-1b406e57e66c
+		summarizeBy: none
+		sourceColumn: Assunto
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fila WhatsApp'
+		dataType: string
+		lineageTag: 232aad63-bce5-5989-a93e-c2844be6441f
+		summarizeBy: none
+		sourceColumn: Fila WhatsApp
+
+		annotation SummarizationSetBy = Automatic
+
+	column Abertura
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 9cc748db-1378-5745-9d07-a97b5494f2f5
+		summarizeBy: none
+		sourceColumn: Abertura
+
+		annotation SummarizationSetBy = Automatic
+
+	column Encerramento
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 5c99d202-6a7a-5b6d-a29d-8d82ab45c156
+		summarizeBy: none
+		sourceColumn: Encerramento
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: b225612f-4ff0-5856-bc62-93762aa21485
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+	column agente_email
+		dataType: string
+		isHidden
+		lineageTag: 1f67c14b-75a4-5c2d-aacd-c97bb40b14be
+		summarizeBy: none
+		sourceColumn: agente_email
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 17f25797-44d1-506e-ab30-257c66e56a1e
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Duração (h)'
+		dataType: double
+		formatString: 0.00
+		lineageTag: 72917028-8bec-5326-9dfd-3d47088bd4b0
+		summarizeBy: none
+		sourceColumn: Duração (h)
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor = RELATED( dColaboradorMes[Setor] )
+		dataType: string
+		lineageTag: 9e29f98f-71f6-5198-8262-b5de88c861f6
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Extracao
+		dataType: dateTime
+		formatString: dd/mm/yy
+		lineageTag: 05b6565c-8156-5cb1-8537-0dfe73a4f729
+		summarizeBy: none
+		sourceColumn: Extracao
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês da Composição' = ( VAR _d = WhatsApp_Atendimentos[Data] VAR _m = IF( ISBLANK( _d ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ), YEAR( _d ) * 100 + MONTH( _d ) ) RETURN MIN( MAX( _m, 202608 ), YEAR( TODAY() ) * 100 + MONTH( TODAY() ) ) )
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Pessoa
+		lineageTag: 84ac3c61-2dc4-5e79-9bd6-3159f9c2a72b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Chave Pessoa Mês' = IF( TRIM( WhatsApp_Atendimentos[agente_email] ) <> "", LOWER( TRIM( WhatsApp_Atendimentos[agente_email] ) ) & "|" & WhatsApp_Atendimentos[Mês da Composição] )
+		dataType: string
+		isHidden
+		displayFolder: Pessoa
+		lineageTag: 94fb6707-827b-5809-a367-acc28f63faa8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Msgs do Cliente'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 9496a546-48bc-5cce-9e5c-4d877834def6
+		summarizeBy: none
+		sourceColumn: Msgs do Cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Msgs do Time'
+		dataType: int64
+		formatString: #,0
+		lineageTag: e426cecd-d575-52ce-8cf2-70e84b306a2d
+		summarizeBy: none
+		sourceColumn: Msgs do Time
+
+		annotation SummarizationSetBy = Automatic
+
+	partition WhatsApp_Atendimentos = m
+		mode: import
+		queryGroup: WhatsApp
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="WhatsApp_Atendimentos",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"conversa_id", type text}, {"ticket_whatsapp_id", type text}, {"Ticket", Int64.Type}, {"cliente_identity", type text}, {"Cliente", type text}, {"Template", type text}, {"Tipo", type text}, {"campaign_id", type text}, {"Assunto", type text}, {"Fila WhatsApp", type text}, {"Abertura", type datetime}, {"Encerramento", type datetime}, {"Data", type datetime}, {"agente_email", type text}, {"Status", type text}, {"Duração (h)", type number}, {"Extracao", type datetime}, {"Msgs do Cliente", Int64.Type}, {"Msgs do Time", Int64.Type}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+

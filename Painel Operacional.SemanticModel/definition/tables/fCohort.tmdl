@@ -1,0 +1,227 @@
+table fCohort
+	lineageTag: 11bb3cb2-9697-5c37-a129-c515e4dc5327
+
+	/// Cohort × mês de vida: quantos saíram naquele mês de vida (não acumulado).
+	measure 'Saídas no Mês de Vida' = VAR m = SELECTEDVALUE( dMesDeVida[Nº do Mês] ) VAR n = COUNTROWS( fCohort ) RETURN IF( NOT ISBLANK( m ) && n > 0 && HASONEVALUE( fCohort[Mês de Entrada] ) && DATEDIFF( MIN( fCohort[Mês de Entrada] ), MAX( fCohort[Data Base] ), MONTH ) + 1 >= m, COUNTROWS( FILTER( fCohort, fCohort[Mês de Vida da Saída] = m ) ) + 0 )
+		formatString: #,0
+		displayFolder: Gerência
+		lineageTag: 295db79d-82ff-529a-9380-ef2dae08db62
+
+	/// Cohort (linha) × mês de vida (coluna): % dos que entraram que não saíram até o fim daquele mês de vida. Vazio se o cohort ainda não chegou nesse mês (o mês atual conta, como no painel antigo).
+	measure '% Retenção no Mês de Vida' = VAR m = SELECTEDVALUE( dMesDeVida[Nº do Mês] ) VAR n = COUNTROWS( fCohort ) VAR saiu = COUNTROWS( FILTER( fCohort, NOT ISBLANK( fCohort[Mês de Vida da Saída] ) && fCohort[Mês de Vida da Saída] <= m ) ) RETURN IF( NOT ISBLANK( m ) && n > 0 && HASONEVALUE( fCohort[Mês de Entrada] ) && DATEDIFF( MIN( fCohort[Mês de Entrada] ), MAX( fCohort[Data Base] ), MONTH ) + 1 >= m, 1 - DIVIDE( saiu, n ) )
+		formatString: 0.00%
+		displayFolder: Gerência
+		lineageTag: e9c1b7ad-eda8-53c5-922e-667b7bf67405
+
+	/// Média de dias entre a entrada e a saída, de quem saiu.
+	measure 'Dias até Sair (média)' = AVERAGE( fCohort[Dias até Sair] )
+		formatString: #,0
+		displayFolder: Gerência
+		lineageTag: f1cdad3c-a8dd-5df0-8183-fb6a3dfaed9d
+
+	/// Ainda ativos ÷ entraram (hoje, sem olhar o mês de vida).
+	measure '% Retenção' = DIVIDE( [Clientes Ainda Ativos], [Clientes que Entraram] )
+		formatString: 0.00%
+		displayFolder: Gerência
+		lineageTag: 007d8946-05a5-59bf-9571-5431094f0633
+
+	/// Dos que entraram, quantos estão ativos no retrato mais recente do CRM.
+	measure 'Clientes Ainda Ativos' = CALCULATE( COUNTROWS( fCohort ), KEEPFILTERS( fCohort[Situação] = "Ativo" ) )
+		formatString: #,0
+		displayFolder: Gerência
+		lineageTag: a4fb9f33-1550-5fd2-8be7-b7d868e96a82
+
+	/// Dos que entraram, quantos não estão ativos no retrato mais recente do CRM.
+	measure 'Clientes que Saíram' = CALCULATE( COUNTROWS( fCohort ), KEEPFILTERS( fCohort[Situação] = "Saiu" ) )
+		formatString: #,0
+		displayFolder: Gerência
+		lineageTag: d55d6617-3656-514e-aa0a-ea9f0cf51e86
+
+	/// Clientes que entraram no período (data de entrada).
+	measure 'Clientes que Entraram' = COUNTROWS( fCohort )
+		formatString: #,0
+		displayFolder: Gerência
+		lineageTag: e0de4909-2a42-56a1-becf-120cb6b87de8
+
+	/// Cohort × mês de vida: mensalidade (Contratos no último dia ativo) de quem saiu naquele mês de vida, em milhares (21.243,25 = 21k; pedido do gestor, 14/10/2026).
+	measure 'R$ Saídas no Mês de Vida' = VAR m = SELECTEDVALUE( dMesDeVida[Nº do Mês] ) VAR n = COUNTROWS( fCohort ) RETURN IF( NOT ISBLANK( m ) && n > 0 && HASONEVALUE( fCohort[Mês de Entrada] ) && DATEDIFF( MIN( fCohort[Mês de Entrada] ), MAX( fCohort[Data Base] ), MONTH ) + 1 >= m, DIVIDE( SUMX( FILTER( fCohort, fCohort[Mês de Vida da Saída] = m ), fCohort[Mensalidade na Saída] ) + 0, 1000 ) )
+		formatString: \R$ #,0"k"
+		displayFolder: Gerência
+		lineageTag: 18ff1f48-9e18-5c45-a319-8f2f9dd2acb8
+
+	column Produto
+		lineageTag: a8d99858-765f-5151-b6e2-62245de04d69
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Produto]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID CRM'
+		formatString: 0
+		lineageTag: 500cdd46-3552-567e-a9e4-e17dcee9e310
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ID CRM]
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID
+		lineageTag: 39f612aa-ae8e-53de-831d-6b9e446b89ba
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cliente
+		lineageTag: 5444ddce-dd92-5260-81ef-a019ce8e317f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cliente]
+
+		annotation SummarizationSetBy = Automatic
+
+	column CS
+		lineageTag: 3fa6ac1d-bd54-5ebc-846c-fc122fae5ef8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Equipe do CS'
+		lineageTag: 7d3daa9a-c3f7-5696-8542-d7315a5c19e7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Equipe do CS]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Entrada
+		formatString: dd/mm/yy
+		lineageTag: d156ec54-637c-5016-89cf-5e1ce71266e3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Entrada]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês de Entrada'
+		formatString: mmm/yyyy
+		lineageTag: 9342ec4a-c54b-5324-9b09-41d76c080d46
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mês de Entrada]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Saída
+		formatString: dd/mm/yy
+		lineageTag: a354699b-1af5-5d12-95ba-5aec7a79a11b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Saída]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês de Vida da Saída'
+		formatString: 0
+		lineageTag: c0b0bf1c-a486-5b55-831a-acfc0ac4cd7c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mês de Vida da Saída]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dias até Sair'
+		formatString: #,0
+		lineageTag: bc373f26-0688-549c-b596-a5d059662cd8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Dias até Sair]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Situação
+		lineageTag: 90848360-dcfd-5506-8a1d-f1535d102923
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Situação]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data Base'
+		formatString: dd/mm/yy
+		lineageTag: 3a646470-a169-5d5f-87a9-5053fe1ccffc
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Data Base]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cohort = FORMAT( fCohort[Mês de Entrada], "mmm/yy" )
+		dataType: string
+		displayFolder: Gerência
+		lineageTag: 770731e2-e007-5b85-a926-606e6351bc17
+		summarizeBy: none
+		sortByColumn: 'Mês de Entrada'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Entrada'
+		lineageTag: 1b7a87c6-2f9c-531f-a53d-e9725addbf57
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tipo de Entrada]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mensalidade na Saída'
+		formatString: \R$ #,0.00
+		lineageTag: 0a171ca6-c790-5938-972c-bcfa12942522
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mensalidade na Saída]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID do Cliente (busca)' = VAR i = TRIM( "" & fCohort[ID] ) RETURN IF( i = "" || i = "0", BLANK(), i )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: ec1dc27f-4cf8-5e19-a3bf-72ce43e6bcdf
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CNPJ do Cliente (busca)' = VAR c = LOOKUPVALUE( dBuscaCliente[CNPJ], dBuscaCliente[ID], TRIM( "" & fCohort[ID] ), BLANK() ) RETURN IF( c = "", BLANK(), c )
+		dataType: string
+		displayFolder: Cliente
+		lineageTag: 3402bf4c-5b0b-5215-a2be-f00b8de10497
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fCohort = calculated
+		mode: import
+		source =
+				
+				-- Períodos que começaram desde ago/2026 (fPeriodos): cada entrada, nova ou retorno, é uma linha do cohort.
+				-- Calculada no refresh, fora do RLS. Gerado por gerar_gerencia.py.
+				SELECTCOLUMNS( FILTER( fPeriodos, fPeriodos[Entrada] >= DATE( 2026, 8, 1 ) ),
+				    "Produto", fPeriodos[Produto],
+				    "Tipo de Entrada", fPeriodos[Tipo de Entrada],
+				    "ID CRM", fPeriodos[ID CRM],
+				    "ID", fPeriodos[ID],
+				    "Cliente", fPeriodos[Cliente],
+				    "CS", fPeriodos[CS],
+				    "Equipe do CS", fPeriodos[Equipe do CS],
+				    "Entrada", fPeriodos[Entrada],
+				    "Mês de Entrada", DATE( YEAR( fPeriodos[Entrada] ), MONTH( fPeriodos[Entrada] ), 1 ),
+				    "Saída", fPeriodos[Saída],
+				    "Mês de Vida da Saída", IF( NOT ISBLANK( fPeriodos[Saída] ), DATEDIFF( fPeriodos[Entrada], fPeriodos[Saída], MONTH ) + 1 ),
+				    "Dias até Sair", IF( NOT ISBLANK( fPeriodos[Saída] ), DATEDIFF( fPeriodos[Entrada], fPeriodos[Saída], DAY ) ),
+				    "Mensalidade na Saída", IF( NOT ISBLANK( fPeriodos[Saída] ), VAR cn = fPeriodos[CNPJ] VAR d = fPeriodos[Último Dia Ativo] VAR d2 = CALCULATE( MAX( Contratos_historico_contratos[periodo] ), REMOVEFILTERS( fPeriodos ), Contratos_historico_contratos[cnpj_cpf] = cn, Contratos_historico_contratos[periodo] <= d ) RETURN IF( NOT ISBLANK( d2 ) && cn <> "", IF( fPeriodos[Produto] = "AF", CALCULATE( SUMX( GROUPBY( SELECTCOLUMNS( Contratos_historico_items, "@i", Contratos_historico_items[item_catalogo_id], "@v", Contratos_historico_items[vr_total] ), [@i], "@m", MAXX( CURRENTGROUP(), [@v] ) ), [@m] ), REMOVEFILTERS( fPeriodos ), Contratos_historico_contratos[periodo] = d2, Contratos_historico_contratos[cnpj_cpf] = cn, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), Contratos_historico_items[item_catalogo_id] IN { 2, 3, 4, 6 } ), CALCULATE( SUMX( GROUPBY( SELECTCOLUMNS( Contratos_historico_items, "@i", Contratos_historico_items[item_catalogo_id], "@v", Contratos_historico_items[vr_total] ), [@i], "@m", MAXX( CURRENTGROUP(), [@v] ) ), [@m] ), REMOVEFILTERS( fPeriodos ), Contratos_historico_contratos[periodo] = d2, Contratos_historico_contratos[cnpj_cpf] = cn, ISBLANK( Contratos_historico_contratos[financeiro_resp_id] ), Contratos_historico_items[item_catalogo_id] IN { 5 } ) ) ) ),
+				    "Situação", fPeriodos[Situação],
+				    "Data Base", fPeriodos[Data Base] )
+

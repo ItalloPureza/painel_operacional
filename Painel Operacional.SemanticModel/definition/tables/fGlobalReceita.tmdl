@@ -1,0 +1,104 @@
+table fGlobalReceita
+	lineageTag: 11170ad4-ab78-57d5-8d4a-a03f7d45f114
+
+	/// Cancelamento + negociação recorrente + não recorrente — Perda de Receita - Total do OKR 2026.
+	measure 'Perda de Receita Total' = [Perda por Cancelamento] + [Perda por Negociação (Recorrente)] + [Perda por Negociação (Não Recorrente)]
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: f5f4eebf-f42e-5297-8133-81bba05be3a9
+
+	/// Soma dos campos de alteração de receita no contexto.
+	measure 'Valor Alterado' = SUM( fGlobalReceita[Valor] )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 54c8efa8-626f-5463-977d-86df947f506c
+
+	/// Aumento de mensalidade dos tickets, pelo fechamento.
+	measure 'Aumento de Mensalidade' = CALCULATE( SUM( fGlobalReceita[Valor] ), KEEPFILTERS( fGlobalReceita[Tipo de Alteração] IN { "Aumento de mensalidade" } ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 9c760120-c043-5531-8dc5-b4d067ae3c1b
+
+	/// Redução de mensalidade dos tickets, pelo fechamento.
+	measure 'Perda por Negociação (Recorrente)' = CALCULATE( SUM( fGlobalReceita[Valor] ), KEEPFILTERS( fGlobalReceita[Tipo de Alteração] IN { "Redução de mensalidade" } ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: a4909e21-52f3-5a48-b37b-97e444498182
+
+	/// Desconto + isenção de mensalidade + isenção de aviso prévio dos tickets, pelo fechamento (Perda de Receita).
+	measure 'Perda por Negociação (Não Recorrente)' = CALCULATE( SUM( fGlobalReceita[Valor] ), KEEPFILTERS( fGlobalReceita[Tipo de Alteração] IN { "Desconto de mensalidade", "Isenção de mensalidade", "Isenção de aviso prévio" } ) )
+		formatString: \R$ #,0.00
+		displayFolder: Global
+		lineageTag: 57cbb97f-fc62-589f-b900-996aac60dcb2
+
+	column Data
+		formatString: dd/mm/yy
+		lineageTag: 31af71f9-4661-52ef-8930-e79095f9d6bb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Data]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sistema
+		lineageTag: f1349e59-3e09-5656-aebf-a91709ef2054
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Sistema]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Área Responsável'
+		lineageTag: 568f347f-00c8-5479-ba4a-f991913c298b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Área Responsável]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Alteração'
+		lineageTag: d1293112-499c-50c5-a439-83dbb4cb05ea
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tipo de Alteração]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Valor
+		formatString: \R$ #,0.00
+		lineageTag: 1438d6ab-6f23-5d72-a28d-172c172d8ba4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Valor]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tickets
+		formatString: #,0
+		lineageTag: 0a07c191-8ec8-5e60-bf5b-9c38c35fdd91
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tickets]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fGlobalReceita = calculated
+		mode: import
+		source =
+				
+				-- Resumo das alterações de receita dos tickets (campos do Helpdesk) por dia de FECHAMENTO, sistema, área e
+				-- tipo. Calculada no refresh, fora do RLS (total da empresa para todos). Gerado por gerar_global.py.
+				VAR t = FILTER( Helpdesk_Tickets, NOT ISBLANK( Helpdesk_Tickets[Data_Fechamento_Ticket] ) )
+				VAR linhas = UNION(
+				    SELECTCOLUMNS( FILTER( t, NOT ISBLANK( Helpdesk_Tickets[Desconto Mensalidade] ) && Helpdesk_Tickets[Desconto Mensalidade] <> 0 ), "@data", DATE( YEAR( Helpdesk_Tickets[Data_Fechamento_Ticket] ), MONTH( Helpdesk_Tickets[Data_Fechamento_Ticket] ), DAY( Helpdesk_Tickets[Data_Fechamento_Ticket] ) ), "@sistema", Helpdesk_Tickets[Sistema], "@area", Helpdesk_Tickets[area_responsavel], "@tipo", "Desconto de mensalidade", "@valor", Helpdesk_Tickets[Desconto Mensalidade] ),
+				    SELECTCOLUMNS( FILTER( t, NOT ISBLANK( Helpdesk_Tickets[Isencao Mensalidade] ) && Helpdesk_Tickets[Isencao Mensalidade] <> 0 ), "@data", DATE( YEAR( Helpdesk_Tickets[Data_Fechamento_Ticket] ), MONTH( Helpdesk_Tickets[Data_Fechamento_Ticket] ), DAY( Helpdesk_Tickets[Data_Fechamento_Ticket] ) ), "@sistema", Helpdesk_Tickets[Sistema], "@area", Helpdesk_Tickets[area_responsavel], "@tipo", "Isenção de mensalidade", "@valor", Helpdesk_Tickets[Isencao Mensalidade] ),
+				    SELECTCOLUMNS( FILTER( t, NOT ISBLANK( Helpdesk_Tickets[Isencao Aviso] ) && Helpdesk_Tickets[Isencao Aviso] <> 0 ), "@data", DATE( YEAR( Helpdesk_Tickets[Data_Fechamento_Ticket] ), MONTH( Helpdesk_Tickets[Data_Fechamento_Ticket] ), DAY( Helpdesk_Tickets[Data_Fechamento_Ticket] ) ), "@sistema", Helpdesk_Tickets[Sistema], "@area", Helpdesk_Tickets[area_responsavel], "@tipo", "Isenção de aviso prévio", "@valor", Helpdesk_Tickets[Isencao Aviso] ),
+				    SELECTCOLUMNS( FILTER( t, NOT ISBLANK( Helpdesk_Tickets[Reducao Mensalidade] ) && Helpdesk_Tickets[Reducao Mensalidade] <> 0 ), "@data", DATE( YEAR( Helpdesk_Tickets[Data_Fechamento_Ticket] ), MONTH( Helpdesk_Tickets[Data_Fechamento_Ticket] ), DAY( Helpdesk_Tickets[Data_Fechamento_Ticket] ) ), "@sistema", Helpdesk_Tickets[Sistema], "@area", Helpdesk_Tickets[area_responsavel], "@tipo", "Redução de mensalidade", "@valor", Helpdesk_Tickets[Reducao Mensalidade] ),
+				    SELECTCOLUMNS( FILTER( t, NOT ISBLANK( Helpdesk_Tickets[Aumento Mensalidade] ) && Helpdesk_Tickets[Aumento Mensalidade] <> 0 ), "@data", DATE( YEAR( Helpdesk_Tickets[Data_Fechamento_Ticket] ), MONTH( Helpdesk_Tickets[Data_Fechamento_Ticket] ), DAY( Helpdesk_Tickets[Data_Fechamento_Ticket] ) ), "@sistema", Helpdesk_Tickets[Sistema], "@area", Helpdesk_Tickets[area_responsavel], "@tipo", "Aumento de mensalidade", "@valor", Helpdesk_Tickets[Aumento Mensalidade] ),
+				    SELECTCOLUMNS( FILTER( t, NOT ISBLANK( Helpdesk_Tickets[Estorno Total] ) && Helpdesk_Tickets[Estorno Total] <> 0 ), "@data", DATE( YEAR( Helpdesk_Tickets[Data_Fechamento_Ticket] ), MONTH( Helpdesk_Tickets[Data_Fechamento_Ticket] ), DAY( Helpdesk_Tickets[Data_Fechamento_Ticket] ) ), "@sistema", Helpdesk_Tickets[Sistema], "@area", Helpdesk_Tickets[area_responsavel], "@tipo", "Estorno total", "@valor", Helpdesk_Tickets[Estorno Total] ),
+				    SELECTCOLUMNS( FILTER( t, NOT ISBLANK( Helpdesk_Tickets[Boletos Cancelados] ) && Helpdesk_Tickets[Boletos Cancelados] <> 0 ), "@data", DATE( YEAR( Helpdesk_Tickets[Data_Fechamento_Ticket] ), MONTH( Helpdesk_Tickets[Data_Fechamento_Ticket] ), DAY( Helpdesk_Tickets[Data_Fechamento_Ticket] ) ), "@sistema", Helpdesk_Tickets[Sistema], "@area", Helpdesk_Tickets[area_responsavel], "@tipo", "Boletos cancelados", "@valor", Helpdesk_Tickets[Boletos Cancelados] ) )
+				VAR g = GROUPBY( linhas, [@data], [@sistema], [@area], [@tipo],
+				    "@valor", SUMX( CURRENTGROUP(), [@valor] ), "@qtd", SUMX( CURRENTGROUP(), 1 ) )
+				RETURN
+				    SELECTCOLUMNS( g, "Data", [@data], "Sistema", [@sistema], "Área Responsável", [@area], "Tipo de Alteração", [@tipo], "Valor", [@valor], "Tickets", [@qtd] )
+

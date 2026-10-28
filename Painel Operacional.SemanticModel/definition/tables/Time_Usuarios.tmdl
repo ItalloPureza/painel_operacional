@@ -1,0 +1,76 @@
+table Time_Usuarios
+	lineageTag: fdd39d18-619e-4b41-aa04-ef031257beb5
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 862c0463-fb27-4c8c-9228-79962ccb86ef
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome
+		dataType: string
+		lineageTag: 72c2e198-7f87-406c-a9b0-930f28f4d579
+		summarizeBy: none
+		sourceColumn: nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column email
+		dataType: string
+		lineageTag: ac66d941-d723-4d07-b23f-f28ca5796234
+		summarizeBy: none
+		sourceColumn: email
+
+		annotation SummarizationSetBy = Automatic
+
+	column perfil
+		dataType: string
+		lineageTag: d07eae33-ce4e-4e93-b96f-efc0caef33e4
+		summarizeBy: none
+		sourceColumn: perfil
+
+		annotation SummarizationSetBy = Automatic
+
+	column ativo
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d55a9910-864b-4354-815c-dcdd3839dcab
+		summarizeBy: none
+		sourceColumn: ativo
+
+		annotation SummarizationSetBy = Automatic
+
+	column avatar_url
+		dataType: string
+		lineageTag: cdff160f-c454-41f7-96b2-81d04c29ec2e
+		summarizeBy: none
+		sourceColumn: avatar_url
+
+		annotation SummarizationSetBy = Automatic
+
+	column ramal
+		dataType: string
+		lineageTag: 78fc55b3-c69a-4f5d-92fd-7c4ac946fba6
+		summarizeBy: none
+		sourceColumn: ramal
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Time_Usuarios = m
+		mode: import
+		queryGroup: Estrutura
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(CaminhoPlanilha), null, true),
+				    Aba = Fonte{[Item="Time_Usuarios",Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalhos, {{"id", Int64.Type}, {"nome", type text}, {"email", type text}, {"perfil", type text}, {"ativo", type logical}, {"avatar_url", type text}, {"ramal", type text}})
+				in
+				    Tipos
+
+
+	annotation PBI_ResultType = Table
+
